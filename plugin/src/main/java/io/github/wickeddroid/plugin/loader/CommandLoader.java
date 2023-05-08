@@ -1,8 +1,10 @@
 package io.github.wickeddroid.plugin.loader;
 
 import io.github.wickeddroid.api.loader.Loader;
-import io.github.wickeddroid.plugin.command.PlayerCommand;
-import io.github.wickeddroid.plugin.command.TeamCommand;
+import io.github.wickeddroid.plugin.command.CommandPlayer;
+import io.github.wickeddroid.plugin.command.CommandTeam;
+import io.github.wickeddroid.plugin.command.CommandUhc;
+import io.github.wickeddroid.plugin.command.CommandUhcStaff;
 import me.fixeddev.commandflow.annotated.AnnotatedCommandTreeBuilder;
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.builder.AnnotatedCommandBuilderImpl;
@@ -18,14 +20,18 @@ public class CommandLoader implements Loader {
 
   private Injector injector;
 
-  private PlayerCommand playerCommand;
-  private TeamCommand teamCommand;
+  private CommandPlayer commandPlayer;
+  private CommandTeam commandTeam;
+  private CommandUhcStaff commandUhcStaff;
+  private CommandUhc commandUhc;
 
   @Override
   public void load() {
     registerCommands(
-            playerCommand,
-            teamCommand
+            commandPlayer,
+            commandTeam,
+            commandUhcStaff,
+            commandUhc
     );
   }
 

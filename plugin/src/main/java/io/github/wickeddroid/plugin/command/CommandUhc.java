@@ -8,9 +8,8 @@ import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 
 @Command(names = "uhc")
-public class UhcCommand implements CommandClass {
-  @Inject
-  private UhcGameHandler uhcGameHandler;
+public class CommandUhc implements CommandClass {
+  @Inject private UhcGameHandler uhcGameHandler;
 
   @Command(names = "create")
   public void create(final @Sender Player sender) {

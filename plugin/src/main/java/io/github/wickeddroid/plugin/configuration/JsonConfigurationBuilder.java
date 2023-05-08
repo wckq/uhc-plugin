@@ -1,5 +1,7 @@
 package io.github.wickeddroid.plugin.configuration;
 
+import io.github.wickeddroid.plugin.configuration.serializer.TitleSerializer;
+import net.kyori.adventure.title.Title;
 import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -57,6 +59,7 @@ public class JsonConfigurationBuilder<T> {
 
   private static ConfigurationOptions applyOptions() {
     return ConfigurationOptions.defaults()
+            .serializers(builder -> builder.register(Title.class, TitleSerializer.INSTANCE))
             .shouldCopyDefaults(true);
   }
 

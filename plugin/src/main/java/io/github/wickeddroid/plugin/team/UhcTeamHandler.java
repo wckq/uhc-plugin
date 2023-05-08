@@ -22,7 +22,7 @@ public class UhcTeamHandler {
   @Inject private UhcTeamManager uhcTeamManager;
   @Inject private UhcPlayerRegistry uhcPlayerRegistry;
 
-  private final Cache<String, String> inviteCache = new DynamicCache<>(20, TimeUnit.SECONDS);
+  private final Cache<String, String> inviteCache = new DynamicCache<>(5, TimeUnit.MINUTES);
 
   public void addPlayerToTeam(
           final Player leader,

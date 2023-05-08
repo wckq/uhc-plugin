@@ -2,7 +2,10 @@ package io.github.wickeddroid.plugin.module;
 
 import io.github.wickeddroid.plugin.configuration.JsonConfigurationBuilder;
 import io.github.wickeddroid.plugin.message.Messages;
+import io.github.wickeddroid.plugin.message.title.Titles;
 import io.github.wickeddroid.plugin.scoreboard.Scoreboard;
+import io.github.wickeddroid.plugin.world.Worlds;
+import net.kyori.adventure.title.Title;
 import org.bukkit.plugin.Plugin;
 import org.spongepowered.configurate.ConfigurateException;
 import team.unnamed.inject.AbstractModule;
@@ -28,6 +31,18 @@ public class ConfigurationModule extends AbstractModule {
       bind(Scoreboard.class)
               .toInstance(JsonConfigurationBuilder
                       .load(Scoreboard.class, path, "scoreboards")
+                      .get()
+              );
+
+      bind(Worlds.class)
+              .toInstance(JsonConfigurationBuilder
+                      .load(Worlds.class, path, "worlds")
+                      .get()
+              );
+
+      bind(Titles.class)
+              .toInstance(JsonConfigurationBuilder
+                      .load(Titles.class, path, "titles")
                       .get()
               );
     } catch (ConfigurateException e) {

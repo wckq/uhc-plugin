@@ -11,17 +11,12 @@ import me.fixeddev.commandflow.bukkit.annotation.Sender;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 
-public class PlayerCommand implements CommandClass {
-  @Inject
-  private UhcPlayerRegistry uhcPlayerRegistry;
-  @Inject
-  private UhcGameHandler uhcGameHandler;
-  @Inject
-  private UhcTeamManager uhcTeamManager;
-  @Inject
-  private MessageHandler messageHandler;
-  @Inject
-  private Messages messages;
+public class CommandPlayer implements CommandClass {
+  @Inject private UhcPlayerRegistry uhcPlayerRegistry;
+  @Inject private UhcGameHandler uhcGameHandler;
+  @Inject private UhcTeamManager uhcTeamManager;
+  @Inject private MessageHandler messageHandler;
+  @Inject private Messages messages;
 
   @Command(names = {"teamchat", "tc", "chat", "c"})
   public void teamChat(final @Sender Player sender) {
@@ -41,10 +36,5 @@ public class PlayerCommand implements CommandClass {
     this.messageHandler.send(sender, uhcPlayer.isTeamChat()
             ? this.messages.other().teamChatOn()
             : this.messages.other().teamChatOff());
-  }
-
-  @Command(names = "test")
-  public void test(final @Sender Player sender) {
-    this.uhcGameHandler.startGame(sender);
   }
 }

@@ -10,11 +10,9 @@ import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 
 @Command(names = "uhc-team")
-public class TeamCommand implements CommandClass {
-  @Inject
-  private UhcTeamHandler uhcTeamHandler;
-  @Inject
-  private UhcTeamManager uhcTeamManager;
+public class CommandTeam implements CommandClass {
+  @Inject private UhcTeamHandler uhcTeamHandler;
+  @Inject private UhcTeamManager uhcTeamManager;
 
   @Command(names = "create")
   public void create(

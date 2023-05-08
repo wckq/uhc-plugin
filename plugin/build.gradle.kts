@@ -1,10 +1,11 @@
 plugins {
     id("xyz.jpenilla.run-paper") version "2.0.0"
+    id("io.papermc.paperweight.userdev") version "1.5.3"
     id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.18.2-R0.1-SNAPSHOT")
 
     implementation("org.spongepowered:configurate-gson:4.1.2")
     implementation("me.catcoder:bukkit-sidebar:6.2.0-SNAPSHOT")

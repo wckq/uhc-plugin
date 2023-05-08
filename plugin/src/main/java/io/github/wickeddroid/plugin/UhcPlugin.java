@@ -19,4 +19,9 @@ public class UhcPlugin extends JavaPlugin {
 
     this.loader.load();
   }
+
+  @Override
+  public void onDisable() {
+    this.loader.unload();
+  }
 }

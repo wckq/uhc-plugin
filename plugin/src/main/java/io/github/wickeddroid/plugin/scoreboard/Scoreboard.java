@@ -10,6 +10,8 @@ import java.util.List;
 public class Scoreboard {
   private String title = "<rainbow>UHC";
   private Lobby lobby = new Lobby();
+  private Lobby game = new Lobby();
+  private Lobby end = new Lobby();
 
   public @NonNull String title() {
     return title;
@@ -19,8 +21,34 @@ public class Scoreboard {
     return this.lobby;
   }
 
+  public @NonNull Lobby game() {
+    return this.game;
+  }
+
+  public @NonNull Lobby end() {
+    return this.end;
+  }
+
   @ConfigSerializable
   public static class Lobby {
+    private List<String> lines = new ArrayList<>();
+
+    public @NonNull List<String> lines() {
+      return lines;
+    }
+  }
+
+  @ConfigSerializable
+  public static class Game {
+    private List<String> lines = new ArrayList<>();
+
+    public @NonNull List<String> lines() {
+      return lines;
+    }
+  }
+
+  @ConfigSerializable
+  public static class End {
     private List<String> lines = new ArrayList<>();
 
     public @NonNull List<String> lines() {

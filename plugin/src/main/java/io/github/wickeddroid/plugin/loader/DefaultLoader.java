@@ -11,9 +11,18 @@ public class DefaultLoader implements Loader {
   @Inject @Named("listener-loader")
   private Loader listenerLoader;
 
+  @Inject @Named("world-loader")
+  private Loader worldLoader;
+
   @Override
   public void load() {
+    this.worldLoader.load();
     this.commandLoader.load();
     this.listenerLoader.load();
+  }
+
+  @Override
+  public void unload() {
+    this.worldLoader.unload();
   }
 }

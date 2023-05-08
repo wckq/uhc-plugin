@@ -41,9 +41,7 @@ public class ScoreboardLobby extends ScoreboardCreator {
             text,
             Placeholder.parsed("online-players", String.valueOf(Bukkit.getOnlinePlayers().size())),
             Placeholder.parsed("max-players", String.valueOf(Bukkit.getServer().getMaxPlayers())),
-            Placeholder.parsed("team-name", uhcTeam == null ? "" : uhcTeam.getName()),
-            Placeholder.parsed("team-owner", uhcTeam == null ? "" : uhcTeam.getLeader()),
-            Placeholder.parsed("team-kills", uhcTeam == null ? "" : String.valueOf(uhcTeam.getKills())),
-            Placeholder.parsed("kills", String.valueOf(uhcPlayer.getKills())));
+            Placeholder.parsed("team-name", uhcTeam == null ? " " : uhcTeam.getName()),
+            Placeholder.parsed("team-owner", uhcTeam == null ? " " : uhcTeam.getLeader()));
   }
 }
