@@ -1,7 +1,7 @@
 package io.github.wickeddroid.plugin.loader;
 
 import io.github.wickeddroid.api.loader.Loader;
-import io.github.wickeddroid.plugin.listener.custom.GameTickListener;
+import io.github.wickeddroid.plugin.listener.custom.PlayerScatteredListener;
 import io.github.wickeddroid.plugin.listener.vanilla.*;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -16,7 +16,7 @@ public class ListenerLoader implements Loader {
   private PlayerDeathListener playerDeathListener;
   private AsyncChatListener asyncChatListener;
   private EntityDamageByEntityListener entityDamageByEntityListener;
-  private GameTickListener gameTickListener;
+  private PlayerScatteredListener playerScatteredListener;
 
   @Override
   public void load() {
@@ -26,7 +26,7 @@ public class ListenerLoader implements Loader {
             playerDeathListener,
             asyncChatListener,
             entityDamageByEntityListener,
-            gameTickListener
+            playerScatteredListener
     );
   }
 

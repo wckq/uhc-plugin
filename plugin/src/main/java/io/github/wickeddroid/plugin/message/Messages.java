@@ -57,7 +57,10 @@ public class Messages {
     private String inviteDoesNotExist = "No se te ha invitado al equipo <color:#93FF9E><param-name>";
     private String leaderCancelInvite = "Se ha cancelado la invitación del jugador <color:#93FF9E><param-player>";
     private String cancelInvite = "Se ha cancelado la invitación del equipo <color:#93FF9E><param-name>.";
-    private String message = "[Team] <param-player> > <param-message>";
+    private String enableTeam = "Se han activado los equipos.";
+    private String disableTeam = "Se han desactivado los equipos.";
+    private String teamHasNotEnabled = "Los equipos se encuentran desactivados.";
+    private String changeTeamSize = "Se ha cambiado el tamaño de equipos a <color:#93FF9E><param-size>";
 
     public @NonNull String create() {
       return this.create;
@@ -131,8 +134,20 @@ public class Messages {
       return this.inviterEqualsPlayer;
     }
 
-    public @NonNull String message() {
-      return this.message;
+    public @NonNull String teamHasNotEnabled() {
+      return this.teamHasNotEnabled;
+    }
+
+    public @NonNull String changeTeamSize() {
+      return this.changeTeamSize;
+    }
+
+    public @NonNull String enableTeam() {
+      return this.enableTeam;
+    }
+
+    public @NonNull String disableTeam() {
+      return this.disableTeam;
     }
   }
 
@@ -140,6 +155,7 @@ public class Messages {
   public static class Other {
     private String teamChatOn = "Te has cambiado al chat de equipo.";
     private String teamChatOff = "Te has cambiado al chat global.";
+    private String scattered = "<param-player> has scattered";
     private String gameHasStarted = "El juego ya ha iniciado";
 
     public @NonNull String teamChatOn() {
@@ -152,6 +168,10 @@ public class Messages {
 
     public @NonNull String gameHasStarted() {
       return this.gameHasStarted;
+    }
+
+    public @NonNull String scattered() {
+      return this.scattered;
     }
   }
 }

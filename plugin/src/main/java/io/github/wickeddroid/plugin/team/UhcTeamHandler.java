@@ -104,7 +104,7 @@ public class UhcTeamHandler {
       return;
     }
 
-    if (leader.getName().equals(leader.getName())) {
+    if (leader.getName().equals(playerName)) {
       this.messageHandler.send(leader, this.messages.team().inviterEqualsPlayer());
       return;
     }

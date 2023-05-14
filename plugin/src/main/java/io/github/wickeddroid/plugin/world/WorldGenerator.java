@@ -9,9 +9,8 @@ import java.io.IOException;
 
 @Singleton
 public class WorldGenerator {
+  @Inject private Worlds worlds;
   private World world;
-  @Inject
-  private Worlds worlds;
 
   public void createWorld(final String name) {
     final var worldCreator = new WorldCreator(name);
@@ -26,6 +25,11 @@ public class WorldGenerator {
 
     this.world = worldCreator.createWorld();
 
+    if (this.world == null) {
+      return;
+    }
+
+    this.setupWorldBorder(this.world, this.worlds.worldBorder());
     this.applySettings(this.world);
   }
 
@@ -47,7 +51,18 @@ public class WorldGenerator {
     world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
 
     world.setDifficulty(Difficulty.HARD);
+
     world.setPVP(false);
+  }
+
+  public void setupWorldBorder(
+          final World world,
+          final int size
+  ) {
+    final var worldBorder = world.getWorldBorder();
+    worldBorder.setDamageAmount(1);
+    worldBorder.setSize(size * 2);
+    worldBorder.setCenter(0, 0);
   }
 
   public World getWorld() {

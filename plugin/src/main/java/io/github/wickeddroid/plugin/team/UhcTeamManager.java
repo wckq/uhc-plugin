@@ -1,10 +1,11 @@
 package io.github.wickeddroid.plugin.team;
 
+import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
-import io.github.wickeddroid.plugin.util.MessageUtil;
+import io.github.wickeddroid.plugin.util.MessageUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 
 public class UhcTeamManager {
+  @Inject private UhcGame uhcGame;
   @Inject private Messages messages;
   @Inject private MessageHandler messageHandler;
   @Inject private UhcTeamRegistry uhcTeamRegistry;
@@ -24,7 +26,8 @@ public class UhcTeamManager {
   ) {
     final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(leader.getName());
 
-    if (uhcPlayer == null) {
+    if (!this.uhcGame.isTeamEnabled()) {
+      this.messageHandler.send(leader, this.messages.team().teamHasNotEnabled());
       return;
     }
 
@@ -92,7 +95,7 @@ public class UhcTeamManager {
         return;
       }
 
-      member.sendMessage(MessageUtil.parseStringToComponent(
+      member.sendMessage(MessageUtils.parseStringToComponent(
               "[Team] <player> ➣ ",
               Placeholder.parsed("player", player.getName())
       ).append(message));

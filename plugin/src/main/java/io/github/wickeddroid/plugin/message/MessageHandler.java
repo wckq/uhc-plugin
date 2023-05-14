@@ -1,6 +1,6 @@
 package io.github.wickeddroid.plugin.message;
 
-import io.github.wickeddroid.plugin.util.MessageUtil;
+import io.github.wickeddroid.plugin.util.MessageUtils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -18,7 +18,7 @@ public class MessageHandler {
           final String message
   ) {
     receiver.sendMessage(
-            MessageUtil.parseStringToComponent(
+            MessageUtils.parseStringToComponent(
                     "<prefix> <white>" + message,
                     Placeholder.parsed("prefix", messages.prefix())
             )
@@ -53,7 +53,7 @@ public class MessageHandler {
     }
 
     receiver.sendMessage(
-            MessageUtil.parseStringToComponent(
+            MessageUtils.parseStringToComponent(
                     "<prefix> <white>" + message,
                     Placeholder.parsed("prefix", messages.prefix()),
                     tagResolver.build()

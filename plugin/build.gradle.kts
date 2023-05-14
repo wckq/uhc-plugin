@@ -23,10 +23,13 @@ tasks {
         options.release.set(17)
     }
     runServer {
-        minecraftVersion("1.18.2")
+        minecraftVersion("1.17.1")
     }
     shadowJar {
         val packageName = "io.github.wickeddroid.libs"
+
+        archiveBaseName.set("uhc")
+        archiveVersion.set("1.0-SNAPSHOT")
 
         relocate("org.spongepowered", "$packageName.sponge")
         relocate("me.fixeddev", "$packageName.injector")
@@ -39,5 +42,6 @@ bukkit {
     main = "io.github.wickeddroid.plugin.UhcPlugin"
     name = "uhc-plugin"
     version = "1.0-SNAPSHOT"
+    apiVersion = "1.17"
     author = "Wicked"
 }

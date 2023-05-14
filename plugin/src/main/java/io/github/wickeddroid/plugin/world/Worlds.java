@@ -10,13 +10,18 @@ import java.util.List;
 @ConfigSerializable
 public class Worlds {
   private String seed = "";
-  private List<String> blacklist = new ArrayList<>(Collections.singleton("world"));
   private String worldName = "uhc_world";
+  private int worldBorder = 2000;
+  private List<String> blacklist = new ArrayList<>(Collections.singleton("world"));
   private boolean hardcore = true;
   private boolean naturalRegeneration = false;
 
   public @NonNull List<String> blacklist() {
     return this.blacklist;
+  }
+
+  public int worldBorder() {
+    return this.worldBorder;
   }
 
   public @NonNull String worldName() {

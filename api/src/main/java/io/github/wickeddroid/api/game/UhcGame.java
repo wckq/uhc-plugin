@@ -40,4 +40,24 @@ public interface UhcGame {
   boolean isGameStart();
 
   void setGameStart(boolean gameStart);
+
+  boolean isTeamEnabled();
+
+  void setTeamEnabled(boolean teamEnabled);
+
+  int getPlayersDeathForPvE();
+
+  void incrementPlayersDeathForPve();
+
+  void setPlayerDeathForPve(int playerDeathForPvp);
+
+  int getPlayersDeathForPvP();
+
+  void incrementPlayersDeathForPvp();
+
+  void setPlayersDeathForPvp(int playersDeathForPvp);
+
+  int getTeamSize();
+
+  void setTeamSize(int teamSize);
 }

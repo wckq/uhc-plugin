@@ -4,12 +4,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
-public final class MessageUtil {
+public final class MessageUtils {
   public static final MiniMessage MINI_MESSAGE = MiniMessage
           .builder()
           .build();
 
-  private MessageUtil() {}
+  private MessageUtils() {}
 
   public static Component parseStringToComponent(final String text) {
     return MINI_MESSAGE.deserialize(text);
