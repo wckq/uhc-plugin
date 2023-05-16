@@ -11,7 +11,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Scenario {
   String name();
-  String lore();
+
+  String key();
+  String[] description();
   Material material();
-  boolean experimental();
+  boolean experimental() default false;
 }

@@ -1,21 +1,18 @@
 package io.github.wickeddroid.plugin.runnable;
 
-import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.event.game.PlayerScatteredEvent;
-import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
-import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class ScatterRunnable extends BukkitRunnable {
+public class ScatterThread implements Runnable{
   private final Location location;
   private Player player;
   private UhcTeam uhcTeam;
 
-  public ScatterRunnable(
+  public ScatterThread(
           final Player player,
           final Location location
   ) {
@@ -23,7 +20,7 @@ public class ScatterRunnable extends BukkitRunnable {
     this.location = location;
   }
 
-  public ScatterRunnable(
+  public ScatterThread(
           final UhcTeam uhcTeam,
           final Location location
   ) {

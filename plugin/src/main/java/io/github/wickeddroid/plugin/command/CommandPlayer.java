@@ -4,6 +4,8 @@ import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
+import io.github.wickeddroid.plugin.scenario.ScenarioManager;
+import io.github.wickeddroid.plugin.scenario.ScenarioRegistration;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
@@ -13,6 +15,7 @@ import team.unnamed.inject.Inject;
 
 public class CommandPlayer implements CommandClass {
   @Inject private UhcPlayerRegistry uhcPlayerRegistry;
+  @Inject private ScenarioManager scenarioManager;
   @Inject private UhcGameHandler uhcGameHandler;
   @Inject private UhcTeamManager uhcTeamManager;
   @Inject private MessageHandler messageHandler;
@@ -36,5 +39,13 @@ public class CommandPlayer implements CommandClass {
     this.messageHandler.send(sender, uhcPlayer.isTeamChat()
             ? this.messages.other().teamChatOn()
             : this.messages.other().teamChatOff());
+  }
+
+  @Command(names = "scenario")
+  public void scenario(
+          final @Sender Player sender,
+          final String name
+  ) {
+    this.scenarioManager.enableScenario(name);
   }
 }

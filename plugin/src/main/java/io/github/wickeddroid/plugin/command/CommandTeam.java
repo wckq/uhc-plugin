@@ -9,7 +9,7 @@ import me.fixeddev.commandflow.bukkit.annotation.Sender;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 
-@Command(names = "uhc-team")
+@Command(names = "team")
 public class CommandTeam implements CommandClass {
   @Inject private UhcTeamHandler uhcTeamHandler;
   @Inject private UhcTeamManager uhcTeamManager;

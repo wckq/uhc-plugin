@@ -14,6 +14,16 @@ dependencies {
     implementation("team.unnamed:inject:2.0.0")
 
     implementation(project(":api"))
+    implementation(project(":annotation-processor"))
+    annotationProcessor(project(":annotation-processor"))
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs("src/main/java", "build/generated/sources/annotationProcessor/java/main")
+        }
+    }
 }
 
 tasks {
@@ -23,7 +33,7 @@ tasks {
         options.release.set(17)
     }
     runServer {
-        minecraftVersion("1.17.1")
+        minecraftVersion("1.18.2")
     }
     shadowJar {
         val packageName = "io.github.wickeddroid.libs"

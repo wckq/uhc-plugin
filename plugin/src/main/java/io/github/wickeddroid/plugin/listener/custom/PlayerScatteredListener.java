@@ -25,11 +25,11 @@ public class PlayerScatteredListener implements Listener {
     }
 
     playerScattered.setGameMode(GameMode.SURVIVAL);
-    playerScattered.setHealth(20);
-    playerScattered.setExp(0);
-    playerScattered.setLevel(0);
-    playerScattered.setFoodLevel(20);
     playerScattered.getInventory().clear();
+    playerScattered.setFoodLevel(20);
+    playerScattered.setHealth(20);
+    playerScattered.setLevel(0);
+    playerScattered.setExp(0);
 
     playerScattered.teleport(event.getLocation());
 

@@ -14,11 +14,15 @@ public class DefaultLoader implements Loader {
   @Inject @Named("world-loader")
   private Loader worldLoader;
 
+  @Inject @Named("scenario-loader")
+  private Loader scenarioLoader;
+
   @Override
   public void load() {
     this.worldLoader.load();
     this.commandLoader.load();
     this.listenerLoader.load();
+    this.scenarioLoader.load();
   }
 
   @Override

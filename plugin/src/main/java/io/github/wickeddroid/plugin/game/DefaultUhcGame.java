@@ -13,8 +13,6 @@ public class DefaultUhcGame implements UhcGame {
   private int appleRate;
   private int timeForPvp;
   private int timeForMeetup;
-  private int playersDeathForPve;
-  private int playersDeathForPvp;
   private boolean pvp;
   private boolean gameStart;
   private boolean teamEnabled;
@@ -29,8 +27,6 @@ public class DefaultUhcGame implements UhcGame {
     this.timeForMeetup = 7200;
     this.teamSize = 2;
     this.worldBorder = 2000;
-    this.playersDeathForPve = 0;
-    this.playersDeathForPvp = 0;
     this.pvp = false;
     this.gameStart = false;
     this.teamEnabled = false;
@@ -148,37 +144,6 @@ public class DefaultUhcGame implements UhcGame {
   @Override
   public void setTeamEnabled(boolean teamEnabled) {
     this.teamEnabled = teamEnabled;
-  }
-
-  @Override
-  public int getPlayersDeathForPvE() {
-    return this.playersDeathForPve;
-  }
-
-  @Override
-  public void incrementPlayersDeathForPve() {
-    ++this.playersDeathForPve;
-  }
-
-  @Override
-  public void setPlayerDeathForPve(int playersDeathForPve) {
-    this.playersDeathForPve = playersDeathForPve;
-  }
-
-
-  @Override
-  public int getPlayersDeathForPvP() {
-    return this.playersDeathForPvp;
-  }
-
-  @Override
-  public void incrementPlayersDeathForPvp() {
-    ++this.playersDeathForPvp;
-  }
-
-  @Override
-  public void setPlayersDeathForPvp(int playersDeathForPvp) {
-    this.playersDeathForPvp = playersDeathForPvp;
   }
 
   @Override

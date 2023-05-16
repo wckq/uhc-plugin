@@ -2,16 +2,11 @@ package io.github.wickeddroid.plugin.command.staff;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
-import io.github.wickeddroid.plugin.runnable.ScatterRunnable;
-import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
-import io.github.wickeddroid.plugin.util.LocationUtils;
 import io.github.wickeddroid.plugin.world.Worlds;
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;

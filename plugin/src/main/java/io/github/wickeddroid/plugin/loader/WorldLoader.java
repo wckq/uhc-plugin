@@ -39,7 +39,7 @@ public class WorldLoader implements Loader {
       try {
         this.worldGenerator.removeWorld(world);
       } catch (IOException e) {
-        throw new IllegalArgumentException("The world doesn't exists");
+        e.printStackTrace();
       }
     }
   }

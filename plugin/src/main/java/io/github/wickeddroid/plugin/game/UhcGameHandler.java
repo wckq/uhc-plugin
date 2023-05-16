@@ -5,8 +5,8 @@ import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.message.title.Titles;
-import io.github.wickeddroid.plugin.runnable.GameRunnable;
-import io.github.wickeddroid.plugin.runnable.ScatterRunnable;
+import io.github.wickeddroid.plugin.runnable.GameThread;
+import io.github.wickeddroid.plugin.runnable.ScatterThread;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
@@ -14,7 +14,6 @@ import io.github.wickeddroid.plugin.util.LocationUtils;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;
@@ -25,7 +24,7 @@ public class UhcGameHandler {
   @Inject private Titles titles;
   @Inject private UhcGame uhcGame;
   @Inject private Messages messages;
-  @Inject private GameRunnable gameRunnable;
+  @Inject private GameThread gameThread;
   @Inject private MessageHandler messageHandler;
   @Inject private UhcTeamRegistry uhcTeamRegistry;
   @Inject private ScoreboardLobby scoreboardLobby;
@@ -49,7 +48,7 @@ public class UhcGameHandler {
           continue;
         }
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> new ScatterRunnable(player, location).run(), delayTeam);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> new ScatterThread(player, location), delayTeam);
 
         delayTeam += 40;
       }
@@ -61,7 +60,7 @@ public class UhcGameHandler {
           continue;
         }
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> new ScatterRunnable(team, location).run(), delayTeam);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> new ScatterThread(team, location), delayTeam);
 
         delayTeam += 40;
       }
@@ -90,7 +89,7 @@ public class UhcGameHandler {
       this.uhcGame.setUhcGameState(UhcGameState.PLAYING);
       this.uhcGame.setStartTime(System.currentTimeMillis());
 
-      this.gameRunnable.runTaskTimerAsynchronously(plugin, 0L, 20L);
+      Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this.gameThread, 0L, 20L);
     }, delayTeam);
   }
 

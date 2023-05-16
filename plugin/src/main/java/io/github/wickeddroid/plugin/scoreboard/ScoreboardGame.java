@@ -34,13 +34,9 @@ public class ScoreboardGame extends ScoreboardCreator {
   public Component replaceVariables(String text, Player player) {
     final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(player.getName());
 
-    final var host = this.uhcGame.getHost();
-
     return MessageUtils.parseStringToComponent(text,
             Placeholder.parsed("player-kills", String.valueOf(uhcPlayer.getKills())),
             Placeholder.parsed("players-alive", String.valueOf(Bukkit.getOnlinePlayers().size())),
-            Placeholder.parsed("deaths-pve", String.valueOf(this.uhcGame.getPlayersDeathForPvE())),
-            Placeholder.parsed("deaths-pvp", String.valueOf(this.uhcGame.getPlayersDeathForPvP())),
             Placeholder.parsed("world-border", String.valueOf(this.uhcGame.getWorldBorder())),
             Placeholder.parsed("game-time", PluginUtils.formatTime(this.uhcGame.getCurrentTime()))
     );

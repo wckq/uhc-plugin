@@ -48,6 +48,7 @@ public class ScoreboardLobby extends ScoreboardCreator {
             Placeholder.parsed("team-name", uhcTeam == null ? " " : uhcTeam.getName()),
             Placeholder.parsed("team-owner", uhcTeam == null ? " " : uhcTeam.getLeader()),
             Placeholder.parsed("team-size", teamSize > 1 ? "To" + teamSize : "FFA"),
-            Placeholder.parsed("game-host", host == null || host.isEmpty() ? "No hay host." : host));
+            Placeholder.parsed("game-host", host == null || host.isEmpty() ? "No hay host." : host)
+    );
   }
 }

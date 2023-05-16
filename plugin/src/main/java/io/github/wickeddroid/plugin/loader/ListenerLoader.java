@@ -17,6 +17,7 @@ public class ListenerLoader implements Loader {
   private AsyncChatListener asyncChatListener;
   private EntityDamageByEntityListener entityDamageByEntityListener;
   private PlayerScatteredListener playerScatteredListener;
+  private PlayerPortalListener playerPortalListener;
 
   @Override
   public void load() {
@@ -26,7 +27,8 @@ public class ListenerLoader implements Loader {
             playerDeathListener,
             asyncChatListener,
             entityDamageByEntityListener,
-            playerScatteredListener
+            playerScatteredListener,
+            playerPortalListener
     );
   }
 
