@@ -1,4 +1,4 @@
-package io.github.wickeddroid.plugin.runnable;
+package io.github.wickeddroid.plugin.thread;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;

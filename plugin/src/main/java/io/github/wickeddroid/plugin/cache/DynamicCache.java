@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.cache;
 
 import io.github.wickeddroid.api.cache.Cache;
+import org.bukkit.event.Event;
 
 import java.util.Collection;
 import java.util.Map;

@@ -2,8 +2,8 @@ package io.github.wickeddroid.plugin.scoreboard;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
-import io.github.wickeddroid.plugin.util.MessageUtils;
-import io.github.wickeddroid.plugin.util.PluginUtils;
+import io.github.wickeddroid.plugin.util.MessageUtil;
+import io.github.wickeddroid.plugin.util.PluginUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
@@ -34,11 +34,11 @@ public class ScoreboardGame extends ScoreboardCreator {
   public Component replaceVariables(String text, Player player) {
     final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(player.getName());
 
-    return MessageUtils.parseStringToComponent(text,
+    return MessageUtil.parseStringToComponent(text,
             Placeholder.parsed("player-kills", String.valueOf(uhcPlayer.getKills())),
             Placeholder.parsed("players-alive", String.valueOf(Bukkit.getOnlinePlayers().size())),
             Placeholder.parsed("world-border", String.valueOf(this.uhcGame.getWorldBorder())),
-            Placeholder.parsed("game-time", PluginUtils.formatTime(this.uhcGame.getCurrentTime()))
+            Placeholder.parsed("game-time", PluginUtil.formatTime(this.uhcGame.getCurrentTime()))
     );
   }
 }

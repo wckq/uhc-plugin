@@ -5,10 +5,19 @@ import io.github.wickeddroid.plugin.scenario.RegisteredScenario;
 import io.github.wickeddroid.plugin.scenario.ListenerScenario;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 
 @RegisteredScenario
-@Scenario(name = "Timber", key = "timber", description = {}, material = Material.OAK_LOG)
+@Scenario(
+        name = "Timber",
+        key = "timber",
+        description = {},
+        material = Material.OAK_LOG
+)
 public class TimberScenario extends ListenerScenario {
-
+  @EventHandler
+  public void onBlockBreak(final BlockBreakEvent event) {
+    final var block = event.getBlock();
+  }
 }
 

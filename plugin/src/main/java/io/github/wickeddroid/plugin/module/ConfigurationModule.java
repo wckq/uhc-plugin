@@ -9,6 +9,8 @@ import net.kyori.adventure.title.Title;
 import org.bukkit.plugin.Plugin;
 import org.spongepowered.configurate.ConfigurateException;
 import team.unnamed.inject.AbstractModule;
+import team.unnamed.inject.Provides;
+import team.unnamed.inject.Singleton;
 
 import java.nio.file.Path;
 
@@ -47,6 +49,15 @@ public class ConfigurationModule extends AbstractModule {
               );
     } catch (ConfigurateException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  @Provides @Singleton
+  public Messages providesMessage() {
+    try {
+      return JsonConfigurationBuilder.load(Messages.class, path, "messages").get();
+    } catch (ConfigurateException e) {
+      throw new RuntimeException("Has error occurred with the file messages.");
     }
   }
 }

@@ -10,18 +10,18 @@ import me.fixeddev.commandflow.bukkit.annotation.Sender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 
 import java.util.Random;
 
+@InjectAll
 @Command(names = "game")
 public class CommandGame implements CommandClass {
-  @Inject private Worlds worlds;
-  @Inject private Plugin plugin;
-  @Inject private UhcGame uhcGame;
-  @Inject private UhcTeamRegistry uhcTeamRegistry;
-  @Inject private UhcGameHandler uhcGameHandler;
-
-  private static final Random RANDOM = new Random();
+  private Worlds worlds;
+  private Plugin plugin;
+  private UhcGame uhcGame;
+  private UhcTeamRegistry uhcTeamRegistry;
+  private UhcGameHandler uhcGameHandler;
 
   @Command(names = "host")
   public void host(final @Sender Player sender) {

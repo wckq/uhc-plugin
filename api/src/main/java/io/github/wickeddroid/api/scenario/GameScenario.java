@@ -11,5 +11,9 @@ public interface GameScenario {
 
   Material getMaterial();
 
+  void setEnabled(boolean enabled);
+
+  boolean isEnabled();
+
   boolean isExperimental();
 }

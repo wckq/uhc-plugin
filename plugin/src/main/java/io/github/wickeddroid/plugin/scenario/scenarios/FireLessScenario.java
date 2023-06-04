@@ -10,18 +10,22 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 @RegisteredScenario
 @Scenario(
-        name = "NoFall",
-        key = "no_fall",
-        description = {},
-        material = Material.FEATHER
+        name = "FireLess",
+        description = {""},
+        key = "fire_less",
+        material = Material.LAVA_BUCKET
 )
-public class NoFallScenario extends ListenerScenario {
+public class FireLessScenario extends ListenerScenario {
   @EventHandler
   public void onEntityDamage(final EntityDamageEvent event) {
     if (!(event.getEntity() instanceof Player)) {
       return;
     }
-    if (event.getCause() != EntityDamageEvent.DamageCause.FALL) {
+
+    if (!(event.getCause() == EntityDamageEvent.DamageCause.FIRE
+            || event.getCause() == EntityDamageEvent.DamageCause.LAVA
+            || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK
+            || event.getCause() == EntityDamageEvent.DamageCause.HOT_FLOOR)) {
       return;
     }
 

@@ -157,6 +157,9 @@ public class Messages {
     private String teamChatOff = "Te has cambiado al chat global.";
     private String scattered = "<param-player> has scattered";
     private String gameHasStarted = "El juego ya ha iniciado";
+    private String scenarioNotExists = "El scenario <color:#93FF9E><param-name> <white>no existe.";
+    private String scenarioEnabled = "El scenario <color:#93FF9E><param-name> <white>ha sido activado correctamente,";
+    private String scenarioDisabled = "El scenario <color:#93FF9E><param-name> <white>ha sido desactivado correctamente";
 
     public @NonNull String teamChatOn() {
       return this.teamChatOn;
@@ -172,6 +175,18 @@ public class Messages {
 
     public @NonNull String scattered() {
       return this.scattered;
+    }
+
+    public @NonNull String scenarioEnabled() {
+      return this.scenarioEnabled;
+    }
+
+    public @NonNull String scenarioDisabled() {
+      return this.scenarioDisabled;
+    }
+
+    public @NonNull String scenarioNotExists() {
+      return this.scenarioNotExists;
     }
   }
 }

@@ -5,30 +5,32 @@ import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.message.title.Titles;
-import io.github.wickeddroid.plugin.runnable.GameThread;
-import io.github.wickeddroid.plugin.runnable.ScatterThread;
+import io.github.wickeddroid.plugin.thread.GameThread;
+import io.github.wickeddroid.plugin.thread.ScatterThread;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
-import io.github.wickeddroid.plugin.util.LocationUtils;
+import io.github.wickeddroid.plugin.util.LocationUtil;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 
+@InjectAll
 public class UhcGameHandler {
-  @Inject private Plugin plugin;
-  @Inject private Worlds worlds;
-  @Inject private Titles titles;
-  @Inject private UhcGame uhcGame;
-  @Inject private Messages messages;
-  @Inject private GameThread gameThread;
-  @Inject private MessageHandler messageHandler;
-  @Inject private UhcTeamRegistry uhcTeamRegistry;
-  @Inject private ScoreboardLobby scoreboardLobby;
-  @Inject private ScoreboardGame scoreboardGame;
+  private Plugin plugin;
+  private Worlds worlds;
+  private Titles titles;
+  private UhcGame uhcGame;
+  private Messages messages;
+  private GameThread gameThread;
+  private MessageHandler messageHandler;
+  private UhcTeamRegistry uhcTeamRegistry;
+  private ScoreboardLobby scoreboardLobby;
+  private ScoreboardGame scoreboardGame;
 
   public void startGame(final Player sender) {
     if (this.uhcGame.isGameStart() || this.uhcGame.getUhcGameState() != UhcGameState.WAITING) {
@@ -42,25 +44,24 @@ public class UhcGameHandler {
 
     if (!this.uhcGame.isTeamEnabled()) {
       for (final var player : Bukkit.getOnlinePlayers()) {
-        final var location = LocationUtils.generateRandomLocation(this.uhcGame, this.worlds.worldName());
+        final var location = LocationUtil.generateRandomLocation(this.uhcGame, this.worlds.worldName());
 
         if (location == null) {
           continue;
         }
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> new ScatterThread(player, location), delayTeam);
+        Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(player, location), delayTeam);
 
         delayTeam += 40;
       }
     } else {
       for (final var team : this.uhcTeamRegistry.getTeams()) {
-        final var location = LocationUtils.generateRandomLocation(this.uhcGame, this.worlds.worldName());
+        final var location = LocationUtil.generateRandomLocation(this.uhcGame, this.worlds.worldName());
 
         if (location == null) {
           continue;
         }
-
-        Bukkit.getScheduler().runTaskLater(plugin, () -> new ScatterThread(team, location), delayTeam);
+        Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(team, location), delayTeam);
 
         delayTeam += 40;
       }

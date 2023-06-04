@@ -6,6 +6,9 @@ import io.github.wickeddroid.plugin.listener.vanilla.*;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import team.unnamed.gui.menu.listener.InventoryClickListener;
+import team.unnamed.gui.menu.listener.InventoryCloseListener;
+import team.unnamed.gui.menu.listener.InventoryOpenListener;
 import team.unnamed.inject.InjectAll;
 
 @InjectAll
@@ -22,6 +25,9 @@ public class ListenerLoader implements Loader {
   @Override
   public void load() {
     registerListeners(
+            new InventoryOpenListener(),
+            new InventoryCloseListener(plugin),
+            new InventoryClickListener(),
             playerJoinListener,
             playerQuitListener,
             playerDeathListener,

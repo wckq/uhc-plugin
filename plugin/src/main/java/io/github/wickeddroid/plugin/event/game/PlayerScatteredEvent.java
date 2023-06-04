@@ -10,16 +10,13 @@ public class PlayerScatteredEvent extends Event {
   private static final HandlerList HANDLER_LIST = new HandlerList();
   private final Player player;
   private final Location location;
-  private final int scattered;
 
   public PlayerScatteredEvent(
           final Player player,
-          final Location location,
-          final int scattered
+          final Location location
   ) {
     this.player = player;
     this.location = location;
-    this.scattered = scattered;
   }
 
   public Player getPlayer() {
@@ -28,10 +25,6 @@ public class PlayerScatteredEvent extends Event {
 
   public Location getLocation() {
     return location;
-  }
-
-  public int getScattered() {
-    return scattered;
   }
 
   public static HandlerList getHandlerList() {

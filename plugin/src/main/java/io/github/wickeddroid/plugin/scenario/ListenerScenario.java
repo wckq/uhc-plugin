@@ -5,12 +5,13 @@ import io.github.wickeddroid.api.scenario.Scenario;
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
 
-public class ListenerScenario implements GameScenario, Listener {
+public abstract class ListenerScenario implements GameScenario, Listener {
   private final String name;
   private final String key;
   private final String[] description;
   private final Material material;
   private final boolean experimental;
+  private boolean enabled;
 
   public ListenerScenario() {
     if (this.getClass().isAnnotationPresent(Scenario.class)) {
@@ -21,6 +22,7 @@ public class ListenerScenario implements GameScenario, Listener {
       this.description = annotation.description();
       this.material = annotation.material();
       this.experimental = annotation.experimental();
+      this.enabled = false;
     } else {
       throw new IllegalArgumentException("Has error ocurred with Scenario " + this.getClass().getSimpleName());
     }
@@ -49,5 +51,15 @@ public class ListenerScenario implements GameScenario, Listener {
   @Override
   public boolean isExperimental() {
     return this.experimental;
+  }
+
+  @Override
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return enabled;
   }
 }

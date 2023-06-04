@@ -7,7 +7,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Set;
@@ -82,42 +81,23 @@ public class RegisteredScenarioAnnotationProcessor extends AbstractProcessor {
   }
 
   private String convertString( String s ) {
-    int ctr = 0 ;
-    int n = s.length( ) ;
-    char ch[ ] = s.toCharArray( ) ;
-    int c = 0 ;
-    for ( int i = 0; i < n; i++ )
-    {
-      if( i == 0 )
-        ch[ i ] = Character.toLowerCase( ch[ i ] ) ;
-      if ( ch[ i ] == ' ' )
-      {
-        ctr++ ;
-        ch[ i + 1 ] = Character.toUpperCase( ch[ i + 1 ] ) ;
+    final var n = s.length();
+    final var ch = s.toCharArray();
+    var c = 0 ;
+    var ctr = 0;
+    for (int i = 0; i < n; i++) {
+      if( i == 0 ) {
+        ch[i] = Character.toLowerCase(ch[i]);
       }
-      else
-        ch[ c++ ] = ch[ i ] ;
-    }
-    return String.valueOf( ch, 0, n - ctr ) ;
-  }
 
-  private static String convertToSnakeCase(String input) {
-    final var output = new StringBuilder();
-
-    for (int i = 0; i < input.length(); i++) {
-      final var currentChar = input.charAt(i);
-
-      if (Character.isUpperCase(currentChar)) {
-        if (i != 0) {
-          output.append("_");
-        }
-
-        output.append(Character.toLowerCase(currentChar));
+      if (ch[ i ] == ' ') {
+        ctr++;
+        ch[i + 1] = Character.toUpperCase(ch[i + 1]);
       } else {
-        output.append(currentChar);
+        ch[c++] = ch[i];
       }
     }
 
-    return output.toString();
+    return String.valueOf( ch, 0, n - ctr);
   }
 }

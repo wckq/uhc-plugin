@@ -1,6 +1,6 @@
 package io.github.wickeddroid.plugin.configuration.serializer;
 
-import io.github.wickeddroid.plugin.util.MessageUtils;
+import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -21,6 +21,7 @@ public enum TitleSerializer implements TypeSerializer<Title> {
     if (!source.hasChild(path)) {
       throw new SerializationException("Required field " + Arrays.toString(path) + " was not present in node");
     }
+
     return source.node(path);
   }
   @Override
@@ -60,8 +61,8 @@ public enum TitleSerializer implements TypeSerializer<Title> {
     }
 
     return Title.title(
-            MessageUtils.parseStringToComponent(title.getString()),
-            MessageUtils.parseStringToComponent(subtitle.getString()),
+            MessageUtil.parseStringToComponent(title.getString()),
+            MessageUtil.parseStringToComponent(subtitle.getString()),
             Title.Times.times(
                     Duration.ofSeconds(fadeIn),
                     Duration.ofSeconds(stay),

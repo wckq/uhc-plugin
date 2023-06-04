@@ -1,15 +1,18 @@
 package io.github.wickeddroid.plugin.command;
 
+import io.github.wickeddroid.plugin.command.staff.CommandStaffTeam;
 import io.github.wickeddroid.plugin.team.UhcTeamHandler;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
 import me.fixeddev.commandflow.annotated.annotation.OptArg;
+import me.fixeddev.commandflow.annotated.annotation.SubCommandClasses;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 
 @Command(names = "team")
+@SubCommandClasses({ CommandStaffTeam.class })
 public class CommandTeam implements CommandClass {
   @Inject private UhcTeamHandler uhcTeamHandler;
   @Inject private UhcTeamManager uhcTeamManager;

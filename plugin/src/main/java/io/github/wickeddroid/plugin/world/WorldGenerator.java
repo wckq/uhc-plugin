@@ -1,5 +1,6 @@
 package io.github.wickeddroid.plugin.world;
 
+import io.github.wickeddroid.api.game.UhcGame;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import team.unnamed.inject.Inject;
@@ -10,6 +11,7 @@ import java.io.IOException;
 @Singleton
 public class WorldGenerator {
   @Inject private Worlds worlds;
+  @Inject private UhcGame uhcGame;
   private World world;
 
   public void createWorld(final String name) {
@@ -63,6 +65,8 @@ public class WorldGenerator {
     worldBorder.setDamageAmount(1);
     worldBorder.setSize(size * 2);
     worldBorder.setCenter(0, 0);
+
+    this.uhcGame.setWorldBorder(size);
   }
 
   public World getWorld() {

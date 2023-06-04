@@ -10,17 +10,19 @@ import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.Singleton;
 
 import java.util.concurrent.TimeUnit;
 
 @Singleton
+@InjectAll
 public class UhcTeamHandler {
-  @Inject private UhcGame uhcGame;
-  @Inject private Messages messages;
-  @Inject private MessageHandler messageHandler;
-  @Inject private UhcTeamManager uhcTeamManager;
-  @Inject private UhcPlayerRegistry uhcPlayerRegistry;
+  private UhcGame uhcGame;
+  private Messages messages;
+  private MessageHandler messageHandler;
+  private UhcTeamManager uhcTeamManager;
+  private UhcPlayerRegistry uhcPlayerRegistry;
 
   private final Cache<String, String> inviteCache = new DynamicCache<>(5, TimeUnit.MINUTES);
 

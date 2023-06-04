@@ -13,24 +13,8 @@ import java.util.Random;
 
 public class DefaultUhcTeam implements UhcTeam {
   private final List<String> members;
-  private final Team team;
   private String leader;
   private String name;
-  private NamedTextColor color;
-  private final NamedTextColor[] textColors = {
-          NamedTextColor.AQUA,
-          NamedTextColor.BLUE,
-          NamedTextColor.DARK_AQUA,
-          NamedTextColor.DARK_BLUE,
-          NamedTextColor.DARK_GRAY,
-          NamedTextColor.DARK_RED,
-          NamedTextColor.YELLOW,
-          NamedTextColor.LIGHT_PURPLE,
-          NamedTextColor.RED,
-          NamedTextColor.GREEN,
-          NamedTextColor.GRAY
-  };
-
   private boolean alive;
   private int kills;
   private int playersAlive;
@@ -46,22 +30,6 @@ public class DefaultUhcTeam implements UhcTeam {
     this.playersAlive = 1;
     this.members = new ArrayList<>();
     this.members.add(leader);
-
-    if (Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader) == null) {
-      this.team = Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(leader);
-
-      team.prefix(Component.text(String.format("[Team %s] | ", leader)));
-      color = textColors[new Random().nextInt(textColors.length)];
-      team.color(color);
-      team.setAllowFriendlyFire(false);
-    } else
-      this.team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader);
-
-    if (team == null) {
-      return;
-    }
-
-    this.team.addEntry(leader);
   }
 
   @Override
@@ -137,13 +105,11 @@ public class DefaultUhcTeam implements UhcTeam {
   @Override
   public void addMember(String name) {
     this.members.add(name);
-    this.team.addEntry(name);
   }
 
   @Override
   public void removeMember(String name) {
     this.members.remove(name);
-    this.team.removeEntry(name);
   }
 
   @Override

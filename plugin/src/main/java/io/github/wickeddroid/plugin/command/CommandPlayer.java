@@ -1,25 +1,27 @@
 package io.github.wickeddroid.plugin.command;
 
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
+import io.github.wickeddroid.plugin.menu.scenario.ScenariosEnabledInventory;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
-import io.github.wickeddroid.plugin.scenario.ScenarioRegistration;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
 import org.bukkit.entity.Player;
-import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 
+@InjectAll
 public class CommandPlayer implements CommandClass {
-  @Inject private UhcPlayerRegistry uhcPlayerRegistry;
-  @Inject private ScenarioManager scenarioManager;
-  @Inject private UhcGameHandler uhcGameHandler;
-  @Inject private UhcTeamManager uhcTeamManager;
-  @Inject private MessageHandler messageHandler;
-  @Inject private Messages messages;
+  private ScenariosEnabledInventory scenariosInventory;
+  private UhcPlayerRegistry uhcPlayerRegistry;
+  private ScenarioManager scenarioManager;
+  private UhcGameHandler uhcGameHandler;
+  private UhcTeamManager uhcTeamManager;
+  private MessageHandler messageHandler;
+  private Messages messages;
 
   @Command(names = {"teamchat", "tc", "chat", "c"})
   public void teamChat(final @Sender Player sender) {
@@ -41,11 +43,8 @@ public class CommandPlayer implements CommandClass {
             : this.messages.other().teamChatOff());
   }
 
-  @Command(names = "scenario")
-  public void scenario(
-          final @Sender Player sender,
-          final String name
-  ) {
-    this.scenarioManager.enableScenario(name);
+  @Command(names = "scenarios")
+  public void scenarios(final @Sender Player sender) {
+    sender.openInventory(scenariosInventory.createInventory());
   }
 }

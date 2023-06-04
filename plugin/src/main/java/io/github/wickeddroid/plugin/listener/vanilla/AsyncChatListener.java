@@ -1,5 +1,6 @@
 package io.github.wickeddroid.plugin.listener.vanilla;
 
+import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
@@ -14,6 +15,7 @@ public class AsyncChatListener implements Listener {
   @Inject private MessageHandler messageHandler;
   @Inject private UhcPlayerRegistry uhcPlayerRegistry;
   @Inject private UhcTeamManager uhcTeamManager;
+  @Inject private UhcGame uhcGame;
 
   @EventHandler
   public void onAsyncChat(final AsyncChatEvent event) {
@@ -26,13 +28,13 @@ public class AsyncChatListener implements Listener {
 
     final var uhcTeam = uhcPlayer.getUhcTeam();
 
-    if (uhcTeam == null) {
-      uhcPlayer.setTeamChat(false);
-      this.messageHandler.send(player, this.messages.team().doesNotExist());
+    if (!uhcPlayer.isTeamChat()) {
       return;
     }
 
-    if (!uhcPlayer.isTeamChat()) {
+    if (uhcTeam == null) {
+      uhcPlayer.setTeamChat(false);
+      this.messageHandler.send(player, this.messages.team().doesNotExist());
       return;
     }
 

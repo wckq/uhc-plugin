@@ -11,8 +11,10 @@ subprojects {
     apply(plugin = "com.github.johnrengelman.shadow")
 
     repositories {
+        mavenCentral()
+        mavenLocal()
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
-        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://repo.codemc.io/repository/nms/")
         maven("https://repo.unnamed.team/repository/unnamed-public/")
     }
 }

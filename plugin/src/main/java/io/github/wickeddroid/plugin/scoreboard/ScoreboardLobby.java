@@ -2,8 +2,7 @@ package io.github.wickeddroid.plugin.scoreboard;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
-import io.github.wickeddroid.plugin.team.UhcTeamManager;
-import io.github.wickeddroid.plugin.util.MessageUtils;
+import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
@@ -41,7 +40,7 @@ public class ScoreboardLobby extends ScoreboardCreator {
     final var host = this.uhcGame.getHost();
     final var teamSize = this.uhcGame.getTeamSize();
 
-    return MessageUtils.parseStringToComponent(
+    return MessageUtil.parseStringToComponent(
             text,
             Placeholder.parsed("online-players", String.valueOf(Bukkit.getOnlinePlayers().size())),
             Placeholder.parsed("max-players", String.valueOf(Bukkit.getServer().getMaxPlayers())),

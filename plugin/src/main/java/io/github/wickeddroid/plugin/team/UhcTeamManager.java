@@ -5,20 +5,22 @@ import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
-import io.github.wickeddroid.plugin.util.MessageUtils;
+import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 
+@InjectAll
 public class UhcTeamManager {
-  @Inject private UhcGame uhcGame;
-  @Inject private Messages messages;
-  @Inject private MessageHandler messageHandler;
-  @Inject private UhcTeamRegistry uhcTeamRegistry;
-  @Inject private UhcTeamHandler uhcTeamHandler;
-  @Inject private UhcPlayerRegistry uhcPlayerRegistry;
+  private UhcGame uhcGame;
+  private Messages messages;
+  private MessageHandler messageHandler;
+  private UhcTeamHandler uhcTeamHandler;
+  private UhcTeamRegistry uhcTeamRegistry;
+  private UhcPlayerRegistry uhcPlayerRegistry;
 
   public void createTeam(
           final Player leader,
@@ -95,7 +97,7 @@ public class UhcTeamManager {
         return;
       }
 
-      member.sendMessage(MessageUtils.parseStringToComponent(
+      member.sendMessage(MessageUtil.parseStringToComponent(
               "<red>[Team] <white><player> <red>➣ <white>",
               Placeholder.parsed("player", player.getName())
       ).append(message));

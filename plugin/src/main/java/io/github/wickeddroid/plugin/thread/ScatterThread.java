@@ -1,4 +1,4 @@
-package io.github.wickeddroid.plugin.runnable;
+package io.github.wickeddroid.plugin.thread;
 
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.event.game.PlayerScatteredEvent;
@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class ScatterThread implements Runnable{
+public class ScatterThread implements Runnable {
   private final Location location;
   private Player player;
   private UhcTeam uhcTeam;
@@ -30,11 +30,8 @@ public class ScatterThread implements Runnable{
 
   @Override
   public void run() {
-    var scattered = 1;
-
     if (uhcTeam == null) {
-      Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location, scattered));
-      ++scattered;
+      Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location));
       return;
     }
 
@@ -46,8 +43,7 @@ public class ScatterThread implements Runnable{
         return;
       }
 
-      Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location, scattered));
-      ++scattered;
+      Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location));
     }
   }
 }
