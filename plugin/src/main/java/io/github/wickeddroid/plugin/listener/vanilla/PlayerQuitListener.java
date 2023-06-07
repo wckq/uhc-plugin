@@ -10,14 +10,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 
+@InjectAll
 public class PlayerQuitListener implements Listener {
 
-  @Inject private UhcPlayerRegistry uhcPlayerRegistry;
-  @Inject private ScoreboardEndGame scoreboardEndGame;
-  @Inject private ScoreboardLobby scoreboardLobby;
-  @Inject private ScoreboardGame scoreboardGame;
-  @Inject private UhcGame uhcGame;
+  private UhcPlayerRegistry uhcPlayerRegistry;
+  private ScoreboardEndGame scoreboardEndGame;
+  private ScoreboardLobby scoreboardLobby;
+  private ScoreboardGame scoreboardGame;
+  private UhcGame uhcGame;
 
   @EventHandler
   public void onPlayerQuit(final PlayerQuitEvent event) {

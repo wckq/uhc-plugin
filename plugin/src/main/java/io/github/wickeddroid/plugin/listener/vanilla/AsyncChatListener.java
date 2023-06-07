@@ -8,14 +8,15 @@ import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 
+@InjectAll
 public class AsyncChatListener implements Listener {
-  @Inject private Messages messages;
-  @Inject private MessageHandler messageHandler;
-  @Inject private UhcPlayerRegistry uhcPlayerRegistry;
-  @Inject private UhcTeamManager uhcTeamManager;
-  @Inject private UhcGame uhcGame;
+  private Messages messages;
+  private MessageHandler messageHandler;
+  private UhcPlayerRegistry uhcPlayerRegistry;
+  private UhcTeamManager uhcTeamManager;
+  private UhcGame uhcGame;
 
   @EventHandler
   public void onAsyncChat(final AsyncChatEvent event) {

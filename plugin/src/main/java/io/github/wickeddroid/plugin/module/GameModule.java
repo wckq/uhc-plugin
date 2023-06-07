@@ -5,6 +5,7 @@ import io.github.wickeddroid.plugin.game.DefaultUhcGame;
 import team.unnamed.inject.AbstractModule;
 
 public class GameModule extends AbstractModule {
+
   @Override
   protected void configure() {
     bind(UhcGame.class)

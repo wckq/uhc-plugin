@@ -27,6 +27,10 @@ public interface UhcGame {
 
   int getTimeForPvp();
 
+  void setCobwebLimit(int cobwebLimit);
+
+  int getCobwebLimit();
+
   void setTimeForPvp(int timeForPvp);
 
   int getTimeForMeetup();
@@ -38,6 +42,10 @@ public interface UhcGame {
   void setPvp(boolean pvp);
 
   boolean isGameStart();
+
+  void setCutClean(boolean cutClean);
+
+  boolean isCutClean();
 
   void setGameStart(boolean gameStart);
 

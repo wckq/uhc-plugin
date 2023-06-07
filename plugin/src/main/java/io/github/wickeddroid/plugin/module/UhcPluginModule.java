@@ -4,6 +4,7 @@ import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.AbstractModule;
 
 public class UhcPluginModule extends AbstractModule {
+
   private final Plugin plugin;
 
   public UhcPluginModule(final Plugin plugin) {

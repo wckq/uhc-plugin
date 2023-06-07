@@ -6,6 +6,7 @@ import io.github.wickeddroid.api.team.UhcTeam;
 import java.util.UUID;
 
 public class DefaultUhcPlayer implements UhcPlayer {
+
   private final UUID uuid;
   private final String name;
   private UhcTeam uhcTeam;

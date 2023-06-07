@@ -16,12 +16,13 @@ import org.bukkit.inventory.ItemStack;
 
 @RegisteredScenario
 @Scenario(
-        name = "<gold>CutClean",
+        name = "CutClean",
         key = "cut_clean",
         description = {""},
         material = Material.IRON_INGOT
 )
 public class CutCleanScenario extends ListenerScenario {
+
   @EventHandler
   public void onBlockBreak(final BlockBreakEvent event) {
     final var block = event.getBlock();

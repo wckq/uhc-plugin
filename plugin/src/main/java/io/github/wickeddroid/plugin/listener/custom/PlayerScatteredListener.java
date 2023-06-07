@@ -8,12 +8,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 
+@InjectAll
 public class PlayerScatteredListener implements Listener {
-  @Inject private Messages messages;
-  @Inject private MessageHandler messageHandler;
-  @Inject private UhcPlayerRegistry uhcPlayerRegistry;
+
+  private Messages messages;
+  private MessageHandler messageHandler;
+  private UhcPlayerRegistry uhcPlayerRegistry;
 
   @EventHandler
   public void onPlayerScattered(final PlayerScatteredEvent event) {
@@ -30,6 +35,10 @@ public class PlayerScatteredListener implements Listener {
     playerScattered.setHealth(20);
     playerScattered.setLevel(0);
     playerScattered.setExp(0);
+
+    playerScattered.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 255));
+    playerScattered.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(Integer.MAX_VALUE, 255));
+    playerScattered.addPotionEffect(PotionEffectType.JUMP.createEffect(Integer.MAX_VALUE, 127));
 
     playerScattered.teleport(event.getLocation());
 

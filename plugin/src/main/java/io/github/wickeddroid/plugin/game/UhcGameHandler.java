@@ -21,6 +21,7 @@ import team.unnamed.inject.InjectAll;
 
 @InjectAll
 public class UhcGameHandler {
+
   private Plugin plugin;
   private Worlds worlds;
   private Titles titles;
@@ -79,6 +80,7 @@ public class UhcGameHandler {
 
         this.scoreboardGame.getSidebar().addViewer(player);
 
+        player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
         player.showTitle(this.titles.gameStart());
       }
 

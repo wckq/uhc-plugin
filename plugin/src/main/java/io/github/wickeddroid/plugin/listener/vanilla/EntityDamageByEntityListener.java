@@ -8,7 +8,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import team.unnamed.inject.Inject;
 
 public class EntityDamageByEntityListener implements Listener {
-  @Inject private UhcTeamManager uhcTeamManager;
+
+  @Inject
+  private UhcTeamManager uhcTeamManager;
 
   @EventHandler
   public void onEntityDamageByEntity(final EntityDamageByEntityEvent event) {

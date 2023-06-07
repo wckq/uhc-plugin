@@ -14,6 +14,7 @@ import team.unnamed.inject.Inject;
 @Command(names = "team")
 @SubCommandClasses({ CommandStaffTeam.class })
 public class CommandTeam implements CommandClass {
+
   @Inject private UhcTeamHandler uhcTeamHandler;
   @Inject private UhcTeamManager uhcTeamManager;
 

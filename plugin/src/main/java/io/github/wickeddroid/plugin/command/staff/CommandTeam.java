@@ -12,9 +12,12 @@ import team.unnamed.inject.Inject;
 @Command(names = "team")
 public class CommandTeam implements CommandClass {
 
-  @Inject private MessageHandler messageHandler;
-  @Inject private Messages messages;
-  @Inject private UhcGame uhcGame;
+  @Inject
+  private MessageHandler messageHandler;
+  @Inject
+  private Messages messages;
+  @Inject
+  private UhcGame uhcGame;
 
   @Command(names = "enable")
   public void enable(

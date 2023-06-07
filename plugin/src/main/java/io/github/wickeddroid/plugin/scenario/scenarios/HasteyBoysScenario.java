@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
         material = Material.DIAMOND_PICKAXE
 )
 public class HasteyBoysScenario extends ListenerScenario {
+
   @EventHandler
   public void onPrepareItemCraft(final PrepareItemCraftEvent event) {
     final var recipe = event.getRecipe();

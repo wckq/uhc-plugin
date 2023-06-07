@@ -10,6 +10,7 @@ import java.io.IOException;
 
 @Singleton
 public class WorldGenerator {
+
   @Inject private Worlds worlds;
   @Inject private UhcGame uhcGame;
   private World world;

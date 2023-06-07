@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
         material = Material.FEATHER
 )
 public class NoFallScenario extends ListenerScenario {
+
   @EventHandler
   public void onEntityDamage(final EntityDamageEvent event) {
     if (!(event.getEntity() instanceof Player)) {

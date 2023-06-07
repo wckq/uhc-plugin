@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class ScoreboardGame extends ScoreboardCreator {
+
   private final UhcGame uhcGame;
   private final UhcPlayerRegistry uhcPlayerRegistry;
 

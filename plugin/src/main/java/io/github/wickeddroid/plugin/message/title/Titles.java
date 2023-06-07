@@ -7,6 +7,7 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
 public class Titles {
+
   private Title gameStart = Title.title(
           MessageUtil.parseStringToComponent("¡UHC Iniciado!"),
           MessageUtil.parseStringToComponent("Recolecta recursos para poder pelear.")

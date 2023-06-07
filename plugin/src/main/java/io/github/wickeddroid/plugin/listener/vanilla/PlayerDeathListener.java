@@ -11,9 +11,13 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import team.unnamed.inject.Inject;
 
 public class PlayerDeathListener implements Listener {
-  @Inject private UhcPlayerRegistry uhcPlayerRegistry;
-  @Inject private UhcTeamManager uhcTeamManager;
-  @Inject private UhcGame uhcGame;
+
+  @Inject
+  private UhcPlayerRegistry uhcPlayerRegistry;
+  @Inject
+  private UhcTeamManager uhcTeamManager;
+  @Inject
+  private UhcGame uhcGame;
 
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent event) {

@@ -4,7 +4,6 @@ import io.github.wickeddroid.api.loader.Loader;
 import io.github.wickeddroid.plugin.command.CommandPlayer;
 import io.github.wickeddroid.plugin.command.CommandTeam;
 import io.github.wickeddroid.plugin.command.CommandUhcStaff;
-import io.github.wickeddroid.plugin.command.commandflow.UhcCommandModule;
 import io.github.wickeddroid.plugin.scenario.ScenarioRegistration;
 import me.fixeddev.commandflow.annotated.AnnotatedCommandTreeBuilder;
 import me.fixeddev.commandflow.annotated.CommandClass;
@@ -40,7 +39,6 @@ public class CommandLoader implements Loader {
     final var partInjector = PartInjector.create();
     partInjector.install(new DefaultsModule());
     partInjector.install(new BukkitModule());
-    partInjector.install(new UhcCommandModule(this.scenarioRegistration));
 
     final var treeBuilder = AnnotatedCommandTreeBuilder.create(
             new AnnotatedCommandBuilderImpl(partInjector),

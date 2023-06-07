@@ -12,6 +12,7 @@ import org.spongepowered.configurate.loader.ConfigurationLoader;
 import java.nio.file.Path;
 
 public class JsonConfigurationBuilder<T> {
+
   private final ConfigurationLoader<BasicConfigurationNode> loader;
   private final ConfigurationNode node;
   private final Class<T> clazz;

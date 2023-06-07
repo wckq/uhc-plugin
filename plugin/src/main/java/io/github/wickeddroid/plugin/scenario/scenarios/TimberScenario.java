@@ -15,6 +15,7 @@ import org.bukkit.event.block.BlockBreakEvent;
         material = Material.OAK_LOG
 )
 public class TimberScenario extends ListenerScenario {
+
   @EventHandler
   public void onBlockBreak(final BlockBreakEvent event) {
     final var block = event.getBlock();

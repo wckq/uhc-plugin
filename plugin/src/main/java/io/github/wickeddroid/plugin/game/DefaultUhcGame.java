@@ -4,15 +4,18 @@ import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 
 public class DefaultUhcGame implements UhcGame {
+
   private String host;
   private UhcGameState uhcGameState;
   private long startTime;
   private int currentTime;
+  private int cobwebLimit;
   private int teamSize;
   private int worldBorder;
   private int appleRate;
   private int timeForPvp;
   private int timeForMeetup;
+  private boolean cutClean;
   private boolean pvp;
   private boolean gameStart;
   private boolean teamEnabled;
@@ -23,11 +26,13 @@ public class DefaultUhcGame implements UhcGame {
     this.startTime = 0;
     this.currentTime = 0;
     this.appleRate = 1;
+    this.cobwebLimit = 64;
     this.timeForPvp = 3600;
     this.timeForMeetup = 7200;
     this.teamSize = 2;
     this.worldBorder = 2000;
     this.pvp = false;
+    this.cutClean = false;
     this.gameStart = false;
     this.teamEnabled = false;
   }
@@ -102,6 +107,16 @@ public class DefaultUhcGame implements UhcGame {
   }
 
   @Override
+  public void setCobwebLimit(int cobwebLimit) {
+
+  }
+
+  @Override
+  public int getCobwebLimit() {
+    return 0;
+  }
+
+  @Override
   public void setTimeForMeetup(int timeForMeetup) {
     this.timeForMeetup = timeForMeetup;
   }
@@ -129,6 +144,16 @@ public class DefaultUhcGame implements UhcGame {
   @Override
   public boolean isGameStart() {
     return this.gameStart;
+  }
+
+  @Override
+  public void setCutClean(boolean cutClean) {
+
+  }
+
+  @Override
+  public boolean isCutClean() {
+    return false;
   }
 
   @Override

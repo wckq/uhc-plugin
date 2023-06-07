@@ -7,6 +7,7 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @SuppressWarnings("")
 @ConfigSerializable
 public class Messages {
+
   private String prefix = "<gradient:#FEE679:#E5BF18>UHC ➣";
   private Team team = new Team();
   private Other other = new Other();

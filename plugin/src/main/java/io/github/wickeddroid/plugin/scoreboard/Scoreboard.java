@@ -8,6 +8,7 @@ import java.util.List;
 
 @ConfigSerializable
 public class Scoreboard {
+
   private String title = "<rainbow>UHC";
   private Lobby lobby = new Lobby();
   private Lobby game = new Lobby();

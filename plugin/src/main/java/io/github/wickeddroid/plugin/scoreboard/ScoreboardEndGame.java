@@ -3,6 +3,7 @@ package io.github.wickeddroid.plugin.scoreboard;
 import org.bukkit.plugin.Plugin;
 
 public class ScoreboardEndGame extends ScoreboardCreator {
+
   public ScoreboardEndGame(Scoreboard scoreboard, Plugin plugin) {
     super(scoreboard.title(), plugin);
 

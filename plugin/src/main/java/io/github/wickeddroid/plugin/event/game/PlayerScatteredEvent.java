@@ -7,6 +7,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerScatteredEvent extends Event {
+
   private static final HandlerList HANDLER_LIST = new HandlerList();
   private final Player player;
   private final Location location;

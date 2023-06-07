@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.InjectAll;
+import team.unnamed.inject.InjectIgnore;
 import team.unnamed.inject.Singleton;
 
 import java.util.concurrent.TimeUnit;
@@ -18,12 +19,14 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 @InjectAll
 public class UhcTeamHandler {
+
   private UhcGame uhcGame;
   private Messages messages;
   private MessageHandler messageHandler;
   private UhcTeamManager uhcTeamManager;
   private UhcPlayerRegistry uhcPlayerRegistry;
 
+  @InjectIgnore
   private final Cache<String, String> inviteCache = new DynamicCache<>(5, TimeUnit.MINUTES);
 
   public void addPlayerToTeam(

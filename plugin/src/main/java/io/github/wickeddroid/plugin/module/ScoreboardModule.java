@@ -13,6 +13,7 @@ import team.unnamed.inject.Provides;
 import team.unnamed.inject.Singleton;
 
 public class ScoreboardModule extends AbstractModule {
+
   @Provides @Singleton
   public ScoreboardLobby lobbyScoreboardProvider(
           final Plugin plugin,

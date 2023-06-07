@@ -5,6 +5,7 @@ import io.github.wickeddroid.plugin.loader.*;
 import team.unnamed.inject.AbstractModule;
 
 public class LoaderModule extends AbstractModule {
+
   @Override
   protected void configure() {
     bindLoader("default-loader", DefaultLoader.class);

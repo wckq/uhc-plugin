@@ -2,19 +2,22 @@ package io.github.wickeddroid.plugin.loader;
 
 import io.github.wickeddroid.api.loader.Loader;
 import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.Named;
 
+@InjectAll
 public class DefaultLoader implements Loader {
-  @Inject @Named("command-loader")
+
+  @Named("command-loader")
   private Loader commandLoader;
 
-  @Inject @Named("listener-loader")
+  @Named("listener-loader")
   private Loader listenerLoader;
 
-  @Inject @Named("world-loader")
+  @Named("world-loader")
   private Loader worldLoader;
 
-  @Inject @Named("scenario-loader")
+  @Named("scenario-loader")
   private Loader scenarioLoader;
 
   @Override

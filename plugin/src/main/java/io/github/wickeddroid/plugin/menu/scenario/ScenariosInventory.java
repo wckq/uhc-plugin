@@ -6,6 +6,7 @@ import io.github.wickeddroid.plugin.menu.UhcInventory;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class ScenariosInventory extends UhcInventory {
+
   @Inject private ScenarioManager scenarioManager;
 
   public ScenariosInventory() {
@@ -98,10 +100,11 @@ public class ScenariosInventory extends UhcInventory {
 
   private ItemBuilder rawItem(final GameScenario gameScenario) {
     return ItemBuilder.newBuilder(gameScenario.getMaterial())
-            .name(MessageUtil.parseStringToComponent(gameScenario.getName())
+            .name(MessageUtil.parseStringToComponent("<color:#93FF9E>" + gameScenario.getName())
                     .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
             .lore(Arrays.stream(gameScenario.getDescription())
                     .map(lore -> MessageUtil.parseStringToComponent(lore)
+                            .color(TextColor.color(255, 255, 255))
                             .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                     .collect(Collectors.toList()));
   }

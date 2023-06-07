@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public abstract class ScoreboardCreator {
+
   private final Sidebar<Component> sidebar;
 
   public ScoreboardCreator(

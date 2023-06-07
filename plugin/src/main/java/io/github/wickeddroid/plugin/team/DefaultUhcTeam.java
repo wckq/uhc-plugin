@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 public class DefaultUhcTeam implements UhcTeam {
+
   private final List<String> members;
   private String leader;
   private String name;

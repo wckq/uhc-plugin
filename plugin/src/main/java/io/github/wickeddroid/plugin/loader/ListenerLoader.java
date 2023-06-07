@@ -13,6 +13,7 @@ import team.unnamed.inject.InjectAll;
 
 @InjectAll
 public class ListenerLoader implements Loader {
+
   private Plugin plugin;
   private PlayerJoinListener playerJoinListener;
   private PlayerQuitListener playerQuitListener;

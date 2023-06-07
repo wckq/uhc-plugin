@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Singleton
 public class UhcTeamRegistry {
+
   private final Map<String, UhcTeam> teamMap = new HashMap<>();
 
   public void createTeam(

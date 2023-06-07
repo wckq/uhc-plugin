@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Singleton
 public class UhcPlayerRegistry {
+
   private final Map<String, UhcPlayer> playerMap = new HashMap<>();
 
   public void createPlayer(

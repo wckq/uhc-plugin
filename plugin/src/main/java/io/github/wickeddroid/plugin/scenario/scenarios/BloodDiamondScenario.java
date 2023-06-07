@@ -9,12 +9,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 @RegisteredScenario
 @Scenario(
-        name = "<red>Blood Diamonds",
+        name = "Blood Diamonds",
         key = "blood_diamonds",
         description = {""},
         material = Material.DIAMOND
 )
 public class BloodDiamondScenario extends ListenerScenario {
+
   @EventHandler
   public void onBlockBreak(final BlockBreakEvent event) {
     if (event.getBlock().getType() == Material.DIAMOND_ORE

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ScatterThread implements Runnable {
+
   private final Location location;
   private Player player;
   private UhcTeam uhcTeam;

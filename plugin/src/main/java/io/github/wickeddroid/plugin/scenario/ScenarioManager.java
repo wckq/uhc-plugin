@@ -10,11 +10,14 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import team.unnamed.inject.Inject;
 import io.github.wickeddroid.plugin.scenario.ScenarioRegistration;
+import team.unnamed.inject.InjectAll;
 
 import java.util.Collection;
 import java.util.List;
 
+@InjectAll
 public class ScenarioManager {
+
   private Plugin plugin;
   private Messages messages;
   private MessageHandler messageHandler;

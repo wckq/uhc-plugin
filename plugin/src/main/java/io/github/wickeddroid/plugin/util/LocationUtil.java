@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class LocationUtil {
+
   private LocationUtil() {}
 
   public static Location generateRandomLocation(

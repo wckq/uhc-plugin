@@ -15,6 +15,7 @@ import team.unnamed.inject.Singleton;
 import java.nio.file.Path;
 
 public class ConfigurationModule extends AbstractModule {
+
   private final Path path;
 
   public ConfigurationModule(final Plugin plugin) {

@@ -9,6 +9,7 @@ import java.util.List;
 
 @ConfigSerializable
 public class Worlds {
+
   private String seed = "";
   private String worldName = "uhc_world";
   private int worldBorder = 2000;

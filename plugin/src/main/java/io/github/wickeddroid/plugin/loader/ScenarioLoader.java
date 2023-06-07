@@ -5,6 +5,7 @@ import io.github.wickeddroid.plugin.scenario.ScenarioRegistration;
 import team.unnamed.inject.Inject;
 
 public class ScenarioLoader implements Loader {
+
   @Inject private ScenarioRegistration scenarioRegistration;
 
   @Override

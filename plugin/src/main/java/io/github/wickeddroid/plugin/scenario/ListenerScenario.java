@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.event.Listener;
 
 public abstract class ListenerScenario implements GameScenario, Listener {
+
   private final String name;
   private final String key;
   private final String[] description;

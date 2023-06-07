@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.Inventory;
 
 public abstract class UhcInventory {
+
   protected final Component title;
   protected final int rows;
 

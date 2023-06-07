@@ -10,6 +10,7 @@ import team.unnamed.inject.Injector;
 import team.unnamed.inject.Named;
 
 public class UhcPlugin extends JavaPlugin {
+
   @Inject @Named("default-loader")
   private Loader loader;
 

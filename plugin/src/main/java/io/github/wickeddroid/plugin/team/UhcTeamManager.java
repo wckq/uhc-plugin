@@ -10,11 +10,11 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import team.unnamed.inject.Inject;
 import team.unnamed.inject.InjectAll;
 
 @InjectAll
 public class UhcTeamManager {
+
   private UhcGame uhcGame;
   private Messages messages;
   private MessageHandler messageHandler;

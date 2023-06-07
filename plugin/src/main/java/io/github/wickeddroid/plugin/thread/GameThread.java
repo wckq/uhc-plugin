@@ -9,6 +9,7 @@ import team.unnamed.inject.Singleton;
 
 @Singleton
 public class GameThread implements Runnable {
+
   @Inject private Worlds worlds;
   @Inject private UhcGame uhcGame;
   @Inject private UhcGameHandler uhcGameHandler;

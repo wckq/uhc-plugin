@@ -9,6 +9,7 @@ import team.unnamed.inject.Inject;
 import java.io.IOException;
 
 public class WorldLoader implements Loader {
+
   @Inject private Worlds worlds;
   @Inject private WorldGenerator worldGenerator;
 

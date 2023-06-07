@@ -12,8 +12,10 @@ import team.unnamed.inject.Inject;
 @Command(names = "scenario")
 public class CommandScenario implements CommandClass {
 
-  @Inject private ScenariosInventory scenariosInventory;
-  @Inject private ScenarioManager scenarioManager;
+  @Inject
+  private ScenariosInventory scenariosInventory;
+  @Inject
+  private ScenarioManager scenarioManager;
 
   @Command(names = "")
   public void enable(

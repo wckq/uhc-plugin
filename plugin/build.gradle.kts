@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.17.1-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.18.2-R0.1-SNAPSHOT")
 
     implementation("org.spongepowered:configurate-gson:4.1.2")
     implementation("me.catcoder:bukkit-sidebar:6.2.0-SNAPSHOT")
@@ -14,7 +14,6 @@ dependencies {
 
     implementation("me.fixeddev:commandflow-bukkit:0.5.2")
     implementation("team.unnamed:inject:2.0.0")
-    implementation("net.kyori:adventure-text-minimessage:4.13.1")
 
     arrayOf("1_17_R1", "1_18_R2", "1_19_R3").forEach {
         implementation("team.unnamed:gui-menu-adapt-v$it:3.4.0-SNAPSHOT")

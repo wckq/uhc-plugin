@@ -4,6 +4,7 @@ import com.destroystokyo.paper.MaterialTags;
 import org.bukkit.Material;
 
 public class MaterialUtil {
+
   private MaterialUtil() {}
 
   public static boolean isTool(Material material){

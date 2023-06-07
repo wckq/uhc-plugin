@@ -4,6 +4,7 @@ package io.github.wickeddroid.plugin.util;
 import java.util.Random;
 
 public class PluginUtil {
+
   public static final Random RANDOM = new Random();
 
   private PluginUtil() {

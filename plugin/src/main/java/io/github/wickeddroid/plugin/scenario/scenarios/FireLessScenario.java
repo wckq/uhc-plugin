@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
         material = Material.LAVA_BUCKET
 )
 public class FireLessScenario extends ListenerScenario {
+
   @EventHandler
   public void onEntityDamage(final EntityDamageEvent event) {
     if (!(event.getEntity() instanceof Player)) {

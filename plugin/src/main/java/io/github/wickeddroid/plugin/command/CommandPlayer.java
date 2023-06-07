@@ -15,6 +15,7 @@ import team.unnamed.inject.InjectAll;
 
 @InjectAll
 public class CommandPlayer implements CommandClass {
+
   private ScenariosEnabledInventory scenariosInventory;
   private UhcPlayerRegistry uhcPlayerRegistry;
   private ScenarioManager scenarioManager;

@@ -5,6 +5,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 public final class MessageUtil {
+
   public static final MiniMessage MINI_MESSAGE = MiniMessage
           .builder()
           .build();
