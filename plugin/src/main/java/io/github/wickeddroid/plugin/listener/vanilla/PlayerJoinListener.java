@@ -6,6 +6,7 @@ import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardEndGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
+import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -29,8 +30,11 @@ public class PlayerJoinListener implements Listener {
     final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(playerName);
 
     if (uhcPlayer == null) {
-      this.uhcPlayerRegistry.createPlayer(player.getUniqueId(), playerName);
+      if (this.uhcGame.getUhcGameState() != UhcGameState.WAITING) {
+        player.setGameMode(GameMode.SPECTATOR);
+      }
 
+      this.uhcPlayerRegistry.createPlayer(player.getUniqueId(), playerName);
     }
 
     if (this.uhcGame.getUhcGameState() == UhcGameState.WAITING) {
@@ -40,5 +44,6 @@ public class PlayerJoinListener implements Listener {
     } else {
       this.scoreboardGame.getSidebar().addViewer(player);
     }
+
   }
 }

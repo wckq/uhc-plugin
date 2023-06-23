@@ -12,6 +12,7 @@ public class Messages {
   private Team team = new Team();
   private Other other = new Other();
   private Game game = new Game();
+  private Staff staff = new Staff();
 
   public @NonNull Team team() {
     return this.team;
@@ -23,6 +24,10 @@ public class Messages {
 
   public @NonNull Game game() {
     return this.game;
+  }
+
+  public @NonNull Staff staff() {
+    return this.staff;
   }
 
   public @NonNull String prefix() {
@@ -149,6 +154,25 @@ public class Messages {
 
     public @NonNull String disableTeam() {
       return this.disableTeam;
+    }
+  }
+
+  @ConfigSerializable
+  public static class Staff {
+    private String changePvpTime = "Has cambiado el tiempo que comience el pvp a <param-time>";
+    private String changeMeetupTime = "Has cambiado el tiempo que comience el meetup a <param-time>";
+    private String invalidTime = "El tiempo que has dado no es valido";
+
+    public @NonNull String changeMeetupTime() {
+      return this.changeMeetupTime;
+    }
+
+    public @NonNull String changePvpTime() {
+      return this.changePvpTime;
+    }
+
+    public @NonNull String invalidTime() {
+      return invalidTime;
     }
   }
 

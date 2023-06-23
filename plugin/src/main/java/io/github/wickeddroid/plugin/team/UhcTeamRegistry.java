@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.team;
 
 import io.github.wickeddroid.api.team.UhcTeam;
+import org.bukkit.Bukkit;
 import team.unnamed.inject.Singleton;
 
 import java.util.Collection;
@@ -22,6 +23,9 @@ public class UhcTeamRegistry {
   }
 
   public void removeTeam(final String leader) {
+    final var team = this.teamMap.get(leader);
+
+    team.getTeam().unregister();
     this.teamMap.remove(leader);
   }
 

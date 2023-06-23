@@ -16,21 +16,23 @@ public class PlayerPortalListener implements Listener {
 
   @EventHandler
   public void onPortalCreate(final PlayerPortalEvent event) {
-    if (event.getCause() != PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) {
+    if (event.getCause() != PlayerTeleportEvent.TeleportCause.NETHER_PORTAL
+          || event.getFrom().getWorld().getEnvironment() != World.Environment.NETHER) {
       return;
     }
 
-    if (event.getFrom().getWorld().getEnvironment() == World.Environment.NETHER) {
-      final var location = event.getTo();
-      final var world = Bukkit.getWorld(worlds.worldName());
+    final var location = event.getTo();
 
-      if (world == null) {
-        return;
-      }
+    final var world = Bukkit.getWorld(worlds.worldName());
 
-      location.setWorld(world);
-
-      event.setTo(location);
+    if (world == null) {
+      return;
     }
+
+    location.setWorld(world);
+
+    event.setTo(location);
+
+    Bukkit.getLogger().info(event.getCanCreatePortal() + "");
   }
 }

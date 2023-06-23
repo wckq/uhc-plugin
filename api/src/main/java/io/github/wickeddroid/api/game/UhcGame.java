@@ -1,6 +1,7 @@
 package io.github.wickeddroid.api.game;
 
 public interface UhcGame {
+
   String getHost();
 
   void setHost(String host);
@@ -43,9 +44,9 @@ public interface UhcGame {
 
   boolean isGameStart();
 
-  void setCutClean(boolean cutClean);
+  void setCleanItem(boolean cleanItem);
 
-  boolean isCutClean();
+  boolean isCleanItem();
 
   void setGameStart(boolean gameStart);
 

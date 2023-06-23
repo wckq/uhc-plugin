@@ -13,13 +13,16 @@ public class UhcPlayerHandler {
   @Inject private Worlds worlds;
   @Inject private UhcGame uhcGame;
 
-  public void scatterPlayer(final Player player) {
+  public void scatterPlayer(
+          final Player player,
+          final boolean laterScatter
+  ) {
     final var location = LocationUtil.generateRandomLocation(uhcGame, worlds.worldName());
 
     if (location == null) {
       return;
     }
 
-    Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location));
+    Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location, laterScatter));
   }
 }

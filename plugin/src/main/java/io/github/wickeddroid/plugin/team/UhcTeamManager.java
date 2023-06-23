@@ -12,6 +12,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.InjectAll;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.stream.Collectors;
+
 @InjectAll
 public class UhcTeamManager {
 
@@ -80,6 +84,39 @@ public class UhcTeamManager {
     this.uhcTeamRegistry.removeTeam(leader.getName());
   }
 
+  public void randomizeTeams(
+          final Player sender,
+          final double teamSize
+  ) {
+    if (teamSize > 1) {
+      final var playersWithoutTeam = Bukkit.getOnlinePlayers()
+              .stream()
+              .filter(player -> this.getTeamByPlayer(player.getName()) == null)
+              .collect(Collectors.toCollection(ArrayList::new));
+
+      Collections.shuffle(playersWithoutTeam);
+
+      final var playersWithoutTeamSize = playersWithoutTeam.size();
+      final var teamsNeeded = (int) Math.ceil(playersWithoutTeamSize / teamSize) + 1;
+
+      for (int i = 0;i<teamsNeeded;i++) {
+        final var leader = playersWithoutTeam.remove(0);
+
+        this.createTeam(leader, null);
+
+        final var uhcTeam = this.getTeamByPlayer(leader.getName());
+
+        if (uhcTeam != null) {
+          for (var j = 0;j<teamSize - 1;j++) {
+            final var member = playersWithoutTeam.remove(0);
+
+            this.uhcTeamHandler.addPlayerToTeam(leader, member, true);
+          }
+        }
+      }
+    }
+  }
+
   public void sendMessageTeam(
           final Player player,
           final Component message
@@ -98,7 +135,7 @@ public class UhcTeamManager {
       }
 
       member.sendMessage(MessageUtil.parseStringToComponent(
-              "<red>[Team] <white><player> <red>➣ <white>",
+              "<red>[Team] <white><player></white> <red>➣</red>",
               Placeholder.parsed("player", player.getName())
       ).append(message));
     }

@@ -32,7 +32,7 @@ public class ScatterThread implements Runnable {
   @Override
   public void run() {
     if (uhcTeam == null) {
-      Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location));
+      Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location, false));
       return;
     }
 
@@ -44,7 +44,7 @@ public class ScatterThread implements Runnable {
         return;
       }
 
-      Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location));
+      Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location, false));
     }
   }
 }

@@ -25,7 +25,7 @@ public class DefaultUhcGame implements UhcGame {
     this.uhcGameState = UhcGameState.WAITING;
     this.startTime = 0;
     this.currentTime = 0;
-    this.appleRate = 1;
+    this.appleRate = 10;
     this.cobwebLimit = 64;
     this.timeForPvp = 3600;
     this.timeForMeetup = 7200;
@@ -147,12 +147,12 @@ public class DefaultUhcGame implements UhcGame {
   }
 
   @Override
-  public void setCutClean(boolean cutClean) {
+  public void setCleanItem(boolean cleanItem) {
 
   }
 
   @Override
-  public boolean isCutClean() {
+  public boolean isCleanItem() {
     return false;
   }
 

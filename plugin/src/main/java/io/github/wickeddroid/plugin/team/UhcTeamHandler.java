@@ -31,24 +31,20 @@ public class UhcTeamHandler {
 
   public void addPlayerToTeam(
           final Player leader,
-          final Player player
+          final Player player,
+          final boolean forceJoin
   ) {
     final var playerName = player.getName();
     final var uhcTeam = this.uhcTeamManager.getTeamByPlayer(leader.getName());
     final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(playerName);
     final var teamInvite = this.inviteCache.get(player.getName());
 
-    if (teamInvite == null) {
-      this.messageHandler.send(player, this.messages.team().inviteDoesNotExist(), uhcTeam.getName());
-      return;
-    }
-
     if (uhcTeam == null) {
       this.messageHandler.send(player, this.messages.team().playerDoesNotTeamExist());
       return;
     }
 
-    if (!teamInvite.equals(uhcTeam.getName())) {
+    if (!forceJoin && (teamInvite == null || !teamInvite.equals(uhcTeam.getName()))) {
       this.messageHandler.send(player, this.messages.team().inviteDoesNotExist(), uhcTeam.getName());
       return;
     }

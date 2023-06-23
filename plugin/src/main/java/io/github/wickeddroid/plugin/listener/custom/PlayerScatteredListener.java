@@ -22,30 +22,34 @@ public class PlayerScatteredListener implements Listener {
 
   @EventHandler
   public void onPlayerScattered(final PlayerScatteredEvent event) {
-    final var playerScattered = event.getPlayer();
-    final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(playerScattered.getName());
+    final var player = event.getPlayer();
+    final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(player.getName());
+
+    if (!event.isLaterScatter()) {
+      player.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 255));
+      player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(Integer.MAX_VALUE, 255));
+      player.addPotionEffect(PotionEffectType.JUMP.createEffect(Integer.MAX_VALUE, 250));
+    }
+
+    player.setGameMode(GameMode.SURVIVAL);
+    player.getInventory().clear();
+    player.setFoodLevel(20);
+    player.setHealth(20);
+    player.setLevel(0);
+    player.setExp(0);
+
+    player.teleport(event.getLocation());
+
+    for (final var onlinePlayer : Bukkit.getOnlinePlayers()) {
+      this.messageHandler.send(onlinePlayer, this.messages.other().scattered(), player.getName());
+    }
 
     if (uhcPlayer == null) {
+      this.uhcPlayerRegistry.createPlayer(player.getUniqueId(), player.getName());
+      this.uhcPlayerRegistry.getPlayer(player.getName()).setScattered(true);
       return;
     }
 
-    playerScattered.setGameMode(GameMode.SURVIVAL);
-    playerScattered.getInventory().clear();
-    playerScattered.setFoodLevel(20);
-    playerScattered.setHealth(20);
-    playerScattered.setLevel(0);
-    playerScattered.setExp(0);
-
-    playerScattered.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 255));
-    playerScattered.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(Integer.MAX_VALUE, 255));
-    playerScattered.addPotionEffect(PotionEffectType.JUMP.createEffect(Integer.MAX_VALUE, 127));
-
-    playerScattered.teleport(event.getLocation());
-
     uhcPlayer.setScattered(true);
-
-    for (final var player : Bukkit.getOnlinePlayers()) {
-      this.messageHandler.send(player, this.messages.other().scattered(), playerScattered.getName());
-    }
   }
 }

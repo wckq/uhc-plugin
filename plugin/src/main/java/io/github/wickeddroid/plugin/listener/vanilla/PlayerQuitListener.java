@@ -27,6 +27,10 @@ public class PlayerQuitListener implements Listener {
     final var playerName = player.getName();
     final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(playerName);
 
+    if (uhcGame.getUhcGameState() != UhcGameState.WAITING) {
+      return;
+    }
+
     if (uhcPlayer != null) {
       this.uhcPlayerRegistry.removePlayer(playerName);
     }

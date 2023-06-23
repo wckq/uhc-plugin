@@ -5,6 +5,7 @@ import io.github.wickeddroid.api.team.UhcTeam;
 import java.util.UUID;
 
 public interface UhcPlayer {
+
   UUID getUuid();
   String getName();
   UhcTeam getUhcTeam();

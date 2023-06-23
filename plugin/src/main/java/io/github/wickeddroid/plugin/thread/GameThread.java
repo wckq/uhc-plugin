@@ -2,17 +2,21 @@ package io.github.wickeddroid.plugin.thread;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
+import io.github.wickeddroid.plugin.game.UhcGameManager;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
 import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.Singleton;
 
+@InjectAll
 @Singleton
 public class GameThread implements Runnable {
 
-  @Inject private Worlds worlds;
-  @Inject private UhcGame uhcGame;
-  @Inject private UhcGameHandler uhcGameHandler;
+  private Worlds worlds;
+  private UhcGame uhcGame;
+  private UhcGameHandler uhcGameHandler;
+  private UhcGameManager uhcGameManager;
 
   @Override
   public void run() {
@@ -25,7 +29,7 @@ public class GameThread implements Runnable {
     }
 
     if (currentTime == this.uhcGame.getTimeForMeetup()) {
-      this.uhcGameHandler.startMeetup();
+      this.uhcGameManager.startMeetup();
     }
 
     if (currentTime >= this.uhcGame.getTimeForMeetup()) {

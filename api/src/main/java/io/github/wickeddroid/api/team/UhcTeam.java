@@ -1,8 +1,11 @@
 package io.github.wickeddroid.api.team;
 
+import org.bukkit.scoreboard.Team;
+
 import java.util.List;
 
 public interface UhcTeam {
+
   String getLeader();
 
   void setLeader(String leader);
@@ -36,4 +39,6 @@ public interface UhcTeam {
   void removeMember(String name);
 
   List<String> getMembers();
+
+  Team getTeam();
 }

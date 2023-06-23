@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Scenario {
-  String name();
 
+  String name();
   String key();
   String[] description();
   Material material();

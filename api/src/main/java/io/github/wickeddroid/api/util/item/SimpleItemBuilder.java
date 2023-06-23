@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class SimpleItemBuilder implements ItemBuilder {
+
   private final Material material;
   private final int amount;
   private Component name;

@@ -2,18 +2,55 @@ package io.github.wickeddroid.api.scenario;
 
 import org.bukkit.Material;
 
-public interface GameScenario {
-  String getName();
+public class GameScenario {
 
-  String getKey();
+  private final String name;
+  private final String key;
+  private final String[] description;
+  private final Material material;
+  private final boolean experimental;
+  private boolean enabled;
 
-  String[] getDescription();
+  public GameScenario() {
+    if (this.getClass().isAnnotationPresent(Scenario.class)) {
+      final var annotation = this.getClass().getAnnotation(Scenario.class);
 
-  Material getMaterial();
+      this.name = annotation.name();
+      this.key = annotation.key();
+      this.description = annotation.description();
+      this.material = annotation.material();
+      this.experimental = annotation.experimental();
+      this.enabled = false;
+    } else {
+      throw new IllegalArgumentException("Has error ocurred with Scenario " + this.getClass().getSimpleName());
+    }
+  }
 
-  void setEnabled(boolean enabled);
+  public String getName() {
+    return this.name;
+  }
 
-  boolean isEnabled();
+  public String getKey() {
+    return this.key;
+  }
 
-  boolean isExperimental();
+  public String[] getDescription() {
+    return this.description;
+  }
+
+  public Material getMaterial() {
+    return this.material;
+  }
+
+  public boolean isExperimental() {
+    return this.experimental;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  public boolean isEnabled() {
+    return enabled;
+  }
 }

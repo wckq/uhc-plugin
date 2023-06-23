@@ -1,6 +1,5 @@
 package io.github.wickeddroid.plugin.command;
 
-import io.github.wickeddroid.plugin.command.staff.CommandStaffTeam;
 import io.github.wickeddroid.plugin.team.UhcTeamHandler;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import me.fixeddev.commandflow.annotated.CommandClass;
@@ -12,7 +11,6 @@ import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 
 @Command(names = "team")
-@SubCommandClasses({ CommandStaffTeam.class })
 public class CommandTeam implements CommandClass {
 
   @Inject private UhcTeamHandler uhcTeamHandler;
@@ -44,11 +42,19 @@ public class CommandTeam implements CommandClass {
           final @Sender Player sender,
           final Player target
   ) {
-    this.uhcTeamHandler.addPlayerToTeam(target, sender);
+    this.uhcTeamHandler.addPlayerToTeam(target, sender, false);
   }
 
   @Command(names = "leave")
   public void leave(final @Sender Player sender) {
     this.uhcTeamHandler.removePlayerOfTeam(sender);
+  }
+
+  @Command(names = "force-join")
+  public void forceJoin(
+          final Player target,
+          final Player leader
+  ) {
+    this.uhcTeamHandler.addPlayerToTeam(target, leader, true);
   }
 }
