@@ -16,4 +16,5 @@ public @interface Scenario {
   String[] description();
   Material material();
   boolean experimental() default false;
+  boolean supportsOptions() default false;
 }
