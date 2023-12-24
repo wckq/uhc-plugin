@@ -5,6 +5,7 @@ import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
 import org.bukkit.Material;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,7 +16,8 @@ public class GameScenario {
   private final String[] description;
   private final Material material;
   private final boolean experimental;
-  private boolean enabled, supportsOptions;
+  private boolean enabled;
+  private final boolean supportsOptions;
   private HashMap<String, Option<?>> options;
 
   public GameScenario() {
@@ -38,12 +40,15 @@ public class GameScenario {
     }
   }
 
-  public void addOption(Option<?> option) {
-    if(!supportsOptions) {
-      throw new NotEnabledFeatureException("Options are not enabled on this scenario.");
+  protected void addOptions(Option<?>... options) {
+    for(var option : options) {
+      if(!supportsOptions) {
+        throw new NotEnabledFeatureException("Options are not enabled on this scenario.");
+      }
+      this.options.put(option.optionName(), option);
     }
-    options.put(option.optionName(), option);
   }
+
 
   public HashMap<String, Option<?>> getOptions() {
     if(!supportsOptions) {
@@ -75,6 +80,8 @@ public class GameScenario {
     return options.get(name);
   }
 
+  public void createOptions() {}
+
   public String getName() {
     return this.name;
   }
@@ -101,5 +108,9 @@ public class GameScenario {
 
   public boolean isEnabled() {
     return enabled;
+  }
+
+  public boolean isSupportsOptions() {
+    return supportsOptions;
   }
 }

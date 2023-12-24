@@ -22,7 +22,7 @@ public class ScenariosEnabledInventory extends UhcInventory {
   @Inject private ScenarioManager scenarioManager;
 
   public ScenariosEnabledInventory() {
-    super(MessageUtil.parseStringToComponent("Scenarios activos"), 6);
+    super("Scenarios activos", 6);
   }
 
   @Override
