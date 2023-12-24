@@ -1,5 +1,6 @@
 package io.github.wickeddroid.plugin.game;
 
+import io.github.wickeddroid.api.events.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.message.MessageHandler;
@@ -32,7 +33,7 @@ public class UhcGameManager {
   private ScoreboardLobby scoreboardLobby;
   private UhcTeamRegistry uhcTeamRegistry;
 
-  public void startGame(final Player sender) {
+  public void startGame(final Player sender, boolean tp) {
     if (this.uhcGame.isGameStart() || this.uhcGame.getUhcGameState() != UhcGameState.WAITING) {
       this.messageHandler.send(sender, this.messages.game().hasStarted());
       return;
@@ -40,7 +41,7 @@ public class UhcGameManager {
 
     var delayTeam = 0;
 
-    if (!this.uhcGame.isTeamEnabled()) {
+    if (!this.uhcGame.isTeamEnabled() && tp) {
       for (final var player : Bukkit.getOnlinePlayers()) {
         final var location = LocationUtil.generateRandomLocation(this.uhcGame, this.worlds.worldName());
 
@@ -53,15 +54,17 @@ public class UhcGameManager {
         delayTeam += 40;
       }
     } else {
-      for (final var team : this.uhcTeamRegistry.getTeams()) {
-        final var location = LocationUtil.generateRandomLocation(this.uhcGame, this.worlds.worldName());
+      if (tp) {
+        for (final var team : this.uhcTeamRegistry.getTeams()) {
+          final var location = LocationUtil.generateRandomLocation(this.uhcGame, this.worlds.worldName());
 
-        if (location == null) {
-          continue;
+          if (location == null) {
+            continue;
+          }
+          Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(team, location), delayTeam);
+
+          delayTeam += 40;
         }
-        Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(team, location), delayTeam);
-
-        delayTeam += 40;
       }
     }
 
@@ -92,6 +95,7 @@ public class UhcGameManager {
       this.uhcGame.setStartTime(System.currentTimeMillis());
 
       Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this.gameThread, 0L, 20L);
+      Bukkit.getPluginManager().callEvent(new GameStartEvent());
     }, delayTeam);
   }
 

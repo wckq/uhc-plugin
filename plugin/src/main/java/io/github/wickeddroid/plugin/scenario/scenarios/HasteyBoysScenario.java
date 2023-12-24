@@ -18,7 +18,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
         description = {},
         material = Material.DIAMOND_PICKAXE
 )
-public class HasteyBoysScenario extends ListenerScenario {
+public class  HasteyBoysScenario extends ListenerScenario {
 
   @EventHandler
   public void onPrepareItemCraft(final PrepareItemCraftEvent event) {

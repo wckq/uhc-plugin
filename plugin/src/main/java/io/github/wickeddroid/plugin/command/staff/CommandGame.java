@@ -6,6 +6,7 @@ import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.world.Worlds;
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
+import me.fixeddev.commandflow.annotated.annotation.Named;
 import me.fixeddev.commandflow.annotated.annotation.SubCommandClasses;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
 import org.bukkit.entity.Player;
@@ -28,8 +29,8 @@ public class CommandGame implements CommandClass {
   }
 
   @Command(names = "start")
-  public void start(final @Sender Player sender) {
-    this.uhcGameManager.startGame(sender);
+  public void start(final @Sender Player sender, @Named("scatter") boolean tp) {
+    this.uhcGameManager.startGame(sender, tp);
   }
 
 }
