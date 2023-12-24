@@ -6,18 +6,22 @@ import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.message.title.Titles;
+import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.thread.GameThread;
 import io.github.wickeddroid.plugin.thread.ScatterThread;
 import io.github.wickeddroid.plugin.util.LocationUtil;
+import io.github.wickeddroid.plugin.util.SaveLoad;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.InjectAll;
+
+import java.io.File;
 
 @InjectAll
 public class UhcGameManager {
@@ -32,6 +36,7 @@ public class UhcGameManager {
   private ScoreboardGame scoreboardGame;
   private ScoreboardLobby scoreboardLobby;
   private UhcTeamRegistry uhcTeamRegistry;
+  private UhcPlayerRegistry uhcPlayerRegistry;
 
   public void startGame(final Player sender, boolean tp) {
     if (this.uhcGame.isGameStart() || this.uhcGame.getUhcGameState() != UhcGameState.WAITING) {
@@ -95,6 +100,17 @@ public class UhcGameManager {
       this.uhcGame.setStartTime(System.currentTimeMillis());
 
       Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this.gameThread, 0L, 20L);
+      Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, ()-> {
+        //BACKUPS PREVENTIVOS
+        try {
+          SaveLoad.save(uhcTeamRegistry.getTeamMap(), plugin.getDataFolder().getAbsolutePath() + File.separator + "team_registry_backup.bin");
+          SaveLoad.save(uhcPlayerRegistry.getPlayerMap(), plugin.getDataFolder().getAbsolutePath() + File.separator + "player_registry_backup.bin");
+
+          Bukkit.getLogger().severe("Saved backup teams");
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      }, 900L,  4800L);
       Bukkit.getPluginManager().callEvent(new GameStartEvent());
     }, delayTeam);
   }

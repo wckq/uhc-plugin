@@ -3,8 +3,10 @@ package io.github.wickeddroid.plugin.loader;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.api.loader.Loader;
+import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.UhcPlugin;
+import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.util.SaveLoad;
@@ -16,6 +18,7 @@ import team.unnamed.inject.Named;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 @InjectAll
 public class DefaultLoader implements Loader {
@@ -35,6 +38,7 @@ public class DefaultLoader implements Loader {
   private UhcGame uhcGame;
   private UhcTeamManager uhcTeamManager;
   private UhcTeamRegistry uhcTeamRegistry;
+  private UhcPlayerRegistry uhcPlayerRegistry;
   private UhcPlugin plugin;
 
   @Override
@@ -44,11 +48,19 @@ public class DefaultLoader implements Loader {
     this.listenerLoader.load();
     this.scenarioLoader.load();
 
-    var file = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "team_registry_backup.bin");
+    var teamsBackup = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "team_registry_backup.bin");
+    var playersBackup = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "player_registry_backup.bin");
 
     try {
-      uhcTeamRegistry.setBackupTeams(SaveLoad.load(file.getAbsolutePath()));
-      file.deleteOnExit();
+      Map<String, UhcTeam> teams = SaveLoad.load(teamsBackup.getAbsolutePath());
+      uhcTeamRegistry.setBackupTeams(teams);
+
+      teamsBackup.deleteOnExit();
+
+      Map<String, UhcPlayer> players = SaveLoad.load(playersBackup.getAbsolutePath());
+      uhcPlayerRegistry.setPlayerMapBackup(players);
+
+      playersBackup.deleteOnExit();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -63,14 +75,10 @@ public class DefaultLoader implements Loader {
       return;
     }
 
-    var teams = uhcTeamRegistry.getTeamMap();
+    var teamsBackup = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "team_registry_backup.bin");
+    var playersBackup = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "player_registry_backup.bin");
 
-    try {
-      SaveLoad.save(teams, plugin.getDataFolder().getAbsolutePath() + File.separator + "team_registry_backup.bin");
-
-      Bukkit.getLogger().severe("Saved backup teams");
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    teamsBackup.delete();
+    playersBackup.delete();
   }
 }

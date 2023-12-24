@@ -34,4 +34,12 @@ public class UhcPlayerRegistry {
   public Collection<UhcPlayer> getPlayers() {
     return this.playerMap.values();
   }
+
+  public Map<String, UhcPlayer> getPlayerMap() {
+    return playerMap;
+  }
+
+  public void setPlayerMapBackup(Map<String, UhcPlayer> backup) {
+    playerMap.putAll(backup);
+  }
 }
