@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.world;
 
 import io.github.wickeddroid.api.game.UhcGame;
+import io.github.wickeddroid.api.game.UhcGameState;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import team.unnamed.inject.Inject;
@@ -37,6 +38,11 @@ public class WorldGenerator {
   }
 
   public void removeWorld(final World world) throws IOException {
+    if(uhcGame.getUhcGameState() != UhcGameState.WAITING && uhcGame.getUhcGameState() != UhcGameState.FINISH) {
+      Bukkit.getLogger().severe("SECURITY PREVENTION: Worlds couldn't been removed because a game was started");
+      return;
+    }
+
     Bukkit.unloadWorld(world, false);
 
     FileUtils.deleteDirectory(world.getWorldFolder());

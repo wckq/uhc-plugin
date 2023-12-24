@@ -67,6 +67,10 @@ public class RegisteredScenarioAnnotationProcessor extends AbstractProcessor {
                 }
                 
                 public void registerScenario(final GameScenario scenario) {
+                    if(scenario.isSupportsOptions()) {
+                         scenario.createOptions();
+                     }
+                     
                     this.scenarios.put(scenario.getKey(), scenario);
                 }
                 

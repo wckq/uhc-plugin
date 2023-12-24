@@ -17,7 +17,9 @@ import team.unnamed.gui.menu.item.ItemClickable;
 import team.unnamed.gui.menu.type.MenuInventory;
 import team.unnamed.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScenariosInventory extends UhcInventory {
@@ -25,7 +27,7 @@ public class ScenariosInventory extends UhcInventory {
   @Inject private ScenarioManager scenarioManager;
 
   public ScenariosInventory() {
-    super(MessageUtil.parseStringToComponent("Scenarios"), 6);
+    super("Scenarios", 6);
   }
 
   @Override
@@ -48,6 +50,13 @@ public class ScenariosInventory extends UhcInventory {
 
                       if (!(event.getWhoClicked() instanceof Player player)) {
                         return true;
+                      }
+
+                      if(gameScenario.isEnabled() && gameScenario.isSupportsOptions()) {
+                          if(event.isShiftClick()) {
+                              event.getWhoClicked().openInventory(new ScenarioOptionsInventory(gameScenario, this).createInventory());
+                              return true;
+                          }
                       }
 
                       if (!gameScenario.isEnabled()) {
@@ -75,6 +84,12 @@ public class ScenariosInventory extends UhcInventory {
             .previousPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
                     .name(Component.text("Anterior pagina - " + page))
                     .build()))
+            .itemIfNoNextPage(ItemClickable.onlyItem(
+                            ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
+                                    .name(Component.text(" ")).build()))
+            .itemIfNoPreviousPage(ItemClickable.onlyItem(
+                            ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
+                                    .name(Component.text(" ")).build()))
             .layoutLines(
                     "xxxxxxxxx",
                     "eeeeeeeee",
@@ -99,10 +114,17 @@ public class ScenariosInventory extends UhcInventory {
   }
 
   private ItemBuilder rawItem(final GameScenario gameScenario) {
+    List<String> loreList = new ArrayList<>(Arrays.asList(gameScenario.getDescription()));
+
+    if(gameScenario.isSupportsOptions()) {
+        loreList.add("");
+        loreList.add("<gray>Shift Click para modificar opciones");
+    }
+
     return ItemBuilder.newBuilder(gameScenario.getMaterial())
             .name(MessageUtil.parseStringToComponent("<color:#93FF9E>" + gameScenario.getName())
                     .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
-            .lore(Arrays.stream(gameScenario.getDescription())
+            .lore(loreList.stream()
                     .map(lore -> MessageUtil.parseStringToComponent(lore)
                             .color(TextColor.color(255, 255, 255))
                             .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))

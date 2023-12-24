@@ -1,5 +1,7 @@
 package io.github.wickeddroid.plugin.command.staff;
 
+import io.github.wickeddroid.api.game.UhcGame;
+import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
@@ -14,6 +16,8 @@ public class CommandTime implements CommandClass {
 
   @Inject
   private UhcGameHandler uhcGameHandler;
+  @Inject
+  private UhcGame uhcGame;
 
   @Command(names = "change-pvp")
   public void changePvp(
@@ -29,5 +33,23 @@ public class CommandTime implements CommandClass {
           final int time
   ) {
     this.uhcGameHandler.changeMeetupPvp(sender, time);
+  }
+
+  @Command(
+          names = "set"
+  )
+  public void set(
+          final @Sender Player sender,
+          final int time
+  ) {
+    this.uhcGame.setCurrentTime(time);
+    if(time > uhcGame.getTimeForPvp() ) {
+      uhcGame.setUhcGameState(UhcGameState.PVP);
+    }
+
+    if(time > uhcGame.getTimeForMeetup()) {
+      uhcGame.setUhcGameState(UhcGameState.MEETUP);
+    }
+
   }
 }
