@@ -16,6 +16,7 @@ import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.Named;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -50,6 +51,8 @@ public class DefaultLoader implements Loader {
 
     var teamsBackup = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "team_registry_backup.bin");
     var playersBackup = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "player_registry_backup.bin");
+
+    if(!teamsBackup.exists() || !playersBackup.exists()) { return; }
 
     try {
       Map<String, UhcTeam> teams = SaveLoad.load(teamsBackup.getAbsolutePath());
