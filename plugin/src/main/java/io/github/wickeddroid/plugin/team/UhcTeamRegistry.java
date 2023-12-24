@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import team.unnamed.inject.Singleton;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,8 +30,16 @@ public class UhcTeamRegistry {
     this.teamMap.remove(leader);
   }
 
+  public Map<String, UhcTeam> getTeamMap() {
+    return teamMap;
+  }
+
   public UhcTeam getTeam(final String leader) {
     return this.teamMap.get(leader);
+  }
+
+  public void setBackupTeams(Map<String, UhcTeam> backupTeams) {
+    this.teamMap.putAll(backupTeams);
   }
 
   public Collection<UhcTeam> getTeams() {
