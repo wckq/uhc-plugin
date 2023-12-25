@@ -7,11 +7,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Team;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class DefaultUhcTeam implements UhcTeam {
+public class DefaultUhcTeam implements UhcTeam, Serializable {
 
   private final List<String> members;
   private String leader;
@@ -47,7 +48,7 @@ public class DefaultUhcTeam implements UhcTeam {
     this.members = new ArrayList<>();
 
     if (Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader) == null) {
-      this.team = Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(leader);
+      setTeam(Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(leader));
 
       team.prefix(Component.text(String.format("[Team %s] | ", leader)));
       team.color(textColors[new Random().nextInt(textColors.length)]);
@@ -56,6 +57,12 @@ public class DefaultUhcTeam implements UhcTeam {
       this.team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader);
 
     this.addMember(leader);
+  }
+
+
+  @Override
+  public void setTeam(Team team) {
+    this.team = team;
   }
 
   @Override

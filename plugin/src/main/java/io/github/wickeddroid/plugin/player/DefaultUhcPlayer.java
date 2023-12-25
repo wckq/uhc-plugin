@@ -3,9 +3,10 @@ package io.github.wickeddroid.plugin.player;
 import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.team.UhcTeam;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class DefaultUhcPlayer implements UhcPlayer {
+public class DefaultUhcPlayer implements UhcPlayer, Serializable {
 
   private final UUID uuid;
   private final String name;
