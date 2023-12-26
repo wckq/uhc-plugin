@@ -36,15 +36,12 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
   private int kills;
   private int playersAlive;
 
-  public DefaultUhcTeam(
-          final String leader,
-          final String name
-  ) {
+  public DefaultUhcTeam(final String leader, final String name) {
     this.leader = leader;
     this.name = name;
     this.alive = true;
     this.kills = 0;
-    this.playersAlive = 1;
+    this.playersAlive = 0;
     this.members = new ArrayList<>();
 
     if (Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader) == null) {
@@ -53,8 +50,9 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
       team.prefix(Component.text(String.format("[Team %s] | ", leader)));
       team.color(textColors[new Random().nextInt(textColors.length)]);
       team.setAllowFriendlyFire(false);
-    } else
+    } else {
       this.team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader);
+    }
 
     this.addMember(leader);
   }
@@ -138,12 +136,14 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
   @Override
   public void addMember(String name) {
     this.members.add(name);
+    this.incrementPlayersAlive();
     this.team.addEntry(name);
   }
 
   @Override
   public void removeMember(String name) {
     this.members.remove(name);
+    this.decrementPlayersAlive();
     this.team.removeEntry(name);
   }
 

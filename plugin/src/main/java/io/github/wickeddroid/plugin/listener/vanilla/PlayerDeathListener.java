@@ -37,10 +37,7 @@ public class PlayerDeathListener implements Listener {
       return;
     }
 
-    if (this.uhcGame.getUhcGameState() == UhcGameState.WAITING
-            || this.uhcGame.getUhcGameState() == UhcGameState.FINISH) {
-      return;
-    }
+    if(this.uhcGame.getUhcGameState() == UhcGameState.WAITING || this.uhcGame.getUhcGameState() == UhcGameState.FINISH) { return; }
 
     final var playerKiller = player.getKiller();
 
@@ -57,7 +54,7 @@ public class PlayerDeathListener implements Listener {
     if (uhcTeam != null) {
       uhcTeam.decrementPlayersAlive();
 
-      if (uhcTeam.getPlayersAlive() != 0) {
+      if (uhcTeam.getPlayersAlive() > 0) {
         return;
       }
 
