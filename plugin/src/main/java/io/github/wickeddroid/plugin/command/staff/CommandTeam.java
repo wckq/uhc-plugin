@@ -95,4 +95,14 @@ public class CommandTeam implements CommandClass {
   ) {
     this.uhcTeamHandler.addPlayerToTeam(leader, target, true);
   }
+
+  @Command(
+          names = "force-create"
+  )
+  public void forceCreate(
+          final @Sender Player sender,
+          final Player target
+  ) {
+    this.uhcTeamManager.createTeam(target, null);
+  }
 }
