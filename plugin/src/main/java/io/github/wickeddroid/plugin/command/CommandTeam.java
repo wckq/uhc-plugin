@@ -20,7 +20,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 
-@Command(names = "team", permission = "prevention.permission")
+@Command(names = "team")
 public class CommandTeam implements CommandClass {
 
   @Inject private UhcTeamHandler uhcTeamHandler;
