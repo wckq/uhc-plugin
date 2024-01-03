@@ -26,6 +26,7 @@ public class ListenerLoader implements Loader {
   private LeavesDecayListener leavesDecayListener;
   private FoodLevelChangeListener foodLevelChangeListener;
   private EntityDamageListener entityDamageListener;
+  private PlayerAdvancementCriterionGrantListener playerAdvancementCriterionGrantListener;
 
   @Override
   public void load() {
@@ -41,7 +42,8 @@ public class ListenerLoader implements Loader {
             playerScatteredListener,
             playerPortalListener,
             foodLevelChangeListener,
-            entityDamageListener
+            entityDamageListener,
+            playerAdvancementCriterionGrantListener
     );
   }
 

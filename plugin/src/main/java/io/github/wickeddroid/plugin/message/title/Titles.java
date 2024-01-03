@@ -9,18 +9,18 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 public class Titles {
 
   private Title gameStart = Title.title(
-          MessageUtil.parseStringToComponent("¡UHC Iniciado!"),
-          MessageUtil.parseStringToComponent("Recolecta recursos para poder pelear.")
+          MessageUtil.parseStringToComponent("<red>¡UHC Iniciado!"),
+          MessageUtil.parseStringToComponent("<aqua>Recolecta recursos para poder pelear.")
   );
 
   private Title pvpTitle = Title.title(
-          MessageUtil.parseStringToComponent("PVP ON"),
-          MessageUtil.parseStringToComponent("Ahora es legal matar y robar a jugadores")
+          MessageUtil.parseStringToComponent("<red>PVP ON"),
+          MessageUtil.parseStringToComponent("<aqua>Ahora es legal matar y robar a jugadores")
   );
 
   private Title meetupTitle = Title.title(
-          MessageUtil.parseStringToComponent("MEETUP"),
-          MessageUtil.parseStringToComponent("Dirigete a 0,0 para la batalla final.")
+          MessageUtil.parseStringToComponent("<red>MEETUP"),
+          MessageUtil.parseStringToComponent("<gold>Dirigete a 0,0 para la batalla final.")
   );
 
   public @NonNull Title gameStart() {

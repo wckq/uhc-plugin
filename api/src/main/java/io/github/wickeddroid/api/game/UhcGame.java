@@ -1,5 +1,9 @@
 package io.github.wickeddroid.api.game;
 
+import org.bukkit.entity.Player;
+
+import java.util.List;
+
 public interface UhcGame {
 
   String getHost();
@@ -54,7 +58,14 @@ public interface UhcGame {
 
   void setTeamEnabled(boolean teamEnabled);
 
+  boolean isOwnTeamsEnabled();
+  void setOwnTeamsEnabled(boolean ownTeamsEnabled);
+
   int getTeamSize();
 
   void setTeamSize(int teamSize);
+
+  List<Player> getIronmans();
+  void addIronman(Player player);
+  void removeIronman(Player player);
 }

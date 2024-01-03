@@ -1,6 +1,8 @@
 package io.github.wickeddroid.plugin.team;
 
 import io.github.wickeddroid.api.team.UhcTeam;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import team.unnamed.inject.Singleton;
 
@@ -16,10 +18,13 @@ public class UhcTeamRegistry {
 
   public void createTeam(
           final String leader,
-          final String name
-  ) {
+          final String name,
+          final NamedTextColor color,
+          final Component prefix,
+          final boolean friendlyFire
+          ) {
     this.teamMap.put(leader, new DefaultUhcTeam(
-            leader, name
+            leader, name, color, prefix, friendlyFire
     ));
   }
 

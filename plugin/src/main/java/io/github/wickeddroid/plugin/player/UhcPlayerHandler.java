@@ -23,6 +23,8 @@ public class UhcPlayerHandler {
       return;
     }
 
+    uhcGame.addIronman(player);
+
     Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location, laterScatter));
   }
 }

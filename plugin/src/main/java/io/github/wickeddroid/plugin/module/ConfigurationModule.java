@@ -1,9 +1,11 @@
 package io.github.wickeddroid.plugin.module;
 
 import io.github.wickeddroid.plugin.configuration.JsonConfigurationBuilder;
+import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.message.title.Titles;
 import io.github.wickeddroid.plugin.scoreboard.Scoreboard;
+import io.github.wickeddroid.plugin.team.Teams;
 import io.github.wickeddroid.plugin.world.Worlds;
 import net.kyori.adventure.title.Title;
 import org.bukkit.plugin.Plugin;
@@ -48,6 +50,15 @@ public class ConfigurationModule extends AbstractModule {
                       .load(Titles.class, path, "titles")
                       .get()
               );
+
+      bind(Teams.class)
+              .toInstance(JsonConfigurationBuilder.load(Teams.class, path, "teams")
+                      .get()
+              );
+
+      bind(Game.class)
+              .toInstance(JsonConfigurationBuilder.load(Game.class, path, "config")
+                      .get());
     } catch (ConfigurateException e) {
       throw new RuntimeException(e);
     }

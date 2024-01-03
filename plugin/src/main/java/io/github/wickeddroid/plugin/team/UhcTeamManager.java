@@ -7,13 +7,18 @@ import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.InjectAll;
+import team.unnamed.inject.InjectIgnore;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @InjectAll
@@ -25,6 +30,9 @@ public class UhcTeamManager {
   private UhcTeamHandler uhcTeamHandler;
   private UhcTeamRegistry uhcTeamRegistry;
   private UhcPlayerRegistry uhcPlayerRegistry;
+  private Teams teams;
+  @InjectIgnore
+  private Iterator<String> iterator;
 
   public void createTeam(
           final Player leader,
@@ -43,12 +51,15 @@ public class UhcTeamManager {
     }
 
     if (name == null || name.isEmpty()) {
-      name = String.format("%s team", leader.getName());
+      name = String.format(teams.defaultName(), leader.getName());
     }
 
     this.uhcTeamRegistry.createTeam(
             leader.getName(),
-            name
+            name,
+            this.getColor(),
+            this.replaceVariables(teams.teamPrefix(), leader),
+            teams.friendlyFire()
     );
 
     this.messageHandler.send(leader, this.messages.team().create(), name);
@@ -56,16 +67,23 @@ public class UhcTeamManager {
     uhcPlayer.setUhcTeam(this.getTeamByLeader(leader.getName()));
   }
 
-  public void removeTeam(final Player leader) {
-    final var uhcTeam = this.getTeamByPlayer(leader.getName());
 
-    if (uhcTeam == null) {
-      this.messageHandler.send(leader, this.messages.team().doesNotExist());
+  public void removeTeam(final UUID leaderUUID) {
+    var leaderOP = Bukkit.getOfflinePlayer(leaderUUID);
+
+    if(leaderOP.getUniqueId() != leaderUUID) {
       return;
     }
 
-    if (!uhcTeam.getLeader().equalsIgnoreCase(leader.getName())) {
-      this.messageHandler.send(leader, this.messages.team().leaderAsMember());
+    final var uhcTeam = this.getTeamByPlayer(leaderOP.getName());
+
+    if (uhcTeam == null && leaderOP.isOnline()) {
+      this.messageHandler.send(leaderOP.getPlayer(), this.messages.team().doesNotExist());
+      return;
+    }
+
+    if (!uhcTeam.getLeader().equalsIgnoreCase(leaderOP.getName()) && leaderOP.isOnline()) {
+      this.messageHandler.send(leaderOP.getPlayer(), this.messages.team().leaderAsMember());
       return;
     }
 
@@ -73,15 +91,18 @@ public class UhcTeamManager {
       final var player = Bukkit.getPlayer(member);
 
       if (player == null || !player.isOnline()) {
-        return;
+        continue;
       }
 
       this.messageHandler.send(player, this.messages.team().leave(), uhcTeam.getName());
       this.uhcPlayerRegistry.getPlayer(member).setUhcTeam(null);
     }
 
-    this.messageHandler.send(leader, this.messages.team().remove());
-    this.uhcTeamRegistry.removeTeam(leader.getName());
+    if(leaderOP.isOnline()) {
+      this.messageHandler.send(leaderOP.getPlayer(), this.messages.team().remove());
+
+    }
+    this.uhcTeamRegistry.removeTeam(leaderOP.getName());
   }
 
   public void randomizeTeams(
@@ -114,6 +135,8 @@ public class UhcTeamManager {
           }
         }
       }
+    } else {
+      Bukkit.getOnlinePlayers().forEach(p -> createTeam(p, null));
     }
   }
 
@@ -149,5 +172,32 @@ public class UhcTeamManager {
     final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(player);
 
     return uhcPlayer == null ? null : uhcPlayer.getUhcTeam();
+  }
+
+  public Component replaceVariables(
+          final String text,
+          final Player leader
+  ) {
+
+    return MessageUtil.parseStringToComponent(
+            text,
+            Placeholder.parsed("leader", leader.getName())
+    );
+  }
+
+  private NamedTextColor getColor() {
+    if(!teams.forceSequentiallyColors()) {
+      return NamedTextColor.NAMES.valueOr(teams.colors().get(ThreadLocalRandom.current().nextInt(teams.colors().size())), NamedTextColor.WHITE);
+    }
+
+    if(this.iterator == null) {
+      this.iterator = teams.colors().iterator();
+    }
+
+    if(!this.iterator.hasNext()) {
+      this.iterator = teams.colors().iterator();
+    }
+
+    return NamedTextColor.NAMES.valueOr(iterator.next(), NamedTextColor.WHITE);
   }
 }

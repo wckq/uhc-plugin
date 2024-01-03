@@ -18,25 +18,11 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
   private String leader;
   private Team team;
   private String name;
-  private NamedTextColor[] textColors = {
-          NamedTextColor.AQUA,
-          NamedTextColor.BLUE,
-          NamedTextColor.DARK_AQUA,
-          NamedTextColor.DARK_BLUE,
-          NamedTextColor.DARK_GRAY,
-          NamedTextColor.DARK_RED,
-          NamedTextColor.YELLOW,
-          NamedTextColor.LIGHT_PURPLE,
-          NamedTextColor.RED,
-          NamedTextColor.GREEN,
-          NamedTextColor.GRAY
-  };
-
   private boolean alive;
   private int kills;
   private int playersAlive;
 
-  public DefaultUhcTeam(final String leader, final String name) {
+  public DefaultUhcTeam(final String leader, final String name, final NamedTextColor color, final Component prefix, final boolean friendlyFire) {
     this.leader = leader;
     this.name = name;
     this.alive = true;
@@ -47,9 +33,9 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
     if (Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader) == null) {
       setTeam(Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(leader));
 
-      team.prefix(Component.text(String.format("[Team %s] | ", leader)));
-      team.color(textColors[new Random().nextInt(textColors.length)]);
-      team.setAllowFriendlyFire(false);
+      team.prefix(prefix);
+      team.color(color);
+      team.setAllowFriendlyFire(friendlyFire);
     } else {
       this.team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader);
     }

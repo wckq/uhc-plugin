@@ -33,7 +33,7 @@ public class WorldGenerator {
       return;
     }
 
-    this.setupWorldBorder(this.world, this.worlds.worldBorder());
+    this.setupWorldBorder(this.world, this.worlds.border().worldBorder());
     this.applySettings(this.world);
   }
 
@@ -42,6 +42,8 @@ public class WorldGenerator {
       Bukkit.getLogger().severe("SECURITY PREVENTION: Worlds couldn't been removed because a game was started");
       return;
     }
+
+    if(!worlds.removeWorld()) { return; }
 
     Bukkit.unloadWorld(world, false);
 

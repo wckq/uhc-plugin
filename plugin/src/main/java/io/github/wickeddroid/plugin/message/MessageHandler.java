@@ -4,6 +4,7 @@ import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.Bukkit;
 import team.unnamed.inject.Inject;
 
 import java.util.regex.Pattern;
@@ -60,4 +61,18 @@ public class MessageHandler {
             )
     );
   }
+
+  public void sendGlobal(
+          final String message
+  ) {
+    Bukkit.getOnlinePlayers().forEach(p -> this.send(p, message));
+  }
+
+  public void sendGlobal(
+          final String message,
+          final String... replacements
+  ) {
+    Bukkit.getOnlinePlayers().forEach(p -> this.send(p, message, replacements));
+  }
+
 }

@@ -2,6 +2,8 @@ package io.github.wickeddroid.plugin.listener.vanilla;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import io.github.wickeddroid.plugin.UhcPlugin;
+import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import net.kyori.adventure.key.Key;
@@ -24,6 +26,10 @@ public class PlayerDeathListener implements Listener {
   private UhcTeamManager uhcTeamManager;
   @Inject
   private UhcGame uhcGame;
+  @Inject
+  private Game game;
+  @Inject
+  private UhcPlugin plugin;
 
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent event) {
@@ -43,21 +49,17 @@ public class PlayerDeathListener implements Listener {
     if (playerKiller != null) {
       final var uhcKiller = this.uhcPlayerRegistry.getPlayer(playerKiller.getName());
 
-      if (uhcKiller == null) {
-        return;
+      if (uhcKiller != null) {
+        uhcKiller.incrementKills();
       }
-
-      uhcKiller.incrementKills();
     }
 
     if (uhcTeam != null) {
       uhcTeam.decrementPlayersAlive();
 
-      if (uhcTeam.getPlayersAlive() > 0) {
-        return;
+      if (uhcTeam.getPlayersAlive() <= 0) {
+        uhcTeamManager.removeTeam(player.getUniqueId());
       }
-
-      uhcTeamManager.removeTeam(player);
     }
 
     if (uhcPlayer == null) {
@@ -68,6 +70,8 @@ public class PlayerDeathListener implements Listener {
 
     uhcPlayer.setAlive(false);
 
-    player.setGameMode(GameMode.SPECTATOR);
+    Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+      player.setGameMode(game.spectatorsEnabled() ? GameMode.SPECTATOR : GameMode.ADVENTURE);
+    },40L);
   }
 }

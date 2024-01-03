@@ -2,10 +2,12 @@ package io.github.wickeddroid.plugin.listener.vanilla;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardEndGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
+import io.github.wickeddroid.plugin.util.MessageUtil;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,6 +23,7 @@ public class PlayerJoinListener implements Listener {
   private ScoreboardLobby scoreboardLobby;
   private ScoreboardGame scoreboardGame;
   private UhcGame uhcGame;
+  private Game game;
 
   @EventHandler
   public void onPlayerJoin(final PlayerJoinEvent event) {
@@ -45,5 +48,6 @@ public class PlayerJoinListener implements Listener {
       this.scoreboardGame.getSidebar().addViewer(player);
     }
 
+    player.sendPlayerListHeaderAndFooter(MessageUtil.parseStringToComponent(game.playerList().header()), MessageUtil.parseStringToComponent(game.playerList().footer()));
   }
 }
