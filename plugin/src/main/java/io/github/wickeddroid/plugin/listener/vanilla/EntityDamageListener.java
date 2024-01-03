@@ -43,7 +43,7 @@ public class EntityDamageListener implements Listener {
     if(event.getEntity() instanceof Player) {
       var player = (Player) event.getEntity();
 
-      var isIronman = uhcGame.getIronmans().contains(player);
+      var isIronman = uhcGame.getIronmans().contains(player.getName());
 
       if(!isIronman) { return; }
 
@@ -59,7 +59,7 @@ public class EntityDamageListener implements Listener {
 
       if(!game.ironmanEnabled()) { return; }
 
-      uhcGame.removeIronman(player);
+      uhcGame.removeIronman(player.getName());
       lostIronmans++;
 
       messageHandler.sendGlobal(messages.game().ironmanLost(), player.getName(), String.valueOf(uhcGame.getIronmans().size()));
@@ -69,7 +69,7 @@ public class EntityDamageListener implements Listener {
       }
 
       if(uhcGame.getIronmans().size() == 1) {
-        messageHandler.sendGlobal(messages.game().ironmanPlayer(), uhcGame.getIronmans().get(0).getName());
+        messageHandler.sendGlobal(messages.game().ironmanPlayer(), uhcGame.getIronmans().get(0));
       }
     }
   }

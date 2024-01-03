@@ -65,7 +65,7 @@ public class UhcGameManager {
         }
 
         Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(player, location), delayTeam);
-        uhcGame.addIronman(player);
+        uhcGame.addIronman(player.getName());
 
         delayTeam += 40;
       }
@@ -79,7 +79,7 @@ public class UhcGameManager {
           }
           Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(team, location), delayTeam);
 
-          team.getMembers().stream().map(Bukkit::getPlayer).forEach(p -> uhcGame.addIronman(p));
+          team.getMembers().stream().map(Bukkit::getPlayer).forEach(p -> uhcGame.addIronman(p.getName()));
 
           delayTeam += 40;
         }

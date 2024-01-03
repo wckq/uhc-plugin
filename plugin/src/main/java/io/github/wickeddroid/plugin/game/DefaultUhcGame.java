@@ -24,7 +24,7 @@ public class DefaultUhcGame implements UhcGame {
   private boolean gameStart;
   private boolean teamEnabled;
   private boolean ownTeamsEnabled;
-  private List<Player> ironmans;
+  private List<String> ironmans;
 
   public DefaultUhcGame(final String host) {
     this.host = host;
@@ -200,17 +200,17 @@ public class DefaultUhcGame implements UhcGame {
   }
 
   @Override
-  public List<Player> getIronmans() {
+  public List<String> getIronmans() {
     return ironmans;
   }
 
   @Override
-  public void addIronman(Player player) {
+  public void addIronman(String player) {
     ironmans.add(player);
   }
 
   @Override
-  public void removeIronman(Player player) {
+  public void removeIronman(String player) {
     ironmans.remove(player);
   }
 }

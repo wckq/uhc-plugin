@@ -45,7 +45,7 @@ public class GameThread implements Runnable {
       this.uhcGame.setWorldBorder((int) world.getWorldBorder().getSize() / 2);
     }
 
-    if(this.uhcTeamRegistry.getTeams().stream().filter(UhcTeam::isAlive).toList().size() == 1) {
+    if(this.uhcTeamRegistry.getTeams().stream().filter(UhcTeam::isAlive).toList().size() == 1 && uhcGame.isTeamEnabled()) {
       this.uhcGameManager.endGame();
     }
   }
