@@ -23,7 +23,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 import team.unnamed.inject.InjectAll;
+import team.unnamed.inject.InjectIgnore;
 
 import java.io.IOException;
 
@@ -43,6 +45,8 @@ public class UhcGameManager {
   private UhcPlayerRegistry uhcPlayerRegistry;
   private Game game;
   private Backup backup;
+  @InjectIgnore
+  private BukkitTask gameTask;
 
   public void startGame(final Player sender, boolean tp) {
     if (this.uhcGame.isGameStart() || this.uhcGame.getUhcGameState() != UhcGameState.WAITING) {
@@ -118,7 +122,7 @@ public class UhcGameManager {
       this.uhcGame.setStartTime(System.currentTimeMillis());
 
 
-      Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this.gameThread, 0L, 20L);
+      gameTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this.gameThread, 0L, 20L);
       Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, ()-> {
         try {
           backup.save();
@@ -153,5 +157,10 @@ public class UhcGameManager {
     if(!worlds.border().keepClosingAfterMeetup()) { return; }
 
     Bukkit.getScheduler().runTaskLater(plugin, ()-> worldBorder.setSize(20, worlds.border().worldBorderDelayAfterMeetup()), worlds.border().worldBorderDelay()*20L);
+  }
+
+  public void endGame() {
+    this.uhcGame.setUhcGameState(UhcGameState.FINISH);
+    gameTask.cancel();
   }
 }

@@ -1,8 +1,10 @@
 package io.github.wickeddroid.plugin.thread;
 
 import io.github.wickeddroid.api.game.UhcGame;
+import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.game.UhcGameManager;
+import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
 import team.unnamed.inject.Inject;
@@ -17,6 +19,7 @@ public class GameThread implements Runnable {
   private UhcGame uhcGame;
   private UhcGameHandler uhcGameHandler;
   private UhcGameManager uhcGameManager;
+  private UhcTeamRegistry uhcTeamRegistry;
 
   @Override
   public void run() {
@@ -40,6 +43,10 @@ public class GameThread implements Runnable {
       }
 
       this.uhcGame.setWorldBorder((int) world.getWorldBorder().getSize() / 2);
+    }
+
+    if(this.uhcTeamRegistry.getTeams().stream().filter(UhcTeam::isAlive).toList().size() == 1) {
+      this.uhcGameManager.endGame();
     }
   }
 }
