@@ -83,6 +83,7 @@ public class FireLessScenario extends ListenerScenario {
             (getOption("prevent_damage_burn").value().getAsBoolean() && cause == EntityDamageEvent.DamageCause.FIRE_TICK) ||
             (getOption("prevent_damage_magma").value().getAsBoolean() && cause == EntityDamageEvent.DamageCause.HOT_FLOOR)
     ) {
+      event.setDamage(0.0D);
       event.setCancelled(true);
     }
 
