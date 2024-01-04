@@ -7,6 +7,7 @@ import org.bukkit.*;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.Singleton;
 
+import java.io.File;
 import java.io.IOException;
 
 @Singleton
@@ -48,6 +49,21 @@ public class WorldGenerator {
     Bukkit.unloadWorld(world, false);
 
     FileUtils.deleteDirectory(world.getWorldFolder());
+  }
+
+  public void removeLobbyData() {
+    worlds.blacklist().forEach(w -> {
+      var world = Bukkit.getWorld(w);
+      if(w == null) { return; }
+
+      try {
+        FileUtils.deleteDirectory(new File(world.getWorldFolder().getAbsolutePath()+"/stats/"));
+        FileUtils.deleteDirectory(new File(world.getWorldFolder().getAbsolutePath()+"/advancements/"));
+        FileUtils.deleteDirectory(new File(world.getWorldFolder().getAbsolutePath()+"/playerdata/"));
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 
   public void applySettings(final World world) {
