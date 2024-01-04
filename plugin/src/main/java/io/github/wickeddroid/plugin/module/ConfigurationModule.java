@@ -3,11 +3,10 @@ package io.github.wickeddroid.plugin.module;
 import io.github.wickeddroid.plugin.configuration.JsonConfigurationBuilder;
 import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.message.Messages;
-import io.github.wickeddroid.plugin.message.title.Titles;
+import io.github.wickeddroid.plugin.message.announcements.Announcements;
 import io.github.wickeddroid.plugin.scoreboard.Scoreboard;
 import io.github.wickeddroid.plugin.team.Teams;
 import io.github.wickeddroid.plugin.world.Worlds;
-import net.kyori.adventure.title.Title;
 import org.bukkit.plugin.Plugin;
 import org.spongepowered.configurate.ConfigurateException;
 import team.unnamed.inject.AbstractModule;
@@ -45,9 +44,9 @@ public class ConfigurationModule extends AbstractModule {
                       .get()
               );
 
-      bind(Titles.class)
+      bind(Announcements.class)
               .toInstance(JsonConfigurationBuilder
-                      .load(Titles.class, path, "titles")
+                      .load(Announcements.class, path, "announcements")
                       .get()
               );
 

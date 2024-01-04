@@ -6,7 +6,7 @@ import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
-import io.github.wickeddroid.plugin.message.title.Titles;
+import io.github.wickeddroid.plugin.message.announcements.Announcements;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
@@ -34,7 +34,6 @@ public class UhcGameManager {
 
   private Plugin plugin;
   private Worlds worlds;
-  private Titles titles;
   private UhcGame uhcGame;
   private Messages messages;
   private GameThread gameThread;
@@ -95,7 +94,6 @@ public class UhcGameManager {
         this.scoreboardGame.getSidebar().addViewer(player);
 
         player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
-        player.showTitle(this.titles.gameStart());
 
         if(game.starterInvulnerability()) {
           player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, game.invulnerabilityDuration()*20, 10, false, false, false));
@@ -142,10 +140,6 @@ public class UhcGameManager {
     }
 
     final var worldBorder = world.getWorldBorder();
-
-    for (final var player : Bukkit.getOnlinePlayers()) {
-      player.showTitle(this.titles.meetupTitle());
-    }
 
     this.uhcGame.setUhcGameState(UhcGameState.MEETUP);
 

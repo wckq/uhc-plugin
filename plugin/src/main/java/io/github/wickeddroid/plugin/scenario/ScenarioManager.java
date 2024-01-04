@@ -55,6 +55,10 @@ public class ScenarioManager {
     HandlerList.unregisterAll(scenario);
   }
 
+  public boolean isEnabled(String key) {
+    return this.scenarioRegistration.getScenarios().get(key).isEnabled();
+  }
+
   public Collection<GameScenario> getScenarios() {
     return this.scenarioRegistration.getScenarios().values();
   }

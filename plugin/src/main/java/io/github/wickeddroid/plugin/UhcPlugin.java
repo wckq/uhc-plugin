@@ -5,6 +5,7 @@ import io.github.wickeddroid.plugin.module.UhcPluginModule;
 import io.github.wickeddroid.plugin.scenario.ScenarioRegistration;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mariuszgromada.math.mxparser.License;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.InjectIgnore;
 import team.unnamed.inject.Injector;
@@ -17,6 +18,8 @@ public class UhcPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
+    License.iConfirmNonCommercialUse("uhcplugin");
+
     Injector.create(new UhcPluginModule(this))
             .injectMembers(this);
 
