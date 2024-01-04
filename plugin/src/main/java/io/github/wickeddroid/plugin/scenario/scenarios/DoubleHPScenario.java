@@ -23,5 +23,6 @@ public class DoubleHPScenario extends ListenerScenario {
   @EventHandler
   public void onScatter(PlayerScatteredEvent event) {
     event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()+20.0D);
+    event.getPlayer().setHealth(event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
   }
 }
