@@ -1,19 +1,28 @@
 package io.github.wickeddroid.plugin.backup;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import io.github.wickeddroid.api.game.UhcGame;
+import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.UhcPlugin;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Backup {
 
@@ -56,7 +65,7 @@ public class Backup {
         var it = game.getIronmans().iterator();
 
         while (it.hasNext()) {
-            String s = it.next().getName();
+            String s = it.next();
 
             playersData.append("\"").append(s).append("\"");
 
@@ -136,5 +145,52 @@ public class Backup {
         byte[] encoded = Base64.getEncoder().encode(json.getBytes());
 
         Files.write(file.toPath(), encoded);
+    }
+
+    public void load() throws IOException, JsonParseException, NullPointerException, IllegalArgumentException {
+        var file = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "uhc_backup.uhc");
+        if(!file.exists()) {
+            return;
+        }
+
+        String jsonString = new String(Base64.getDecoder().decode(Files.readAllBytes(file.toPath())), StandardCharsets.UTF_8);
+
+
+        var json = JsonParser.parseString(jsonString).getAsJsonObject();
+
+        var game = json.get("game").getAsJsonObject();
+
+        var host = game.get("host").getAsString();
+        var state = UhcGameState.valueOf(game.get("state").getAsString());
+        var startTime = game.get("start-time").getAsLong();
+        var currentTime = game.get("current-time").getAsInt();
+        var worldBorder = game.get("worldborder").getAsInt();
+        var pvpTime = game.get("pvp-time").getAsInt();
+        var meetupTime = game.get("meetup-time").getAsInt();
+        var appleRate = game.get("applerate").getAsInt();
+        var cobwebLimit = game.get("cobweb-limit").getAsInt();
+        var pvpEnabled = game.get("pvp-enabled").getAsBoolean();
+        var gameStarted = game.get("game-started").getAsBoolean();
+        var cleanEnabled = game.get("clean-enabled").getAsBoolean();
+        var teamsEnabled = game.get("teams-enabled").getAsBoolean();
+        var ownTeamsEnabled = game.get("own-teams-enabled").getAsBoolean();
+        var teamSize = game.get("team-size").getAsInt();
+        var ironmans = game.get("ironmans").getAsJsonArray().asList().stream().map(JsonElement::getAsString).toList();
+
+        uhcGame.setHost(host);
+        uhcGame.setUhcGameState(state);
+        uhcGame.setStartTime(startTime);
+        uhcGame.setCurrentTime(currentTime);
+        uhcGame.setWorldBorder(worldBorder);
+        uhcGame.setTimeForPvp(pvpTime);
+        uhcGame.setTimeForMeetup(meetupTime);
+        uhcGame.setAppleRate(appleRate);
+        uhcGame.setCobwebLimit(cobwebLimit);
+        uhcGame.setPvp(pvpEnabled);
+        uhcGame.setGameStart(gameStarted);
+        uhcGame.setCleanItem(cleanEnabled);
+        uhcGame.setTeamEnabled(teamsEnabled);
+        uhcGame.setOwnTeamsEnabled(ownTeamsEnabled);
+        uhcGame.setTeamSize(teamSize);
     }
 }
