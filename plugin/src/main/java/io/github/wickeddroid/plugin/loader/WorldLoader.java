@@ -39,6 +39,7 @@ public class WorldLoader implements Loader {
 
       try {
         this.worldGenerator.removeWorld(world);
+        this.worldGenerator.removeLobbyData();
       } catch (IOException e) {
         e.printStackTrace();
       }

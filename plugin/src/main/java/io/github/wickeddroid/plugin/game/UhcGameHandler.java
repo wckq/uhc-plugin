@@ -4,7 +4,7 @@ import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
-import io.github.wickeddroid.plugin.message.title.Titles;
+import io.github.wickeddroid.plugin.message.announcements.Announcements;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ import team.unnamed.inject.InjectAll;
 @InjectAll
 public class UhcGameHandler {
 
-  private Titles titles;
+  private Announcements announcements;
   private UhcGame uhcGame;
   private Messages messages;
   private MessageHandler messageHandler;
@@ -25,12 +25,6 @@ public class UhcGameHandler {
       }
 
       world.setPVP(pvp);
-    }
-
-    if (pvp) {
-      for (final var player : Bukkit.getOnlinePlayers()) {
-        player.showTitle(this.titles.pvpTitle());
-      }
     }
 
     this.uhcGame.setUhcGameState(UhcGameState.PVP);

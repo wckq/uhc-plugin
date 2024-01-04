@@ -3,9 +3,10 @@ package io.github.wickeddroid.plugin.game;
 import io.github.wickeddroid.api.events.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
-import io.github.wickeddroid.plugin.message.title.Titles;
+import io.github.wickeddroid.plugin.message.announcements.Announcements;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
@@ -13,22 +14,26 @@ import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.thread.GameThread;
 import io.github.wickeddroid.plugin.thread.ScatterThread;
 import io.github.wickeddroid.plugin.util.LocationUtil;
-import io.github.wickeddroid.plugin.util.SaveLoad;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 import team.unnamed.inject.InjectAll;
+import team.unnamed.inject.InjectIgnore;
 
-import java.io.File;
+import java.io.IOException;
 
 @InjectAll
 public class UhcGameManager {
 
   private Plugin plugin;
   private Worlds worlds;
-  private Titles titles;
   private UhcGame uhcGame;
   private Messages messages;
   private GameThread gameThread;
@@ -37,6 +42,10 @@ public class UhcGameManager {
   private ScoreboardLobby scoreboardLobby;
   private UhcTeamRegistry uhcTeamRegistry;
   private UhcPlayerRegistry uhcPlayerRegistry;
+  private Game game;
+  private Backup backup;
+  @InjectIgnore
+  private BukkitTask gameTask;
 
   public void startGame(final Player sender, boolean tp) {
     if (this.uhcGame.isGameStart() || this.uhcGame.getUhcGameState() != UhcGameState.WAITING) {
@@ -55,6 +64,7 @@ public class UhcGameManager {
         }
 
         Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(player, location), delayTeam);
+        uhcGame.addIronman(player.getName());
 
         delayTeam += 40;
       }
@@ -67,6 +77,8 @@ public class UhcGameManager {
             continue;
           }
           Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(team, location), delayTeam);
+
+          team.getMembers().stream().map(Bukkit::getPlayer).forEach(p -> uhcGame.addIronman(p.getName()));
 
           delayTeam += 40;
         }
@@ -82,7 +94,14 @@ public class UhcGameManager {
         this.scoreboardGame.getSidebar().addViewer(player);
 
         player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
-        player.showTitle(this.titles.gameStart());
+
+        if(game.starterInvulnerability()) {
+          player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, game.invulnerabilityDuration()*20, 10, false, false, false));
+        }
+
+        if(game.initialBoat()) {
+          player.getInventory().addItem(new ItemStack(Material.ACACIA_BOAT));
+        }
       }
 
       for (final var world : Bukkit.getWorlds()) {
@@ -93,24 +112,22 @@ public class UhcGameManager {
         world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
         world.setGameRule(GameRule.DO_MOB_SPAWNING, true);
         world.setGameRule(GameRule.DO_WEATHER_CYCLE, true);
+        world.getWorldBorder().setDamageAmount(worlds.border().initialBorderDamage());
       }
 
       this.uhcGame.setGameStart(true);
       this.uhcGame.setUhcGameState(UhcGameState.PLAYING);
       this.uhcGame.setStartTime(System.currentTimeMillis());
 
-      Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this.gameThread, 0L, 20L);
-      Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, ()-> {
-        //BACKUPS PREVENTIVOS
-        try {
-          SaveLoad.save(uhcTeamRegistry.getTeamMap(), plugin.getDataFolder().getAbsolutePath() + File.separator + "team_registry_backup.bin");
-          SaveLoad.save(uhcPlayerRegistry.getPlayerMap(), plugin.getDataFolder().getAbsolutePath() + File.separator + "player_registry_backup.bin");
 
-          Bukkit.getLogger().severe("Saved backup teams");
-        } catch (Exception e) {
+      gameTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this.gameThread, 0L, 20L);
+      Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, ()-> {
+        try {
+          backup.save();
+        } catch (IOException e) {
           throw new RuntimeException(e);
         }
-      }, 900L,  4800L);
+      }, 200L, 12000L);
       Bukkit.getPluginManager().callEvent(new GameStartEvent());
     }, delayTeam);
   }
@@ -124,11 +141,20 @@ public class UhcGameManager {
 
     final var worldBorder = world.getWorldBorder();
 
-    for (final var player : Bukkit.getOnlinePlayers()) {
-      player.showTitle(this.titles.meetupTitle());
-    }
-
     this.uhcGame.setUhcGameState(UhcGameState.MEETUP);
-    Bukkit.getScheduler().runTask(plugin, () -> worldBorder.setSize(300, 300));
+
+    Bukkit.getScheduler().runTask(plugin, () -> {
+      worldBorder.setSize(worlds.border().meetupWorldBorder(), worlds.border().worldBorderDelay());
+      worldBorder.setDamageAmount(worlds.border().meetupBorderDamage());
+    });
+
+    if(!worlds.border().keepClosingAfterMeetup()) { return; }
+
+    Bukkit.getScheduler().runTaskLater(plugin, ()-> worldBorder.setSize(20, worlds.border().worldBorderDelayAfterMeetup()), worlds.border().worldBorderDelay()*20L);
+  }
+
+  public void endGame() {
+    this.uhcGame.setUhcGameState(UhcGameState.FINISH);
+    gameTask.cancel();
   }
 }

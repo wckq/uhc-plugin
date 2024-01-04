@@ -37,10 +37,16 @@ public class Messages {
   @ConfigSerializable
   public static class Game {
     private String hasStarted = "El juego ya ha empezado.";
+    private String ironmanLost = "<gold>El jugador <param-player> ya no puede ser ironman. Quedan <green><param-ironmanleft><gold> ironman.";
+    private String papermanPlayer = "<gold>El jugador <param-player> es el <red>Paperman <gold>de la partida.";
+    private String ironmanPlayer = "<gold>El jugador <param-player> es el <green>Ironman <gold>de la partida.";
 
     public @NonNull String hasStarted() {
       return this.hasStarted;
     }
+    public @NonNull String ironmanLost() { return this.ironmanLost; }
+    public @NonNull String papermanPlayer() { return this.papermanPlayer; }
+    public @NonNull String ironmanPlayer() { return this.ironmanPlayer; }
   }
 
   @ConfigSerializable
@@ -66,7 +72,12 @@ public class Messages {
     private String enableTeam = "Se han activado los equipos.";
     private String disableTeam = "Se han desactivado los equipos.";
     private String teamHasNotEnabled = "Los equipos se encuentran desactivados.";
+    private String ownTeamsHasNotEnabled = "Los equipos propios se encuentran desactivados.";
     private String changeTeamSize = "Se ha cambiado el tamaño de equipos a <color:#93FF9E><param-size>";
+    private String changeTeamNameError = "No se pueden realizar cambios a los nombres de los equipos.";
+    private String changeTeamPrefixError = "No se pueden realizar cambios al prefix de los equipos.";
+    private String settingChanged = "Has cambiado la configuración a \"<param-value>\"";
+    private String maxLengthReached = "Has sobrepasado la cantidad máxima de <param-length> caracteres.";
 
     public @NonNull String create() {
       return this.create;
@@ -144,6 +155,10 @@ public class Messages {
       return this.teamHasNotEnabled;
     }
 
+    public @NonNull String ownTeamsHasNotEnabled() {
+      return ownTeamsHasNotEnabled;
+    }
+
     public @NonNull String changeTeamSize() {
       return this.changeTeamSize;
     }
@@ -155,6 +170,12 @@ public class Messages {
     public @NonNull String disableTeam() {
       return this.disableTeam;
     }
+
+    public @NonNull String changeTeamNameError() { return this.changeTeamNameError; }
+
+    public @NonNull String changeTeamPrefixError() { return this.changeTeamPrefixError; }
+    public @NonNull String settingChanged() { return this.settingChanged; }
+    public @NonNull String maxLengthReached() { return this.maxLengthReached; }
   }
 
   @ConfigSerializable

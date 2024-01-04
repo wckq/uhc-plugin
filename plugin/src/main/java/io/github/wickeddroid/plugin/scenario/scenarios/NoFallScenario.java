@@ -26,6 +26,7 @@ public class NoFallScenario extends ListenerScenario {
       return;
     }
 
+    event.setDamage(0.0D);
     event.setCancelled(true);
   }
 }

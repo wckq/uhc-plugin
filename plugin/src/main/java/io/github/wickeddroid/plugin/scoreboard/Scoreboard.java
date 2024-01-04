@@ -11,8 +11,8 @@ public class Scoreboard {
 
   private String title = "<rainbow>UHC";
   private Lobby lobby = new Lobby();
-  private Lobby game = new Lobby();
-  private Lobby end = new Lobby();
+  private Game game = new Game();
+  private End end = new End();
 
   public @NonNull String title() {
     return title;
@@ -22,11 +22,11 @@ public class Scoreboard {
     return this.lobby;
   }
 
-  public @NonNull Lobby game() {
+  public @NonNull Game game() {
     return this.game;
   }
 
-  public @NonNull Lobby end() {
+  public @NonNull End end() {
     return this.end;
   }
 

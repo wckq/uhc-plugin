@@ -14,6 +14,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @RegisteredScenario
 @Scenario(
         name = "CutClean",
@@ -70,27 +73,27 @@ public class CutCleanScenario extends ListenerScenario {
 
   @EventHandler
   public void onEntityDeath(final EntityDeathEvent event) {
-    final var entity = event.getEntity();
     final var drops = event.getDrops();
-    final var amount = PluginUtil.RANDOM.nextInt(3) + 1;
 
-    if (entity instanceof Pig
-            || entity instanceof Cow
-            || entity instanceof Chicken
-            || entity instanceof Sheep) {
-      drops.clear();
+    Map<Material, Material> dropReplacements = Map.of(
+            Material.PORKCHOP, Material.COOKED_PORKCHOP,
+            Material.BEEF, Material.COOKED_BEEF,
+            Material.MUTTON, Material.COOKED_MUTTON,
+            Material.CHICKEN, Material.COOKED_CHICKEN,
+            Material.RABBIT, Material.COOKED_RABBIT
+    );
 
-      if (entity instanceof Pig) {
-        drops.add(new ItemStack(Material.COOKED_PORKCHOP, amount));
-      } else if (entity instanceof Cow) {
-        drops.add(new ItemStack(Material.COOKED_BEEF, amount));
-        drops.add(new ItemStack(Material.LEATHER, PluginUtil.RANDOM.nextInt(2)+1));
-      } else if (entity instanceof Sheep) {
-        drops.add(new ItemStack(Material.COOKED_MUTTON, amount));
-      } else {
-        drops.add(new ItemStack(Material.COOKED_CHICKEN, amount));
-        drops.add(new ItemStack(Material.FEATHER, PluginUtil.RANDOM.nextInt(1)+1));
+    var dropsMaterial = drops.stream().collect(Collectors.toMap(ItemStack::getType, itemStack -> itemStack));
+
+    dropReplacements.forEach((from, to) -> {
+
+
+      if(dropsMaterial.containsKey(from)) {
+        var itemStack = dropsMaterial.get(from);
+
+        drops.remove(itemStack);
+        drops.add(new ItemStack(to, itemStack.getAmount()));
       }
-    }
+    });
   }
 }

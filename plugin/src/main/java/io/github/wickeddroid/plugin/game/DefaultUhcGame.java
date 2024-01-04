@@ -2,6 +2,10 @@ package io.github.wickeddroid.plugin.game;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DefaultUhcGame implements UhcGame {
 
@@ -19,6 +23,8 @@ public class DefaultUhcGame implements UhcGame {
   private boolean pvp;
   private boolean gameStart;
   private boolean teamEnabled;
+  private boolean ownTeamsEnabled;
+  private List<String> ironmans;
 
   public DefaultUhcGame(final String host) {
     this.host = host;
@@ -35,6 +41,8 @@ public class DefaultUhcGame implements UhcGame {
     this.cutClean = false;
     this.gameStart = false;
     this.teamEnabled = false;
+    this.ownTeamsEnabled = false;
+    this.ironmans = new ArrayList<>();
   }
 
   public DefaultUhcGame() {
@@ -167,6 +175,16 @@ public class DefaultUhcGame implements UhcGame {
   }
 
   @Override
+  public boolean isOwnTeamsEnabled() {
+    return this.ownTeamsEnabled;
+  }
+
+  @Override
+  public void setOwnTeamsEnabled(boolean ownTeamsEnabled) {
+    this.ownTeamsEnabled = ownTeamsEnabled;
+  }
+
+  @Override
   public void setTeamEnabled(boolean teamEnabled) {
     this.teamEnabled = teamEnabled;
   }
@@ -179,5 +197,20 @@ public class DefaultUhcGame implements UhcGame {
   @Override
   public void setTeamSize(int teamSize) {
     this.teamSize = teamSize;
+  }
+
+  @Override
+  public List<String> getIronmans() {
+    return ironmans;
+  }
+
+  @Override
+  public void addIronman(String player) {
+    ironmans.add(player);
+  }
+
+  @Override
+  public void removeIronman(String player) {
+    ironmans.remove(player);
   }
 }

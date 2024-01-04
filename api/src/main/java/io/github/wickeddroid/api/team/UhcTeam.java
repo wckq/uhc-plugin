@@ -41,4 +41,5 @@ public interface UhcTeam {
   List<String> getMembers();
 
   Team getTeam();
+  void setTeam(Team team);
 }

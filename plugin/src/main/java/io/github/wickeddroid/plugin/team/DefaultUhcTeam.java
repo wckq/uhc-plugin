@@ -7,55 +7,46 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Team;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class DefaultUhcTeam implements UhcTeam {
+public class DefaultUhcTeam implements UhcTeam, Serializable {
 
   private final List<String> members;
   private String leader;
   private Team team;
   private String name;
-  private NamedTextColor[] textColors = {
-          NamedTextColor.AQUA,
-          NamedTextColor.BLUE,
-          NamedTextColor.DARK_AQUA,
-          NamedTextColor.DARK_BLUE,
-          NamedTextColor.DARK_GRAY,
-          NamedTextColor.DARK_RED,
-          NamedTextColor.YELLOW,
-          NamedTextColor.LIGHT_PURPLE,
-          NamedTextColor.RED,
-          NamedTextColor.GREEN,
-          NamedTextColor.GRAY
-  };
-
   private boolean alive;
   private int kills;
   private int playersAlive;
 
-  public DefaultUhcTeam(
-          final String leader,
-          final String name
-  ) {
+  public DefaultUhcTeam(final String leader, final String name, final NamedTextColor color, final Component prefix, final boolean friendlyFire) {
     this.leader = leader;
     this.name = name;
     this.alive = true;
     this.kills = 0;
-    this.playersAlive = 1;
+    this.playersAlive = 0;
     this.members = new ArrayList<>();
 
     if (Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader) == null) {
-      this.team = Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(leader);
+      setTeam(Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(leader));
 
-      team.prefix(Component.text(String.format("[Team %s] | ", leader)));
-      team.color(textColors[new Random().nextInt(textColors.length)]);
-      team.setAllowFriendlyFire(false);
-    } else
+      team.prefix(prefix);
+      team.color(color);
+      team.setAllowFriendlyFire(friendlyFire);
+    } else {
       this.team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader);
+    }
 
     this.addMember(leader);
+  }
+
+
+  @Override
+  public void setTeam(Team team) {
+    this.team = team;
   }
 
   @Override
@@ -131,12 +122,14 @@ public class DefaultUhcTeam implements UhcTeam {
   @Override
   public void addMember(String name) {
     this.members.add(name);
+    this.incrementPlayersAlive();
     this.team.addEntry(name);
   }
 
   @Override
   public void removeMember(String name) {
     this.members.remove(name);
+    this.decrementPlayersAlive();
     this.team.removeEntry(name);
   }
 
