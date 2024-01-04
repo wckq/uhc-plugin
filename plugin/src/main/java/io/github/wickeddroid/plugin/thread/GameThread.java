@@ -72,13 +72,13 @@ public class GameThread implements Runnable {
       if(verify.get()) { return; }
 
       var time = a.time()
-              .replaceAll("%pvp%", String.valueOf(this.uhcGame.getTimeForPvp()))
-              .replaceAll("%meetup%", String.valueOf(this.uhcGame.getTimeForMeetup()))
-              .replaceAll("%wb-delay%", String.valueOf(this.worlds.border().worldBorderDelay()))
-              .replaceAll("%wb-meetup-delay%", String.valueOf(this.worlds.border().worldBorderDelayAfterMeetup()));
+              .replaceAll("%pvp%", String.valueOf(this.uhcGame.getTimeForPvp()+1))
+              .replaceAll("%meetup%", String.valueOf(this.uhcGame.getTimeForMeetup()+1))
+              .replaceAll("%wb-delay%", String.valueOf(this.worlds.border().worldBorderDelay()+1))
+              .replaceAll("%wb-meetup-delay%", String.valueOf(this.worlds.border().worldBorderDelayAfterMeetup()+1));
       Expression ex = new Expression(time);
 
-      var seconds = ex.calculate();
+      int seconds = (int) ex.calculate();
 
       if(Double.isNaN(seconds)) {
         Bukkit.getLogger().severe("Invalid announcement time");

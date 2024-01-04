@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.configuration.serializer;
 
 import io.github.wickeddroid.plugin.util.MessageUtil;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -78,14 +79,8 @@ public enum TitleSerializer implements TypeSerializer<Title> {
       return;
     }
 
-    node.node("title").set(PlainTextComponentSerializer
-            .plainText().serialize(
-                    title.title()
-            ));
-    node.node("subtitle").set(PlainTextComponentSerializer
-            .plainText().serialize(
-                    title.subtitle()
-            ));
+    node.node("title").set(MiniMessage.miniMessage().serialize(title.title()));
+    node.node("subtitle").set(MiniMessage.miniMessage().serialize(title.subtitle()));
 
     node.node("fadeIn").set(Objects.requireNonNull(title.times())
             .fadeIn().get(ChronoUnit.SECONDS));
