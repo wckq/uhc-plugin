@@ -5,22 +5,24 @@ plugins {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.17.1-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.19.4-R0.1-SNAPSHOT")
 
     implementation("org.spongepowered:configurate-gson:4.1.2")
     implementation("me.catcoder:bukkit-sidebar:6.2.0-SNAPSHOT")
 
-    implementation("team.unnamed:gui-menu-api:3.4.0-SNAPSHOT")
+    implementation("team.unnamed:gui-menu-api:3.4.1-SNAPSHOT") // LOCAL MODIFIED, USE 3.3.2
 
     implementation("me.fixeddev:commandflow-bukkit:0.5.2")
     implementation("team.unnamed:inject:2.0.0")
 
     arrayOf("1_17_R1", "1_18_R2", "1_19_R3").forEach {
-        implementation("team.unnamed:gui-menu-adapt-v$it:3.4.0-SNAPSHOT")
+        implementation("team.unnamed:gui-menu-adapt-v$it:3.4.1-SNAPSHOT") // LOCAL MODIFIED, USE 3.3.2
     }
 
     implementation("commons-io:commons-io:2.13.0")
-    implementation("net.kyori:adventure-text-minimessage:4.13.1")
+    implementation("net.kyori:adventure-text-minimessage:4.14.0")
+
+    implementation("org.mariuszgromada.math:MathParser.org-mXparser:5.2.1")
 
     implementation(project(":api"))
     implementation(project(":annotation-processor"))
@@ -34,12 +36,12 @@ tasks {
         options.release.set(17)
     }
     runServer {
-        minecraftVersion("1.18.2")
+        minecraftVersion("1.19.4")
     }
     shadowJar {
         val packageName = "io.github.wickeddroid.libs"
 
-        archiveBaseName.set("uhc")
+        archiveBaseName.set("uhc-core")
         archiveVersion.set("1.0-SNAPSHOT")
 
         relocate("commons-io", "$packageName.commons")
@@ -54,6 +56,6 @@ bukkit {
     main = "io.github.wickeddroid.plugin.UhcPlugin"
     name = "uhc-plugin"
     version = "1.0-SNAPSHOT"
-    apiVersion = "1.17"
+    apiVersion = "1.19"
     author = "Wicked"
 }
