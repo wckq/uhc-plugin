@@ -42,14 +42,6 @@ public class CommandTime implements CommandClass {
           final @Sender Player sender,
           final int time
   ) {
-    this.uhcGame.setCurrentTime(time);
-    if(time > uhcGame.getTimeForPvp() ) {
-      uhcGame.setUhcGameState(UhcGameState.PVP);
-    }
-
-    if(time > uhcGame.getTimeForMeetup()) {
-      uhcGame.setUhcGameState(UhcGameState.MEETUP);
-    }
-
+    this.uhcGame.setStartTime(uhcGame.getStartTime() - (time * 1000L));
   }
 }
