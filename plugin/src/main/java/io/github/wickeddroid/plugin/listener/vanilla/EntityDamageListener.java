@@ -59,6 +59,8 @@ public class EntityDamageListener implements Listener {
 
       if(!game.ironmanEnabled()) { return; }
 
+      if(uhcGame.getIronmans().size() == 1) { return; }
+
       uhcGame.removeIronman(player.getName());
       lostIronmans++;
 
