@@ -6,7 +6,6 @@ import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
-import io.github.wickeddroid.plugin.message.announcements.Announcements;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
@@ -14,9 +13,11 @@ import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.thread.GameThread;
 import io.github.wickeddroid.plugin.thread.ScatterThread;
 import io.github.wickeddroid.plugin.util.LocationUtil;
+import io.github.wickeddroid.plugin.world.SafeScatter;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +29,9 @@ import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.InjectIgnore;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @InjectAll
 public class UhcGameManager {
@@ -47,43 +51,56 @@ public class UhcGameManager {
   @InjectIgnore
   private BukkitTask gameTask;
 
-  public void startGame(final Player sender, boolean tp) {
-    if (this.uhcGame.isGameStart() || this.uhcGame.getUhcGameState() != UhcGameState.WAITING) {
-      this.messageHandler.send(sender, this.messages.game().hasStarted());
-      return;
-    }
+  private CompletableFuture<List<Location>> requestLocations(int count, boolean experimental) throws Exception {
+    List<Location> locs = new ArrayList<>();
 
-    var delayTeam = 0;
+    CompletableFuture<List<Location>> complFuture = new CompletableFuture<>();
 
-    if (!this.uhcGame.isTeamEnabled() && tp) {
-      for (final var player : Bukkit.getOnlinePlayers()) {
-        final var location = LocationUtil.generateRandomLocation(this.uhcGame, this.worlds.worldName());
+    if(experimental) {
+      // EXPERIMENTAL - Busca Safe Positions (Eliminando los spawn en Liquid Blocks)
+      var future = SafeScatter.scatterTask(this.worlds.worldName(),  uhcGame.getWorldBorder(), uhcGame.getWorldBorder(), count);
 
-        if (location == null) {
-          continue;
-        }
+      future.whenComplete((locations1, throwable) -> {
+        locs.addAll(locations1);
+        complFuture.complete(locs);
+      });
 
-        Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(player, location), delayTeam);
-        uhcGame.addIronman(player.getName());
-
-        delayTeam += 40;
-      }
+      return complFuture;
     } else {
-      if (tp) {
-        for (final var team : this.uhcTeamRegistry.getTeams()) {
-          final var location = LocationUtil.generateRandomLocation(this.uhcGame, this.worlds.worldName());
+      // TP TRADICIONAL
+      while (locs.size() < count) {
+        locs.add(LocationUtil.generateRandomLocation(this.uhcGame, this.worlds.worldName()));
+      }
 
-          if (location == null) {
-            continue;
-          }
+      complFuture.complete(locs);
+
+      return complFuture;
+    }
+  }
+
+  public void teleportPlayers(List<Location> locations, boolean tp) {
+      int delayTeam = 0;
+
+      if (!this.uhcGame.isTeamEnabled() && tp) {
+        for (final var player : Bukkit.getOnlinePlayers()) {
+          var location = locations.stream().findAny().get();
+          Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(player, location), delayTeam);
+          uhcGame.addIronman(player.getName());
+
+          delayTeam += 40;
+          locations.remove(location);
+        }
+      } else if(tp) {
+        for (final var team : this.uhcTeamRegistry.getTeams()) {
+          var location = locations.stream().findAny().get();
           Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(team, location), delayTeam);
 
           team.getMembers().stream().map(Bukkit::getPlayer).forEach(p -> uhcGame.addIronman(p.getName()));
 
           delayTeam += 40;
+          locations.remove(location);
         }
       }
-    }
 
     Bukkit.getScheduler().runTaskLater(plugin, () -> {
       for (final var player : Bukkit.getOnlinePlayers()) {
@@ -130,6 +147,26 @@ public class UhcGameManager {
       }, 200L, 12000L);
       Bukkit.getPluginManager().callEvent(new GameStartEvent());
     }, delayTeam);
+  }
+
+
+
+  public void startGame(final Player sender, boolean tp) {
+    if (this.uhcGame.isGameStart() || this.uhcGame.getUhcGameState() != UhcGameState.WAITING) {
+      this.messageHandler.send(sender, this.messages.game().hasStarted());
+      return;
+    }
+
+    Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+      try {
+        var future = requestLocations(uhcGame.isTeamEnabled() ? uhcTeamRegistry.getTeams().size() : Bukkit.getOnlinePlayers().size(), game.useExperimentalScatter());
+
+        future.whenComplete((locations, throwable) -> teleportPlayers(locations, tp));
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    });
+
   }
 
   public void startMeetup() {
