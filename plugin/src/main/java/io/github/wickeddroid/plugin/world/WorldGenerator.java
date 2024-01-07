@@ -52,6 +52,7 @@ public class WorldGenerator {
   }
 
   public void removeLobbyData() {
+    if(!worlds.removeWorld()) { return; }
     worlds.blacklist().forEach(w -> {
       var world = Bukkit.getWorld(w);
       if(w == null) { return; }
