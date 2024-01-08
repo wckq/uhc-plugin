@@ -6,7 +6,7 @@ plugins {
 
 var majorVersion = "1"
 var minorVersion = "0"
-var patchVersion = "0"
+var patchVersion = "1"
 
 project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus("-BETA")
 
@@ -16,10 +16,14 @@ dependencies {
     implementation("org.spongepowered:configurate-gson:4.1.2")
     implementation("me.catcoder:bukkit-sidebar:6.2.0-SNAPSHOT")
 
-    implementation("com.github.agus5534:gui:45e66ff34e")
+    implementation("com.github.agus5534.gui:gui-menu-api:45e66ff34e")
 
     implementation("me.fixeddev:commandflow-bukkit:0.5.2")
     implementation("team.unnamed:inject:2.0.0")
+
+    arrayOf("1_19_R1", "1_19_R2", "1_19_R3", "1_20_R1", "1_20_R2", "1_20_R3").forEach {
+        implementation("com.github.agus5534.gui:gui-menu-adapt-v$it:45e66ff34e:dev")
+    }
 
     implementation("commons-io:commons-io:2.13.0")
     implementation("org.mariuszgromada.math:MathParser.org-mXparser:5.2.1")
@@ -47,7 +51,7 @@ tasks {
         relocate("commons-io", "$packageName.commons")
         relocate("org.spongepowered", "$packageName.sponge")
         relocate("me.fixeddev", "$packageName.injector")
-        relocate("team.unnamed", "$packageName.command-flow")
+        relocate("team.unnamed", "$packageName.team.unnamed")
         relocate("me.catcoder", "$packageName.siderbar")
     }
 }
