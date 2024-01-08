@@ -133,7 +133,7 @@ public class UhcTeamHandler {
     }
 
     this.messageHandler.send(leader, this.messages.team().leaderInvitePlayer(), playerName);
-    this.messageHandler.send(player, this.messages.team().invitePlayer(), leader.getName());
+    this.messageHandler.send(player, this.messages.team().invitePlayer(), leader.getName(), leader.getName(), leader.getName());
     this.inviteCache.save(playerName, uhcTeam.getName());
   }
 }

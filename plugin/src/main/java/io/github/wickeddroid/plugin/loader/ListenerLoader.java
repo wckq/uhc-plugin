@@ -47,7 +47,9 @@ public class ListenerLoader implements Loader {
             entityDamageListener,
             playerAdvancementCriterionGrantListener,
             entityDeathEvent,
-            blockPlaceListener
+            blockPlaceListener,
+            blockBreakListener,
+            leavesDecayListener
     );
   }
 
