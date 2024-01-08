@@ -32,7 +32,5 @@ public class PlayerPortalListener implements Listener {
     location.setWorld(world);
 
     event.setTo(location);
-
-    Bukkit.getLogger().info(event.getCanCreatePortal() + "");
   }
 }
