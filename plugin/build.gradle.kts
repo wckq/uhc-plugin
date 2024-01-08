@@ -45,8 +45,8 @@ tasks {
     shadowJar {
         val packageName = "io.github.wickeddroid.libs"
 
-        archiveBaseName.set("uhc-core")
-        archiveVersion.set("1.0-SNAPSHOT")
+        archiveBaseName.set(rootProject.name)
+        archiveVersion.set(rootProject.version.toString())
 
         relocate("commons-io", "$packageName.commons")
         relocate("org.spongepowered", "$packageName.sponge")
