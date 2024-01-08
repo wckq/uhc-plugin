@@ -133,7 +133,7 @@ public class CommandTeam implements CommandClass {
       return;
     }
 
-    team.getTeam().prefix(MessageUtil.parseStringToComponent("["+prefix+"]")
+    team.getTeam().prefix(MessageUtil.parseStringToComponent("["+prefix+"] ")
             .decoration(TextDecoration.OBFUSCATED, TextDecoration.State.FALSE)
             .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
             .decoration(TextDecoration.BOLD, TextDecoration.State.FALSE)

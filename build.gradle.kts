@@ -13,6 +13,7 @@ subprojects {
     repositories {
         mavenCentral()
         mavenLocal()
+        maven("https://jitpack.io")
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
         maven("https://repo.codemc.io/repository/nms/")
         maven("https://repo.unnamed.team/repository/unnamed-public/")

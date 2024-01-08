@@ -65,7 +65,7 @@ public class Messages {
     private String playerTeamExists = "El jugador ya se encuentra en un equipo.";
     private String playerDoesNotTeamExist = "El jugador no se encuentra en un equipo.";
     private String leaderInvitePlayer = "El jugador <color:#93FF9E><param-player> <white>ha sido invitado correctamente.";
-    private String invitePlayer = "El jugador <color:#93FF9E><param-leader> <white>te ha invitado a su equipo";
+    private String invitePlayer = "El jugador <color:#93FF9E><param-leader> <white>te ha invitado a su equipo. <gold><bold> <click:run_command:/team accept <param-leader>>¡Click aquí para unirte!</click> <reset>o utiliza <gold>/team accept <param-leader>";
     private String inviteDoesNotExist = "No se te ha invitado al equipo <color:#93FF9E><param-name>";
     private String leaderCancelInvite = "Se ha cancelado la invitación del jugador <color:#93FF9E><param-player>";
     private String cancelInvite = "Se ha cancelado la invitación del equipo <color:#93FF9E><param-name>.";

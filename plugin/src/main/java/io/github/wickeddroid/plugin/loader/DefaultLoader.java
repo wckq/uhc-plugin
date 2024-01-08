@@ -11,6 +11,7 @@ import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.util.SaveLoad;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.Named;
@@ -49,39 +50,11 @@ public class DefaultLoader implements Loader {
     this.listenerLoader.load();
     this.scenarioLoader.load();
 
-    var teamsBackup = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "team_registry_backup.bin");
-    var playersBackup = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "player_registry_backup.bin");
-
-    if(!teamsBackup.exists() || !playersBackup.exists()) { return; }
-
-    try {
-      Map<String, UhcTeam> teams = SaveLoad.load(teamsBackup.getAbsolutePath());
-      uhcTeamRegistry.setBackupTeams(teams);
-
-      teamsBackup.deleteOnExit();
-
-      Map<String, UhcPlayer> players = SaveLoad.load(playersBackup.getAbsolutePath());
-      uhcPlayerRegistry.setPlayerMapBackup(players);
-
-      playersBackup.deleteOnExit();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-
+    Bukkit.getServer().setDefaultGameMode(GameMode.ADVENTURE);
   }
 
   @Override
   public void unload() {
     this.worldLoader.unload();
-
-    if(uhcGame.getUhcGameState() == UhcGameState.WAITING || uhcGame.getUhcGameState() == UhcGameState.FINISH) {
-      return;
-    }
-
-    var teamsBackup = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "team_registry_backup.bin");
-    var playersBackup = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "player_registry_backup.bin");
-
-    teamsBackup.delete();
-    playersBackup.delete();
   }
 }

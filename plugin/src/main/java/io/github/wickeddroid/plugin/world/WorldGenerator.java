@@ -38,13 +38,13 @@ public class WorldGenerator {
     this.applySettings(this.world);
   }
 
-  public void removeWorld(final World world) throws IOException {
+  public void removeWorld(final World world, final boolean force) throws IOException {
     if(uhcGame.getUhcGameState() != UhcGameState.WAITING && uhcGame.getUhcGameState() != UhcGameState.FINISH) {
       Bukkit.getLogger().severe("SECURITY PREVENTION: Worlds couldn't been removed because a game was started");
       return;
     }
 
-    if(!worlds.removeWorld()) { return; }
+    if(!worlds.removeWorld() && !force) { return; }
 
     Bukkit.unloadWorld(world, false);
 
@@ -52,6 +52,7 @@ public class WorldGenerator {
   }
 
   public void removeLobbyData() {
+    if(!worlds.removeWorld()) { return; }
     worlds.blacklist().forEach(w -> {
       var world = Bukkit.getWorld(w);
       if(w == null) { return; }

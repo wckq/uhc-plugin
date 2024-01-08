@@ -4,24 +4,28 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
 }
 
+var majorVersion = "1"
+var minorVersion = "0"
+var patchVersion = "1"
+
+project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus("-BETA")
+
 dependencies {
     paperweight.paperDevBundle("1.19.4-R0.1-SNAPSHOT")
 
     implementation("org.spongepowered:configurate-gson:4.1.2")
     implementation("me.catcoder:bukkit-sidebar:6.2.0-SNAPSHOT")
 
-    implementation("team.unnamed:gui-menu-api:3.4.1-SNAPSHOT") // LOCAL MODIFIED, USE 3.3.2
+    implementation("com.github.agus5534.gui:gui-menu-api:45e66ff34e")
 
     implementation("me.fixeddev:commandflow-bukkit:0.5.2")
     implementation("team.unnamed:inject:2.0.0")
 
-    arrayOf("1_17_R1", "1_18_R2", "1_19_R3").forEach {
-        implementation("team.unnamed:gui-menu-adapt-v$it:3.4.1-SNAPSHOT") // LOCAL MODIFIED, USE 3.3.2
+    arrayOf("1_19_R1", "1_19_R2", "1_19_R3", "1_20_R1", "1_20_R2", "1_20_R3").forEach {
+        implementation("com.github.agus5534.gui:gui-menu-adapt-v$it:45e66ff34e:dev")
     }
 
     implementation("commons-io:commons-io:2.13.0")
-    implementation("net.kyori:adventure-text-minimessage:4.14.0")
-
     implementation("org.mariuszgromada.math:MathParser.org-mXparser:5.2.1")
 
     implementation(project(":api"))
@@ -41,21 +45,25 @@ tasks {
     shadowJar {
         val packageName = "io.github.wickeddroid.libs"
 
-        archiveBaseName.set("uhc-core")
-        archiveVersion.set("1.0-SNAPSHOT")
+        archiveBaseName.set(rootProject.name)
+        archiveVersion.set(rootProject.version.toString())
 
         relocate("commons-io", "$packageName.commons")
         relocate("org.spongepowered", "$packageName.sponge")
         relocate("me.fixeddev", "$packageName.injector")
-        relocate("team.unnamed", "$packageName.command-flow")
+        relocate("team.unnamed", "$packageName.team.unnamed")
         relocate("me.catcoder", "$packageName.siderbar")
     }
 }
 
+tasks.reobfJar {
+    outputJar.set(layout.buildDirectory.file("libs/${rootProject.name}-${project.version}.jar"))
+}
+
 bukkit {
     main = "io.github.wickeddroid.plugin.UhcPlugin"
-    name = "uhc-plugin"
-    version = "1.0-SNAPSHOT"
+    name = rootProject.name
+    version = project.version.toString()
     apiVersion = "1.19"
     author = "Wicked"
 }

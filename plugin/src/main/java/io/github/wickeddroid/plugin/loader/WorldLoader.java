@@ -38,11 +38,12 @@ public class WorldLoader implements Loader {
       }
 
       try {
-        this.worldGenerator.removeWorld(world);
-        this.worldGenerator.removeLobbyData();
+        this.worldGenerator.removeWorld(world, false);
       } catch (IOException e) {
-        e.printStackTrace();
+        throw new RuntimeException(e);
       }
     }
+
+    this.worldGenerator.removeLobbyData();
   }
 }
