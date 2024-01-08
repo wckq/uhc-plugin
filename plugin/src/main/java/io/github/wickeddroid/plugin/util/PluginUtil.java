@@ -6,6 +6,7 @@ import java.util.Random;
 public class PluginUtil {
 
   public static final Random RANDOM = new Random();
+  public static final String OVERRIDE_LOBBY_PROTECTION_PERMISSION = "uhc.override_lobby_protection_permission";
 
   private PluginUtil() {
 

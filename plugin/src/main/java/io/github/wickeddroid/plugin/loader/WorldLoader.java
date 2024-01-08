@@ -38,9 +38,9 @@ public class WorldLoader implements Loader {
       }
 
       try {
-        this.worldGenerator.removeWorld(world);
+        this.worldGenerator.removeWorld(world, false);
       } catch (IOException e) {
-        e.printStackTrace();
+        throw new RuntimeException(e);
       }
     }
 
