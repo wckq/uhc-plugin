@@ -4,6 +4,12 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
 }
 
+var majorVersion = "1"
+var minorVersion = "0"
+var patchVersion = "0"
+
+project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus("-BETA")
+
 dependencies {
     paperweight.paperDevBundle("1.19.4-R0.1-SNAPSHOT")
 
@@ -46,10 +52,14 @@ tasks {
     }
 }
 
+tasks.reobfJar {
+    outputJar.set(layout.buildDirectory.file("libs/${rootProject.name}-${project.version}.jar"))
+}
+
 bukkit {
     main = "io.github.wickeddroid.plugin.UhcPlugin"
-    name = "uhc-plugin"
-    version = "1.0-SNAPSHOT"
+    name = rootProject.name
+    version = project.version.toString()
     apiVersion = "1.19"
     author = "Wicked"
 }
