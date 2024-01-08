@@ -42,7 +42,8 @@ public class ScoreboardGame extends ScoreboardCreator {
             Placeholder.parsed("player-kills", String.valueOf(uhcPlayer.getKills())),
             Placeholder.parsed("players-alive", String.valueOf(uhcPlayerRegistry.getPlayers().stream().filter(UhcPlayer::isAlive).toList().size())),
             Placeholder.parsed("world-border", String.valueOf(this.uhcGame.getWorldBorder())),
-            Placeholder.parsed("game-time", PluginUtil.formatTime(this.uhcGame.getCurrentTime()))
+            Placeholder.parsed("game-time", PluginUtil.formatTime(this.uhcGame.getCurrentTime())),
+            Placeholder.parsed("game-state", PluginUtil.formatState(this.uhcGame.getUhcGameState()))
     );
   }
 }

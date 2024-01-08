@@ -1,6 +1,8 @@
 package io.github.wickeddroid.plugin.util;
 
 
+import io.github.wickeddroid.api.game.UhcGameState;
+
 import java.util.Random;
 
 public class PluginUtil {
@@ -18,5 +20,22 @@ public class PluginUtil {
     final var seconds = (int) totalSecs % 60;
 
     return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+  }
+
+  public static String formatState(UhcGameState gameState) {
+    switch (gameState) {
+      case PLAYING -> {
+        return "Pacto";
+      }
+      case PVP -> {
+        return "PvP";
+      }
+      case MEETUP -> {
+        return "Meetup";
+      }
+      default -> {
+        return "Desconocido";
+      }
+    }
   }
 }
