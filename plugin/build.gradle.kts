@@ -15,7 +15,7 @@ dependencies {
     implementation("me.fixeddev:commandflow-bukkit:0.5.2")
     implementation("team.unnamed:inject:2.0.0")
 
-    arrayOf("1_17_R1", "1_18_R2", "1_19_R3").forEach {
+    arrayOf("1_17_R1", "1_18_R2", "1_19_R3", "v1_20_R1").forEach {
         implementation("team.unnamed:gui-menu-adapt-v$it:3.4.1-SNAPSHOT") // LOCAL MODIFIED, USE 3.3.2
     }
 
