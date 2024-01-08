@@ -10,18 +10,12 @@ dependencies {
     implementation("org.spongepowered:configurate-gson:4.1.2")
     implementation("me.catcoder:bukkit-sidebar:6.2.0-SNAPSHOT")
 
-    implementation("team.unnamed:gui-menu-api:3.4.1-SNAPSHOT") // LOCAL MODIFIED, USE 3.3.2
+    implementation("com.github.agus5534:gui:45e66ff34e")
 
     implementation("me.fixeddev:commandflow-bukkit:0.5.2")
     implementation("team.unnamed:inject:2.0.0")
 
-    arrayOf("1_17_R1", "1_18_R2", "1_19_R3", "v1_20_R1").forEach {
-        implementation("team.unnamed:gui-menu-adapt-v$it:3.4.1-SNAPSHOT") // LOCAL MODIFIED, USE 3.3.2
-    }
-
     implementation("commons-io:commons-io:2.13.0")
-    implementation("net.kyori:adventure-text-minimessage:4.14.0")
-
     implementation("org.mariuszgromada.math:MathParser.org-mXparser:5.2.1")
 
     implementation(project(":api"))
