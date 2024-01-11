@@ -31,7 +31,7 @@ public class DefaultUhcGame implements UhcGame {
     this.uhcGameState = UhcGameState.WAITING;
     this.startTime = 0;
     this.currentTime = 0;
-    this.appleRate = 10;
+    this.appleRate = -1;
     this.cobwebLimit = 64;
     this.timeForPvp = 3600;
     this.timeForMeetup = 7200;
