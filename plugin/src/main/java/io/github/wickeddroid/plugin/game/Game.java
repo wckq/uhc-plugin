@@ -14,6 +14,8 @@ public class Game {
     private boolean initialBoat = true;
     private boolean replaceGhastDrop = false;
     private boolean useExperimentalScatter = false;
+    private boolean banRegenerationPotion = true;
+    private boolean banAmplifiedStrengthPotion = true;
 
     public boolean starterInvulnerability() { return this.starterInvulnerability; }
     public int invulnerabilityDuration() { return this.invulnerabilityDuration; }
@@ -23,6 +25,8 @@ public class Game {
     public boolean initialBoat() { return this.initialBoat; }
     public boolean replaceGhastDrop() { return this.replaceGhastDrop; }
     public boolean useExperimentalScatter() { return this.useExperimentalScatter; }
+    public boolean banRegenerationPotion() { return this.banRegenerationPotion; }
+    public boolean banAmplifiedStrengthPotion() { return this.banAmplifiedStrengthPotion; }
 
     private PlayerList playerList = new PlayerList();
 

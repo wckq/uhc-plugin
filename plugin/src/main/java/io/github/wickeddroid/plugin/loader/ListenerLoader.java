@@ -29,6 +29,7 @@ public class ListenerLoader implements Loader {
   private PlayerAdvancementCriterionGrantListener playerAdvancementCriterionGrantListener;
   private EntityDeathEvent entityDeathEvent;
   private BlockPlaceListener blockPlaceListener;
+  private BrewEventListener brewEventListener;
 
   @Override
   public void load() {
@@ -49,7 +50,8 @@ public class ListenerLoader implements Loader {
             entityDeathEvent,
             blockPlaceListener,
             blockBreakListener,
-            leavesDecayListener
+            leavesDecayListener,
+            brewEventListener
     );
   }
 
