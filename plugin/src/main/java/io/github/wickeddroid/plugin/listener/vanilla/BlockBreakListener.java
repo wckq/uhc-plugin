@@ -24,9 +24,10 @@ public class BlockBreakListener implements Listener {
 
     if(worlds.blacklist().contains(world.getName()) && !event.getPlayer().hasPermission(PluginUtil.OVERRIDE_LOBBY_PROTECTION_PERMISSION)) {
       event.setCancelled(true);
+      return;
     }
 
-    if (this.uhcGame.getUhcGameState() == UhcGameState.WAITING) {
+    if (this.uhcGame.getUhcGameState() == UhcGameState.WAITING && !worlds.blacklist().contains(world.getName())) {
       event.setCancelled(true);
       return;
     }
