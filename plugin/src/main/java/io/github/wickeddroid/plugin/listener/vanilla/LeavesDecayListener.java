@@ -19,7 +19,7 @@ public class LeavesDecayListener implements Listener {
     final var world = event.getBlock();
     final var appleRate = this.uhcGame.getAppleRate();
 
-    if (PluginUtil.RANDOM.nextInt(100) >= appleRate) {
+    if (PluginUtil.RANDOM.nextInt(0, 100) < appleRate) {
       world.getWorld().dropItemNaturally(world.getLocation(), new ItemStack(Material.APPLE));
     }
   }
