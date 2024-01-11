@@ -1,19 +1,26 @@
 package io.github.wickeddroid.plugin.scenario.scenarios;
 
 import com.destroystokyo.paper.MaterialTags;
+import io.github.wickeddroid.api.game.UhcGame;
+import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.api.scenario.Scenario;
 import io.github.wickeddroid.plugin.scenario.ListenerScenario;
 import io.github.wickeddroid.plugin.scenario.RegisteredScenario;
 import io.github.wickeddroid.plugin.util.MaterialUtil;
 import io.github.wickeddroid.plugin.util.PluginUtil;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_19_R3.util.CraftMagicNumbers;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import team.unnamed.inject.Inject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -26,53 +33,54 @@ import java.util.stream.Collectors;
 )
 public class CutCleanScenario extends ListenerScenario {
 
+  @Inject
+  private UhcGame uhcGame;
+
   @EventHandler
   public void onBlockBreak(final BlockBreakEvent event) {
-    final var block = event.getBlock();
-    final var player = event.getPlayer();
-    final var item = player.getInventory().getItemInMainHand();
-    final var location = block.getLocation();
-    final var world = block.getWorld();
+    if(uhcGame.getUhcGameState() == UhcGameState.WAITING) { return; }
 
-    if (block.getType() == Material.GRAVEL) {
+    Map<Material, Material> dropReplacements = new java.util.HashMap<>(Map.of(
+            Material.RAW_IRON, Material.IRON_INGOT,
+            Material.RAW_COPPER, Material.COPPER_INGOT,
+            Material.ANCIENT_DEBRIS, Material.NETHERITE_SCRAP,
+            Material.RAW_GOLD, Material.GOLD_INGOT,
+            Material.GRAVEL, Material.FLINT,
+            Material.SAND, Material.GLASS,
+            Material.RED_SAND, Material.GLASS,
+            Material.RAW_IRON_BLOCK, Material.IRON_BLOCK
+    ));
+
+    var block = event.getBlock();
+
+    var drops = block.getDrops(event.getPlayer().getItemInHand());
+
+    var dropsMaterial = drops.stream().collect(Collectors.toMap(ItemStack::getType, itemStack -> itemStack));
+
+    List<ItemStack> newDrops = new ArrayList<>();
+    dropReplacements.forEach((from, to) -> {
+
+      if(dropsMaterial.containsKey(from)) {
+        var itemStack = dropsMaterial.get(from);
+        newDrops.add(new ItemStack(to, itemStack.getAmount()));
+      }
+    });
+
+    if(!newDrops.isEmpty()) {
       event.setDropItems(false);
-      world.dropItemNaturally(location, new ItemStack(Material.FLINT));
-      return;
+
+      ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+      orb.setExperience(event.getExpToDrop());
+      newDrops.forEach(d ->    block.getWorld().dropItemNaturally(block.getLocation(), d));
     }
 
-    if (!MaterialTags.ORES.isTagged(block)) {
-      return;
-    }
-
-    if (!MaterialUtil.isTool(item.getType()) || item.containsEnchantment(Enchantment.SILK_TOUCH)) {
-      return;
-    }
-
-    event.setDropItems(false);
-
-    switch (block.getType()) {
-      case GOLD_ORE, DEEPSLATE_GOLD_ORE -> {
-        world.dropItemNaturally(location, new ItemStack(Material.GOLD_INGOT));
-        ((ExperienceOrb) world.spawnEntity(location, EntityType.EXPERIENCE_ORB)).setExperience(2);
-      }
-      case IRON_ORE, DEEPSLATE_IRON_ORE -> {
-        world.dropItemNaturally(location, new ItemStack(Material.IRON_INGOT));
-        ((ExperienceOrb) world.spawnEntity(location, EntityType.EXPERIENCE_ORB)).setExperience(2);
-      }
-      case COPPER_ORE, DEEPSLATE_COPPER_ORE -> {
-        world.dropItemNaturally(location, new ItemStack(Material.COPPER_INGOT));
-        ((ExperienceOrb) world.spawnEntity(location, EntityType.EXPERIENCE_ORB)).setExperience(2);
-      }
-      case ANCIENT_DEBRIS -> {
-        world.dropItemNaturally(location, new ItemStack(Material.NETHERITE_SCRAP));
-        ((ExperienceOrb) world.spawnEntity(location, EntityType.EXPERIENCE_ORB)).setExperience(4);
-      }
-      default -> event.setDropItems(true);
-    }
   }
 
   @EventHandler
   public void onEntityDeath(final EntityDeathEvent event) {
+    if(event.getEntity().getType() == EntityType.PLAYER) { return; }
+    if(uhcGame.getUhcGameState() == UhcGameState.WAITING) { return; }
+
     final var drops = event.getDrops();
 
     Map<Material, Material> dropReplacements = Map.of(
