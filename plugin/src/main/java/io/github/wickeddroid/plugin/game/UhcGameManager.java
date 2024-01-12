@@ -13,7 +13,7 @@ import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.thread.GameThread;
 import io.github.wickeddroid.plugin.thread.ScatterThread;
 import io.github.wickeddroid.plugin.util.LocationUtil;
-import io.github.wickeddroid.plugin.world.SafeScatter;
+import io.github.wickeddroid.plugin.world.ScatterTask;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -58,7 +58,7 @@ public class UhcGameManager {
 
     if(experimental) {
       // EXPERIMENTAL - Busca Safe Positions (Eliminando los spawn en Liquid Blocks)
-      var future = SafeScatter.scatterTask(this.worlds.worldName(),  uhcGame.getWorldBorder(), uhcGame.getWorldBorder(), count);
+      var future = ScatterTask.scatterTask(this.worlds.worldName(),  uhcGame.getWorldBorder(), uhcGame.getWorldBorder(), count);
 
       future.whenComplete((locations1, throwable) -> {
         locs.addAll(locations1);

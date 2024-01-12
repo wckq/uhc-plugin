@@ -11,7 +11,7 @@ var patchVersion = "2"
 project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus("-BETA")
 
 dependencies {
-    paperweight.paperDevBundle("1.19.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.19.2-R0.1-SNAPSHOT")
 
     implementation("org.spongepowered:configurate-gson:4.1.2")
     implementation("me.catcoder:bukkit-sidebar:6.2.5-SNAPSHOT")
@@ -20,12 +20,17 @@ dependencies {
 
     implementation("me.fixeddev:commandflow-bukkit:0.5.2")
     implementation("team.unnamed:inject:2.0.0")
+    implementation("net.kyori:adventure-api:4.15.0")
 
     arrayOf("1_19_R1", "1_19_R2", "1_19_R3", "1_20_R1", "1_20_R2").forEach {
         implementation("com.github.agus5534.gui:gui-menu-adapt-v$it:45e66ff34e:dev")
+        implementation(project(":uhc-plugin-adapter-v$it"))
     }
 
+
+
     implementation("commons-io:commons-io:2.13.0")
+    implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.mariuszgromada.math:MathParser.org-mXparser:5.2.1")
 
     implementation(project(":api"))
