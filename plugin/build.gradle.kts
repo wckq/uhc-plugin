@@ -5,8 +5,8 @@ plugins {
 }
 
 var majorVersion = "1"
-var minorVersion = "0"
-var patchVersion = "2"
+var minorVersion = "1"
+var patchVersion = "0"
 
 project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus("-BETA")
 
