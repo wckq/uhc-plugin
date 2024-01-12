@@ -30,6 +30,7 @@ public class ListenerLoader implements Loader {
   private EntityDeathEvent entityDeathEvent;
   private BlockPlaceListener blockPlaceListener;
   private BrewEventListener brewEventListener;
+  private LootGenerateListener lootGenerateListener;
 
   @Override
   public void load() {
@@ -50,8 +51,8 @@ public class ListenerLoader implements Loader {
             entityDeathEvent,
             blockPlaceListener,
             blockBreakListener,
-            leavesDecayListener,
-            brewEventListener
+            brewEventListener,
+            lootGenerateListener
     );
   }
 
