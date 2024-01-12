@@ -5,6 +5,7 @@ import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
+import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,8 @@ public class EntityDamageListener implements Listener {
   private MessageHandler messageHandler;
   @Inject
   private Game game;
+  @Inject
+  private ScenarioManager scenarioManager;
 
   private int lostIronmans = 0;
 
@@ -54,6 +57,10 @@ public class EntityDamageListener implements Listener {
       }
 
       if (player.isBlocking() && event.getDamage() != 0) {
+        return;
+      }
+
+      if(event.getCause() == EntityDamageEvent.DamageCause.FALL && scenarioManager.isEnabled("no_fall")) {
         return;
       }
 
