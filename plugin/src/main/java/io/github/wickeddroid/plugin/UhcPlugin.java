@@ -11,6 +11,8 @@ import team.unnamed.inject.InjectIgnore;
 import team.unnamed.inject.Injector;
 import team.unnamed.inject.Named;
 
+import java.util.regex.Pattern;
+
 public class UhcPlugin extends JavaPlugin {
 
   @Inject @Named("default-loader")
@@ -23,6 +25,19 @@ public class UhcPlugin extends JavaPlugin {
     Injector.create(new UhcPluginModule(this))
             .injectMembers(this);
 
+
+    var version = Bukkit.getServer().getClass().getName().split(Pattern.quote("."))[3];
+    var str = version.split(Pattern.quote("_"));
+    var versionNumber = Byte.parseByte(str[1]);
+    var patchNumber = Byte.parseByte(str[2].substring(1));
+
+  if(versionNumber < 19) {
+    throw new ExceptionInInitializerError("Plugin doesn't support versions older than 1.19");
+  }
+
+  if(versionNumber >= 20 && patchNumber > 2) {
+    throw new ExceptionInInitializerError("Due to new Scoreboard packets, this version isn't supported yet");
+  }
 
     this.loader.load();
   }
