@@ -35,8 +35,11 @@ public class BlockBreakListener implements Listener {
     final var block = event.getBlock();
 
     if (block.getType().toString().endsWith("_LEAVES")) {
-      if (PluginUtil.RANDOM.nextInt(100) >= this.uhcGame.getAppleRate()) {
-        block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.APPLE));
+      if (PluginUtil.RANDOM.nextInt(0, 100) < this.uhcGame.getAppleRate())
+      {
+        if(block.getType() == Material.OAK_LEAVES || block.getType() == Material.DARK_OAK_LEAVES) {
+          block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.APPLE));
+        }
       }
     }
   }
