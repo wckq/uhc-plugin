@@ -57,6 +57,12 @@ public class ScenariosEnabledInventory extends UhcInventory {
             .previousPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
                     .name(Component.text("Previous page - " + page))
                     .build()))
+            .itemIfNoNextPage(ItemClickable.onlyItem(
+                    ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
+                            .name(Component.text(" ")).build()))
+            .itemIfNoPreviousPage(ItemClickable.onlyItem(
+                    ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
+                            .name(Component.text(" ")).build()))
             .layoutLines(
                     "xxxxxxxxx",
                     "xeeeeeeex",
