@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
                 "<gold>   » Bundle",
                 "<gold>   » Golden Apple",
                 "<gold>   » Shulker Box",
-                "<gold>   » Random (Anteriores 4)",
+                "<gold>   » Random (Anteriores 3)",
                 "<gold>   » Random (Cualquier Item)"
         },
         material = Material.STICK,

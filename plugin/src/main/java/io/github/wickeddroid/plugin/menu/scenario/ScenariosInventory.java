@@ -118,7 +118,7 @@ public class ScenariosInventory extends UhcInventory {
 
     if(gameScenario.isSupportsOptions()) {
         loreList.add("");
-        loreList.add("<green>Shift <gray>+ <green>Click Izq. <gray>para modificar opciones");
+        loreList.add("<green>Shift <gray>+ <green>Click Izq. <gray>para modificar opciones.");
     }
 
     return ItemBuilder.newBuilder(gameScenario.getMaterial())
