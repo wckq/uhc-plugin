@@ -27,7 +27,7 @@ import java.util.concurrent.ThreadLocalRandom;
                 "<gold>   » Random (Anteriores 3)",
                 "<gold>   » Random (Cualquier Item)"
         },
-        material = Material.STICK,
+        material = Material.BUNDLE,
         supportsOptions = true
 )
 public class StarterItemScenario extends ListenerScenario {

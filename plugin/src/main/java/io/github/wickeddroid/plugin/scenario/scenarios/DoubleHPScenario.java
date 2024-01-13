@@ -19,7 +19,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
         description = {
                 "<gray>- Todos inician con 40 de HP."
         },
-        material = Material.ENCHANTED_GOLDEN_APPLE
+        material = Material.GOLD_BLOCK
 )
 public class DoubleHPScenario extends ListenerScenario {
   @EventHandler

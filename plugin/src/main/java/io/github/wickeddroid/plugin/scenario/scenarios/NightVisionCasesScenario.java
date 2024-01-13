@@ -24,7 +24,7 @@ import team.unnamed.inject.Inject;
         description = {
                 "<gray>- Todos tienen Visión Nocturna."
         },
-        material = Material.DIAMOND_HELMET
+        material = Material.CHAINMAIL_HELMET
 )
 public class NightVisionCasesScenario extends ListenerScenario {
   @Inject private Plugin plugin;

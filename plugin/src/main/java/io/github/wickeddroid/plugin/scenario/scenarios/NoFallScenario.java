@@ -15,7 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
         description = {
                 "<gray>- No hay daño de caída."
         },
-        material = Material.FEATHER
+        material = Material.DIAMOND_BOOTS
 )
 public class NoFallScenario extends ListenerScenario {
 

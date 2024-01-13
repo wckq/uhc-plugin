@@ -19,7 +19,7 @@ import java.util.List;
                 "<gray>- Los <aqua>Diamantes <gray>hacen daño",
                 "<gray>al picarlos."
         },
-        material = Material.DIAMOND,
+        material = Material.DIAMOND_ORE,
         supportsOptions = true
 )
 public class BloodDiamondScenario extends ListenerScenario {
