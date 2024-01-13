@@ -78,6 +78,7 @@ public class Messages {
     private String changeTeamPrefixError = "No se pueden realizar cambios al prefix de los equipos.";
     private String settingChanged = "Has cambiado la configuración a \"<param-value>\"";
     private String maxLengthReached = "Has sobrepasado la cantidad máxima de <param-length> caracteres.";
+    private String sendCoords = "<gray>Estoy en <bold>X: <red><param-coordx> <gray><bold>Y: <red><param-coordy> <gray><bold>Z: <red><param-coordz>";
 
     public @NonNull String create() {
       return this.create;
@@ -176,6 +177,7 @@ public class Messages {
     public @NonNull String changeTeamPrefixError() { return this.changeTeamPrefixError; }
     public @NonNull String settingChanged() { return this.settingChanged; }
     public @NonNull String maxLengthReached() { return this.maxLengthReached; }
+    public @NonNull String sendCoords() { return this.sendCoords; }
   }
 
   @ConfigSerializable

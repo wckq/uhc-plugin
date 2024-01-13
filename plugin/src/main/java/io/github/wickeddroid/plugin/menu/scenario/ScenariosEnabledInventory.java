@@ -43,7 +43,6 @@ public class ScenariosEnabledInventory extends UhcInventory {
                                     .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                             .lore(Arrays.stream(gameScenario.getDescription())
                                     .map(lore -> MessageUtil.parseStringToComponent(lore)
-                                            .color(TextColor.color(255, 255, 255))
                                             .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                                     .collect(Collectors.toList()))
                             .build()

@@ -49,6 +49,29 @@ public class CommandPlayer implements CommandClass {
             : this.messages.other().teamChatOff());
   }
 
+  @Command(names = {"coords", "c", "location"})
+  public void coords(final @Sender Player sender) {
+    final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(sender.getName());
+
+    if (uhcPlayer == null) {
+      return;
+    }
+
+    this.uhcTeamManager.getTeamByPlayer(uhcPlayer.getName());
+    if (this.uhcTeamManager.getTeamByPlayer(uhcPlayer.getName()) == null) {
+      this.messageHandler.send(sender, this.messages.team().doesNotExist());
+      return;
+    }
+
+    var location = sender.getLocation();
+
+    uhcTeamManager.sendMessageTeam(sender, messageHandler.parse(messages.team().sendCoords(),
+            String.valueOf(Math.round(location.getX())),
+            String.valueOf(Math.round(location.getY())),
+            String.valueOf(Math.round(location.getZ()))
+    ));
+  }
+
   @Command(names = "cleanitem")
   public void cleanItem(@Sender Player sender) {
     final var inventory = sender.getInventory();
