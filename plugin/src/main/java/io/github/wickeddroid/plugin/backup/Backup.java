@@ -20,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;
+import team.unnamed.inject.Singleton;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -30,6 +31,7 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Singleton
 public class Backup {
 
     @Inject
@@ -218,9 +220,10 @@ public class Backup {
             var alive = object.get("alive").getAsBoolean();
             var scattered = object.get("scattered").getAsBoolean();
 
-           uhcPlayerRegistry.createPlayer(UUID.fromString(uuid), name);
+            uhcPlayerRegistry.createPlayer(UUID.fromString(uuid), name);
+            resistance.add(name);
 
-           var player = uhcPlayerRegistry.getPlayer(name);
+            var player = uhcPlayerRegistry.getPlayer(name);
 
             player.setKills(kills);
             player.setAlive(alive);
@@ -259,8 +262,6 @@ public class Backup {
         uhcTeamRegistry.setBackupTeams(teamMap);
 
         file.delete();
-
-        resistance.addAll(uhcPlayerRegistry.getPlayers().stream().map(UhcPlayer::getName).toList());
 
         if(uhcGame.isGameStart()) {
             uhcGameManager.startBackup();
