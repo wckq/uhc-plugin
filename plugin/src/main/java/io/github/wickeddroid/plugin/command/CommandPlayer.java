@@ -2,6 +2,7 @@ package io.github.wickeddroid.plugin.command;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
+import io.github.wickeddroid.plugin.menu.PlayerInventory;
 import io.github.wickeddroid.plugin.menu.scenario.ScenariosEnabledInventory;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
@@ -11,6 +12,7 @@ import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -28,6 +30,7 @@ public class CommandPlayer implements CommandClass {
   private MessageHandler messageHandler;
   private Messages messages;
   private UhcGame uhcGame;
+  private PlayerInventory playerInventory;
 
   @Command(names = {"teamchat", "tc", "chat", "c"})
   public void teamChat(final @Sender Player sender) {
@@ -99,5 +102,12 @@ public class CommandPlayer implements CommandClass {
   @Command(names = "scenarios")
   public void scenarios(final @Sender Player sender) {
     sender.openInventory(scenariosInventory.createInventory());
+  }
+
+  @Command(names = {"inv", "inventory", "invsee"}, permission = "uhc.inventory")
+  public void inventory(final @Sender Player sender, final Player target) {
+    if(sender.getGameMode() == GameMode.SPECTATOR) {
+      playerInventory.openInv(target, sender);
+    }
   }
 }
