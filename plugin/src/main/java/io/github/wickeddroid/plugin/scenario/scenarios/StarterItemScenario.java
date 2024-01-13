@@ -20,7 +20,12 @@ import java.util.concurrent.ThreadLocalRandom;
         name = "Starter Item",
         key = "starter_item",
         description = {
-                "- Inicia con un item al azar"
+                "<gray>- Los jugadores pueden iniciar con un item al azar:",
+                "<gold>   » Bundle",
+                "<gold>   » Golden Apple",
+                "<gold>   » Shulker Box",
+                "<gold>   » Random (Anteriores 4)",
+                "<gold>   » Random (Cualquier Item)"
         },
         material = Material.STICK,
         supportsOptions = true

@@ -15,7 +15,11 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 @Scenario(
         name = "HasteyBoys+",
         key = "hastey_boys_plus",
-        description = {},
+        description = {
+                "<gray>- Las herramientas son encantadas con: ",
+                "<aqua>   » Eficiencia V",
+                "<aqua>   » Unbreaking III"
+        },
         material = Material.NETHERITE_PICKAXE
 )
 public class HasteyBoysPlusScenario extends ListenerScenario {

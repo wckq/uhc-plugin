@@ -23,7 +23,10 @@ import java.util.stream.Collectors;
 @Scenario(
         name = "CutClean",
         key = "cut_clean",
-        description = {""},
+        description = {
+                "<gray>- La comida y ores se cocinan.",
+                "<gray>- También la arena."
+        },
         material = Material.IRON_INGOT
 )
 public class CutCleanScenario extends ListenerScenario {

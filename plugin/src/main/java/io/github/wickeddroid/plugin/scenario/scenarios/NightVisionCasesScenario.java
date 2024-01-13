@@ -21,7 +21,9 @@ import team.unnamed.inject.Inject;
 @Scenario(
         name = "Night Vision Cases",
         key = "nv_cases",
-        description = {},
+        description = {
+                "<gray>- Todos tienen Visión Nocturna."
+        },
         material = Material.DIAMOND_HELMET
 )
 public class NightVisionCasesScenario extends ListenerScenario {

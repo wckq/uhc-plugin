@@ -12,7 +12,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 @Scenario(
         name = "NoFall",
         key = "no_fall",
-        description = {},
+        description = {
+                "<gray>- No hay daño de caída."
+        },
         material = Material.FEATHER
 )
 public class NoFallScenario extends ListenerScenario {

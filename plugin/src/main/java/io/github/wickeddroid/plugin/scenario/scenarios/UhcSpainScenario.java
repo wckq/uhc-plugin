@@ -25,7 +25,11 @@ import team.unnamed.inject.Inject;
 @Scenario(
         name = "Uhc España",
         key = "uhc_spain",
-        description = "- Puedes crafter Super Golden Apples y Hyper Goldens Apples.",
+        description = {
+                "<gray>- Puedes craftear:",
+                "<gold>   » <bold>Super Golden Apples",
+                "<gold>   » <bold>Hyper Goldens Apples"
+        },
         material = Material.GOLDEN_APPLE
 )
 public class UhcSpainScenario extends ListenerScenario {

@@ -16,7 +16,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 @Scenario(
         name = "Double HP",
         key = "double_hp",
-        description = {},
+        description = {
+                "<gray>- Todos inician con 40 de HP."
+        },
         material = Material.ENCHANTED_GOLDEN_APPLE
 )
 public class DoubleHPScenario extends ListenerScenario {

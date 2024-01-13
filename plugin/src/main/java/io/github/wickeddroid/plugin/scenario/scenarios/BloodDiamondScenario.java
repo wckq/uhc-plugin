@@ -15,7 +15,10 @@ import java.util.List;
 @Scenario(
         name = "Blood Diamonds",
         key = "blood_diamonds",
-        description = {""},
+        description = {
+                "<gray>- Los <aqua>Diamantes <gray>hacen daño",
+                "<gray>al picarlos."
+        },
         material = Material.DIAMOND,
         supportsOptions = true
 )

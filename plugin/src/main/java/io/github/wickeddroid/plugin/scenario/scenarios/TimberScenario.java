@@ -11,7 +11,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 @Scenario(
         name = "Timber",
         key = "timber",
-        description = {},
+        description = {
+                "<red><bold>UNDER DEVELOPMENT - NOT WORKING"
+        },
         material = Material.OAK_LOG
 )
 public class TimberScenario extends ListenerScenario {

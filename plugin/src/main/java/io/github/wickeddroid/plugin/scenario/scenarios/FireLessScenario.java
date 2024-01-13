@@ -15,7 +15,9 @@ import java.util.List;
 @RegisteredScenario
 @Scenario(
         name = "FireLess",
-        description = {""},
+        description = {
+                "<gray>El fuego no hace daño."
+        },
         key = "fire_less",
         material = Material.LAVA_BUCKET,
         supportsOptions = true
