@@ -24,6 +24,7 @@ public class DefaultUhcGame implements UhcGame {
   private boolean gameStart;
   private boolean teamEnabled;
   private boolean ownTeamsEnabled;
+  private boolean loadedBackup;
   private List<String> ironmans;
 
   public DefaultUhcGame(final String host) {
@@ -42,11 +43,22 @@ public class DefaultUhcGame implements UhcGame {
     this.gameStart = false;
     this.teamEnabled = false;
     this.ownTeamsEnabled = false;
+    this.loadedBackup = false;
     this.ironmans = new ArrayList<>();
   }
 
   public DefaultUhcGame() {
     this(null);
+  }
+
+  @Override
+  public boolean loadedBackup() {
+    return loadedBackup;
+  }
+
+  @Override
+  public void setLoadedBackup(boolean loadedBackup) {
+    this.loadedBackup = loadedBackup;
   }
 
   @Override

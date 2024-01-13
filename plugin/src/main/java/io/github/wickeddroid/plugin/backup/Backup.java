@@ -8,9 +8,16 @@ import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.UhcPlugin;
+import io.github.wickeddroid.plugin.game.UhcGameHandler;
+import io.github.wickeddroid.plugin.game.UhcGameManager;
+import io.github.wickeddroid.plugin.player.DefaultUhcPlayer;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
+import io.github.wickeddroid.plugin.team.DefaultUhcTeam;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
+import io.github.wickeddroid.plugin.world.Worlds;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;
 
@@ -20,8 +27,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Backup {
@@ -34,7 +40,13 @@ public class Backup {
     private UhcGame uhcGame;
     @Inject
     private UhcPlayerRegistry uhcPlayerRegistry;
-
+    @Inject
+    private Worlds worlds;
+    @Inject
+    private UhcGameManager uhcGameManager;
+    @Inject
+    private UhcGameHandler uhcGameHandler;
+    public List<String> resistance = new ArrayList<>();
 
     private StringBuilder teamsData = new StringBuilder("[]");
     private StringBuilder gameData = new StringBuilder("{}");
@@ -130,6 +142,8 @@ public class Backup {
         teamsData.append("]");
     }
 
+
+
     public void save() throws IOException {
         saveGame(uhcGame);
         saveTeams(uhcTeamRegistry.getTeams().stream().toList());
@@ -154,7 +168,6 @@ public class Backup {
         }
 
         String jsonString = new String(Base64.getDecoder().decode(Files.readAllBytes(file.toPath())), StandardCharsets.UTF_8);
-
 
         var json = JsonParser.parseString(jsonString).getAsJsonObject();
 
@@ -192,5 +205,74 @@ public class Backup {
         uhcGame.setTeamEnabled(teamsEnabled);
         uhcGame.setOwnTeamsEnabled(ownTeamsEnabled);
         uhcGame.setTeamSize(teamSize);
+        uhcGame.getIronmans().addAll(ironmans);
+
+        var players = json.get("players").getAsJsonArray();
+
+        players.forEach(jsonElement -> {
+            var object = jsonElement.getAsJsonObject();
+
+            var uuid = object.get("uuid").getAsString();
+            var name = object.get("name").getAsString();
+            var kills = object.get("kills").getAsInt();
+            var alive = object.get("alive").getAsBoolean();
+            var scattered = object.get("scattered").getAsBoolean();
+
+           uhcPlayerRegistry.createPlayer(UUID.fromString(uuid), name);
+
+           var player = uhcPlayerRegistry.getPlayer(name);
+
+            player.setKills(kills);
+            player.setAlive(alive);
+            player.setScattered(scattered);
+        });
+
+
+        var teams = json.get("teams").getAsJsonArray();
+
+        Map<String, UhcTeam> teamMap = new HashMap<>();
+        teams.forEach(jsonElement -> {
+            var object = jsonElement.getAsJsonObject();
+            var name = object.get("name").getAsString();
+            var alive_count = object.get("alive-count").getAsInt();
+            var kills = object.get("kills").getAsInt();
+            var leader = object.get("leader").getAsString();
+            var alive = object.get("alive").getAsBoolean();
+            var members = object.get("members").getAsJsonArray().asList().stream().map(JsonElement::getAsString).toList();
+
+            var team = new DefaultUhcTeam(leader, name, NamedTextColor.WHITE, null, false);
+
+            team.setKills(kills);
+
+            members.forEach(m -> {
+                team.addMember(m);
+
+                uhcPlayerRegistry.getPlayer(m).setUhcTeam(team);
+            });
+
+            team.setAlive(alive);
+            team.setPlayersAlive(alive_count);
+
+            teamMap.put(leader, team);
+        });
+
+        uhcTeamRegistry.setBackupTeams(teamMap);
+
+        file.delete();
+
+        resistance.addAll(uhcPlayerRegistry.getPlayers().stream().map(UhcPlayer::getName).toList());
+
+        if(uhcGame.isGameStart()) {
+            uhcGameManager.startBackup();
+
+            if(uhcGame.getUhcGameState() == UhcGameState.PVP) {
+                uhcGameHandler.changePvp(true);
+            }
+
+            if(uhcGame.getUhcGameState() == UhcGameState.MEETUP) {
+                uhcGameHandler.changePvp(true);
+                uhcGameManager.startMeetup();
+            }
+        }
     }
 }

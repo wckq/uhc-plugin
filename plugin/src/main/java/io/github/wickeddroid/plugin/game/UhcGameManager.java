@@ -78,6 +78,30 @@ public class UhcGameManager {
     }
   }
 
+
+  public void startBackup() {
+    for (final var world : Bukkit.getWorlds()) {
+      if (this.worlds.blacklist().contains(world.getName())) {
+        continue;
+      }
+
+      world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+      world.setGameRule(GameRule.DO_MOB_SPAWNING, true);
+      world.setGameRule(GameRule.DO_WEATHER_CYCLE, true);
+      world.getWorldBorder().setDamageAmount(worlds.border().initialBorderDamage());
+    }
+
+
+    gameTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this.gameThread, 0L, 20L);
+    Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, ()-> {
+      try {
+        backup.save();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }, 200L, 12000L);
+  }
+
   public void teleportPlayers(List<Location> locations, boolean tp) {
       int delayTeam = 0;
 

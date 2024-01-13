@@ -2,6 +2,7 @@ package io.github.wickeddroid.plugin.listener.vanilla;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardEndGame;
@@ -12,6 +13,8 @@ import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.InjectAll;
 
@@ -24,6 +27,7 @@ public class PlayerJoinListener implements Listener {
   private ScoreboardGame scoreboardGame;
   private UhcGame uhcGame;
   private Game game;
+  private Backup backup;
 
   @EventHandler
   public void onPlayerJoin(final PlayerJoinEvent event) {
@@ -49,5 +53,14 @@ public class PlayerJoinListener implements Listener {
     }
 
     player.sendPlayerListHeaderAndFooter(MessageUtil.parseStringToComponent(game.playerList().header()), MessageUtil.parseStringToComponent(game.playerList().footer()));
+
+    if(uhcGame.loadedBackup()) {
+      if(backup.resistance.contains(playerName) && uhcGame.getUhcGameState() != UhcGameState.MEETUP) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 25, false, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 600, 25, false, false, false));
+
+        backup.resistance.remove(playerName);
+      }
+    }
   }
 }

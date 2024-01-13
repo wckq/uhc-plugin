@@ -15,6 +15,8 @@ public interface UhcGame {
   void setUhcGameState(UhcGameState uhcGameState);
 
   long getStartTime();
+  boolean loadedBackup();
+  void setLoadedBackup(boolean loadedBackup);
 
   void setStartTime(long startTime);
 

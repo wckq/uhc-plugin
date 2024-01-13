@@ -43,7 +43,6 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
     this.addMember(leader);
   }
 
-
   @Override
   public void setTeam(Team team) {
     this.team = team;

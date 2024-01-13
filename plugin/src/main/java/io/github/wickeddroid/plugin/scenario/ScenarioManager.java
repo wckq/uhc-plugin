@@ -12,6 +12,7 @@ import team.unnamed.inject.Inject;
 import io.github.wickeddroid.plugin.scenario.ScenarioRegistration;
 import team.unnamed.inject.InjectAll;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,19 +25,22 @@ public class ScenarioManager {
   private ScenarioRegistration scenarioRegistration;
 
   public void enableScenario(
-          final Player player,
+          @Nullable final Player player,
           final String key
   ) {
     final var scenario = (ListenerScenario) this.scenarioRegistration.getScenarios().get(key);
 
-    if (scenario == null) {
+    if (scenario == null && player != null) {
       this.messageHandler.send(player, this.messages.other().scenarioNotExists(), key);
       return;
     }
 
     scenario.setEnabled(true);
     Bukkit.getPluginManager().registerEvents(scenario, this.plugin);
-    this.messageHandler.send(player, this.messages.other().scenarioEnabled(), scenario.getName());
+
+    if(player != null) {
+      this.messageHandler.send(player, this.messages.other().scenarioEnabled(), scenario.getName());
+    }
   }
 
   public void disableScenario(

@@ -45,7 +45,9 @@ public class AsyncChatListener implements Listener {
         event.setCancelled(true);
         this.uhcTeamManager.sendMessageTeam(player, Component.text(message.replaceFirst(teams.fastChatTogglePrefix(), "")));
       }
-        return;
+
+
+      return;
     }
 
     if (!uhcPlayer.isTeamChat()) {
