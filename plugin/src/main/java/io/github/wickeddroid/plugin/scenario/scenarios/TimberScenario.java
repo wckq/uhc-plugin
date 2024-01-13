@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -86,7 +87,7 @@ public class TimberScenario extends ListenerScenario {
     }
 
     private boolean isLog(Material material) {
-        return (material.toString().toLowerCase().endsWith("_log") || material.toString().toLowerCase().endsWith("_stem"));
+        return (material.toString().toLowerCase().endsWith("_log") || material.toString().toLowerCase().endsWith("_stem") || material.toString().toLowerCase().endsWith("nest"));
     }
 
     private boolean isLeaves(Material material) {
