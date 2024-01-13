@@ -28,7 +28,7 @@ public class SimpleItemBuilder implements ItemBuilder {
     this.enchantments = new HashMap<>();
     this.itemFlags = new ArrayList<>();
     this.lore = new ArrayList<>();
-    this.modelData == null;
+    this.modelData = null;
   }
 
   @Override
