@@ -42,11 +42,13 @@ public class UhcSpainScenario extends ListenerScenario {
         final var superGoldenApple = ItemBuilder
                 .newBuilder(Material.GOLDEN_APPLE)
                 .name(MessageUtil.parseStringToComponent("<yellow>Super Golden Apple").decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
+                .modelData(19)
                 .build();
 
         final var hyperGoldenApple = ItemBuilder
                 .newBuilder(Material.GOLDEN_APPLE)
                 .name(MessageUtil.parseStringToComponent("<yellow>Hyper Golden Apple").decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
+                .modelData(20)
                 .build();
 
         final var superGoldenAppleRecipe = new ShapedRecipe(new NamespacedKey(plugin, "super_golden_apple"), superGoldenApple);
@@ -76,21 +78,22 @@ public class UhcSpainScenario extends ListenerScenario {
             return;
         }
 
+        if (item.getItemMeta() == null || !item.getItemMeta().hasCustomModelData()) {
+            return;
+        }
+
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             player.removePotionEffect(PotionEffectType.ABSORPTION);
             player.removePotionEffect(PotionEffectType.REGENERATION);
         }, 1L);
 
-        if (item.getItemMeta() == null || item.getItemMeta().getDisplayName() == null) {
-            return;
-        }
 
-        if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("Super Golden Apple")) {
+        if (item.getItemMeta().getCustomModelData() == 19) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, (20 * 120), 1));
             },3L);
-        } else if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("Hyper Golden Apple")) {
+        } else if (item.getItemMeta().getCustomModelData() == 20) {
             if(attribute == null) {
                 event.setCancelled(true);
                 return;

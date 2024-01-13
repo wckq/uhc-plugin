@@ -23,6 +23,7 @@ public interface ItemBuilder {
   ItemBuilder enchantment(Enchantment enchantment, int level);
 
   ItemBuilder itemFlags(ItemFlag... itemFlags);
+  ItemBuilder modelData(int data);
 
   ItemStack build();
 
