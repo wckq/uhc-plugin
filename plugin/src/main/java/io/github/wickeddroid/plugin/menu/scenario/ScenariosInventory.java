@@ -19,6 +19,7 @@ import team.unnamed.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class ScenariosInventory extends UhcInventory {
             GameScenario.class, title
     );
 
-    final var entities = scenarioManager.getScenarios();
+    final var entities = scenarioManager.getScenarios().stream().sorted(Comparator.comparing(GameScenario::getName)).collect(Collectors.toList());
 
     menuInventory.entities(entities)
             .entityParser(gameScenario -> ItemClickable.builder()

@@ -15,6 +15,7 @@ import team.unnamed.gui.menu.type.MenuInventory;
 import team.unnamed.inject.Inject;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class ScenariosEnabledInventory extends UhcInventory {
@@ -34,6 +35,7 @@ public class ScenariosEnabledInventory extends UhcInventory {
     final var entities = scenarioManager.getScenarios()
             .stream()
             .filter(GameScenario::isEnabled)
+            .sorted(Comparator.comparing(GameScenario::getName))
             .collect(Collectors.toList());
 
     menuInventory.entities(entities)
