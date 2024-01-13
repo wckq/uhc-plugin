@@ -66,8 +66,6 @@ public interface UhcGame {
   int getTeamSize();
 
   void setTeamSize(int teamSize);
-
   List<String> getIronmans();
-  void addIronman(String player);
-  void removeIronman(String player);
+  List<String> getBackupPlayers();
 }

@@ -109,7 +109,7 @@ public class UhcGameManager {
         for (final var player : Bukkit.getOnlinePlayers()) {
           var location = locations.stream().findAny().get();
           Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(player, location), delayTeam);
-          uhcGame.addIronman(player.getName());
+          uhcGame.getIronmans().add(player.getName());
 
           delayTeam += 40;
           locations.remove(location);
@@ -119,7 +119,7 @@ public class UhcGameManager {
           var location = locations.stream().findAny().get();
           Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(team, location), delayTeam);
 
-          team.getMembers().stream().map(Bukkit::getPlayer).forEach(p -> uhcGame.addIronman(p.getName()));
+          team.getMembers().stream().map(Bukkit::getPlayer).forEach(p -> uhcGame.getIronmans().add(p.getName()));
 
           delayTeam += 40;
           locations.remove(location);

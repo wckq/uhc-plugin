@@ -68,7 +68,7 @@ public class EntityDamageListener implements Listener {
 
       if(uhcGame.getIronmans().size() == 1) { return; }
 
-      uhcGame.removeIronman(player.getName());
+      uhcGame.getIronmans().remove(player.getName());
       lostIronmans++;
 
       messageHandler.sendGlobal(messages.game().ironmanLost(), player.getName(), String.valueOf(uhcGame.getIronmans().size()));

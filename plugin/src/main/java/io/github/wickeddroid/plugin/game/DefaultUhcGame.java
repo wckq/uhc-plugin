@@ -3,10 +3,12 @@ package io.github.wickeddroid.plugin.game;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import org.bukkit.entity.Player;
+import team.unnamed.inject.Singleton;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class DefaultUhcGame implements UhcGame {
 
   private String host;
@@ -26,6 +28,7 @@ public class DefaultUhcGame implements UhcGame {
   private boolean ownTeamsEnabled;
   private boolean loadedBackup;
   private List<String> ironmans;
+  private List<String> backupPlayers;
 
   public DefaultUhcGame(final String host) {
     this.host = host;
@@ -45,6 +48,7 @@ public class DefaultUhcGame implements UhcGame {
     this.ownTeamsEnabled = false;
     this.loadedBackup = false;
     this.ironmans = new ArrayList<>();
+    this.backupPlayers = new ArrayList<>();
   }
 
   public DefaultUhcGame() {
@@ -217,12 +221,7 @@ public class DefaultUhcGame implements UhcGame {
   }
 
   @Override
-  public void addIronman(String player) {
-    ironmans.add(player);
-  }
-
-  @Override
-  public void removeIronman(String player) {
-    ironmans.remove(player);
+  public List<String> getBackupPlayers() {
+    return backupPlayers;
   }
 }

@@ -55,11 +55,11 @@ public class PlayerJoinListener implements Listener {
     player.sendPlayerListHeaderAndFooter(MessageUtil.parseStringToComponent(game.playerList().header()), MessageUtil.parseStringToComponent(game.playerList().footer()));
 
     if(uhcGame.loadedBackup()) {
-      if(backup.resistance.contains(playerName) && uhcGame.getUhcGameState() != UhcGameState.MEETUP) {
+      if(uhcGame.getBackupPlayers().contains(playerName)) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 25, false, false, false));
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 600, 25, false, false, false));
 
-        backup.resistance.remove(playerName);
+        uhcGame.getBackupPlayers().remove(playerName);
       }
     }
   }

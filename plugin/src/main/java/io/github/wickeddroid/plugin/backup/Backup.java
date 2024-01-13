@@ -48,8 +48,6 @@ public class Backup {
     private UhcGameManager uhcGameManager;
     @Inject
     private UhcGameHandler uhcGameHandler;
-    public List<String> resistance = new ArrayList<>();
-
     private StringBuilder teamsData = new StringBuilder("[]");
     private StringBuilder gameData = new StringBuilder("{}");
     private StringBuilder playersData = new StringBuilder("[]");
@@ -221,7 +219,7 @@ public class Backup {
             var scattered = object.get("scattered").getAsBoolean();
 
             uhcPlayerRegistry.createPlayer(UUID.fromString(uuid), name);
-            resistance.add(name);
+            uhcGame.getBackupPlayers().add(name);
 
             var player = uhcPlayerRegistry.getPlayer(name);
 
@@ -275,5 +273,7 @@ public class Backup {
                 uhcGameManager.startMeetup();
             }
         }
+
+        uhcGame.setLoadedBackup(true);
     }
 }
