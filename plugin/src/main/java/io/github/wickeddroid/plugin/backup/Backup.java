@@ -3,15 +3,18 @@ package io.github.wickeddroid.plugin.backup;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import io.github.wickeddroid.api.events.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.api.player.UhcPlayer;
+import io.github.wickeddroid.api.scenario.GameScenario;
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.UhcPlugin;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.game.UhcGameManager;
 import io.github.wickeddroid.plugin.player.DefaultUhcPlayer;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
+import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import io.github.wickeddroid.plugin.team.DefaultUhcTeam;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.world.Worlds;
@@ -27,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,13 +52,16 @@ public class Backup {
     private UhcGameManager uhcGameManager;
     @Inject
     private UhcGameHandler uhcGameHandler;
+    @Inject
+    private ScenarioManager scenarioManager;
+
     private StringBuilder teamsData = new StringBuilder("[]");
     private StringBuilder gameData = new StringBuilder("{}");
     private StringBuilder playersData = new StringBuilder("[]");
+    private StringBuilder scenariosData = new StringBuilder("[]");
 
     private void saveGame(UhcGame game) {
         gameData = new StringBuilder("{");
-
 
         gameData
                 .append("\"host\":").append("\"").append(game.getHost()).append("\",")
@@ -79,9 +86,9 @@ public class Backup {
         while (it.hasNext()) {
             String s = it.next();
 
-            playersData.append("\"").append(s).append("\"");
+            gameData.append("\"").append(s).append("\"");
 
-            if(it.hasNext()) { playersData.append(","); }
+            if(it.hasNext()) { gameData.append(","); }
         }
 
         gameData.append("]}");
@@ -142,14 +149,34 @@ public class Backup {
         teamsData.append("]");
     }
 
+    private void saveScenarios() {
+        scenariosData = new StringBuilder("[");
+
+        var it = scenarioManager.getScenarios().stream().filter(GameScenario::isEnabled).toList().iterator();
+
+        while (it.hasNext()) {
+            var s = it.next();
+
+            scenariosData.append("\"").append(s.getKey()).append("\"");
+
+            if(it.hasNext()) {
+                scenariosData.append(",");
+            }
+        }
+
+        scenariosData.append("]");
+
+    }
+
 
 
     public void save() throws IOException {
         saveGame(uhcGame);
         saveTeams(uhcTeamRegistry.getTeams().stream().toList());
         savePlayers(uhcPlayerRegistry.getPlayers().stream().toList());
+        saveScenarios();
 
-        String json = "{\"game\":%s,\"players\":%s,\"teams\":%s}".formatted(gameData.toString(), playersData.toString(), teamsData.toString());
+        String json = "{\"version\":\"%s\",\"game\":%s,\"players\":%s,\"teams\":%s,\"scenarios\":%s}".formatted(plugin.getDescription().getVersion(), gameData.toString(), playersData.toString(), teamsData.toString(), scenariosData.toString());
 
         var file = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "uhc_backup.uhc");
 
@@ -170,6 +197,13 @@ public class Backup {
         String jsonString = new String(Base64.getDecoder().decode(Files.readAllBytes(file.toPath())), StandardCharsets.UTF_8);
 
         var json = JsonParser.parseString(jsonString).getAsJsonObject();
+
+        var version = json.get("version").getAsString();
+
+        if(!version.equalsIgnoreCase(plugin.getDescription().getVersion())) {
+            Bukkit.getLogger().severe("Backup file version not supported");
+            return;
+        }
 
         var game = json.get("game").getAsJsonObject();
 
@@ -255,6 +289,14 @@ public class Backup {
             team.setPlayersAlive(alive_count);
 
             teamMap.put(leader, team);
+        });
+
+        var scenarios = json.get("scenarios").getAsJsonArray();
+
+        scenarios.forEach(jsonElement -> {
+            var s = jsonElement.getAsString();
+
+            scenarioManager.enableScenario(null, s);
         });
 
         uhcTeamRegistry.setBackupTeams(teamMap);

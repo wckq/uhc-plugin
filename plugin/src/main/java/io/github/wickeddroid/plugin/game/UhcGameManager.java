@@ -107,6 +107,8 @@ public class UhcGameManager {
         throw new RuntimeException(e);
       }
     }, 200L, 12000L);
+
+    Bukkit.getPluginManager().callEvent(new GameStartEvent());
   }
 
   public void teleportPlayers(List<Location> locations, boolean tp) {
