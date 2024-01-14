@@ -208,6 +208,7 @@ public class Messages {
     private String scenarioNotExists = "El scenario <color:#93FF9E><param-name> <white>no existe.";
     private String scenarioEnabled = "El scenario <color:#93FF9E><param-name> <white>ha sido activado correctamente,";
     private String scenarioDisabled = "El scenario <color:#93FF9E><param-name> <white>ha sido desactivado correctamente";
+    private String scatterProgress = "<red>[<gray><param-generated>/<param-requested><red>] <green>Coordenadas Generadas (<param-percentage>%)";
 
     public @NonNull String teamChatOn() {
       return this.teamChatOn;
@@ -236,5 +237,6 @@ public class Messages {
     public @NonNull String scenarioNotExists() {
       return this.scenarioNotExists;
     }
+    public @NonNull String scatterProgress() { return this.scatterProgress; }
   }
 }

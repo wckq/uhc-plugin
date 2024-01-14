@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 public class SafeScatter implements ScatterTask {
     @Override
-    public @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count) throws Exception {
+    public @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, Consumer<Integer> progress) throws Exception {
         final var world = Bukkit.getWorld(worldName);
         List<Location> locations = new ArrayList<>();
 
@@ -55,12 +55,13 @@ public class SafeScatter implements ScatterTask {
                 }
 
                 locations.add(loc);
+                progress.accept(locations.size());
             };
-
-            scheduleLoad.invoke(null, serverLevelCast, chunkX, chunkZ, chunkStatusFull, true, prioritisedExecutor, consumer);
 
             if(locations.size() >= count) {
                 completableFuture.complete(locations);
+            } else {
+                scheduleLoad.invoke(null, serverLevelCast, chunkX, chunkZ, chunkStatusFull, true, prioritisedExecutor, consumer);
             }
         }
 

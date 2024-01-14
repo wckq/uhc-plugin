@@ -29,6 +29,7 @@ import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.InjectIgnore;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -58,7 +59,13 @@ public class UhcGameManager {
 
     if(experimental) {
       // EXPERIMENTAL - Busca Safe Positions (Eliminando los spawn en Liquid Blocks)
-      var future = ScatterTask.scatterTask(this.worlds.worldName(),  uhcGame.getWorldBorder(), uhcGame.getWorldBorder(), count);
+      var future = ScatterTask.scatterTask(this.worlds.worldName(),  uhcGame.getWorldBorder(), uhcGame.getWorldBorder(), count, progress -> {
+        double percentage = (100D/count)*progress;
+
+        var message = messageHandler.parse(messages.other().scatterProgress(), String.valueOf(progress), String.valueOf(count), new DecimalFormat("0.00").format(percentage));
+
+        Bukkit.getOnlinePlayers().forEach(p -> p.sendActionBar(message));
+      });
 
       future.whenComplete((locations1, throwable) -> {
         locs.addAll(locations1);

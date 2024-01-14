@@ -12,8 +12,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
@@ -66,6 +68,18 @@ public class UhcSpainScenario extends ListenerScenario {
         hyperGoldenAppleRecipe.setIngredient('G', new RecipeChoice.ExactChoice(superGoldenApple));
 
         Bukkit.addRecipe(hyperGoldenAppleRecipe);
+
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            p.discoverRecipe(new NamespacedKey(plugin, "super_golden_apple"));
+            p.discoverRecipe(new NamespacedKey(plugin, "hyper_golden_apple"));
+        });
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        var p = event.getPlayer();
+        p.discoverRecipe(new NamespacedKey(plugin, "super_golden_apple"));
+        p.discoverRecipe(new NamespacedKey(plugin, "hyper_golden_apple"));
     }
 
     @EventHandler
