@@ -15,6 +15,7 @@ import io.github.wickeddroid.plugin.game.UhcGameManager;
 import io.github.wickeddroid.plugin.player.DefaultUhcPlayer;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
+import io.github.wickeddroid.plugin.scenario.SettingManager;
 import io.github.wickeddroid.plugin.team.DefaultUhcTeam;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.world.Worlds;
@@ -54,11 +55,14 @@ public class Backup {
     private UhcGameHandler uhcGameHandler;
     @Inject
     private ScenarioManager scenarioManager;
+    @Inject
+    private SettingManager settingManager;
 
     private StringBuilder teamsData = new StringBuilder("[]");
     private StringBuilder gameData = new StringBuilder("{}");
     private StringBuilder playersData = new StringBuilder("[]");
     private StringBuilder scenariosData = new StringBuilder("[]");
+    private StringBuilder settingsData = new StringBuilder("[]");
 
     private void saveGame(UhcGame game) {
         gameData = new StringBuilder("{");
@@ -165,7 +169,24 @@ public class Backup {
         }
 
         scenariosData.append("]");
+    }
 
+    private void saveSettings() {
+        settingsData = new StringBuilder("[");
+
+        var it = settingManager.getSettings().stream().filter(GameScenario::isEnabled).toList().iterator();
+
+        while (it.hasNext()) {
+            var s = it.next();
+
+            settingsData.append("\"").append(s.getKey()).append("\"");
+
+            if(it.hasNext()) {
+                settingsData.append(",");
+            }
+        }
+
+        settingsData.append("]");
     }
 
 
@@ -175,8 +196,9 @@ public class Backup {
         saveTeams(uhcTeamRegistry.getTeams().stream().toList());
         savePlayers(uhcPlayerRegistry.getPlayers().stream().toList());
         saveScenarios();
+        saveSettings();
 
-        String json = "{\"version\":\"%s\",\"game\":%s,\"players\":%s,\"teams\":%s,\"scenarios\":%s}".formatted(plugin.getDescription().getVersion(), gameData.toString(), playersData.toString(), teamsData.toString(), scenariosData.toString());
+        String json = "{\"version\":\"%s\",\"game\":%s,\"players\":%s,\"teams\":%s,\"scenarios\":%s,\"settings\":%s}".formatted(plugin.getDescription().getVersion(), gameData.toString(), playersData.toString(), teamsData.toString(), scenariosData.toString(), settingsData.toString());
 
         var file = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "uhc_backup.uhc");
 
@@ -297,6 +319,14 @@ public class Backup {
             var s = jsonElement.getAsString();
 
             scenarioManager.enableScenario(null, s);
+        });
+
+        var settings = json.get("settings").getAsJsonArray();
+
+        settings.forEach(jsonElement -> {
+            var s = jsonElement.getAsString();
+
+            settingManager.enableSetting(null, s);
         });
 
         uhcTeamRegistry.setBackupTeams(teamMap);

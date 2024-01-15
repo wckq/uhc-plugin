@@ -26,14 +26,16 @@ public class SettingManager {
     ) {
         final var scenario = (SettingScenario) this.settingRegistration.getSettings().get(key);
 
-        if (scenario == null) {
+        if (scenario == null && player != null) {
             this.messageHandler.send(player, this.messages.other().settingNotExists(), key);
             return;
         }
 
         scenario.setEnabled(true);
         Bukkit.getPluginManager().registerEvents(scenario, this.plugin);
-        this.messageHandler.send(player, this.messages.other().settingEnabled(), scenario.getName());
+        if(player != null) {
+            this.messageHandler.send(player, this.messages.other().settingEnabled(), scenario.getName());
+        }
     }
 
     public void disableSetting(
