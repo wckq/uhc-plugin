@@ -36,8 +36,6 @@ public class SettingsInventory extends UhcInventory {
 
         final var entities = settingManager.getSettings();
 
-        Bukkit.getLogger().info(entities.toString());
-
         menuInventory.entities(entities)
                 .entityParser(gameScenario -> ItemClickable.builder()
                         .item(gameScenario.isEnabled() ? enableItem(gameScenario) : rawItem(gameScenario).build())
@@ -65,18 +63,18 @@ public class SettingsInventory extends UhcInventory {
                         .build()
                 )
                 .bounds(9, 21)
-                .itemIfNoNextPage(ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE)
-                        .name(Component.text(" "))
-                        .build()))
-                .itemIfNoPreviousPage(ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE)
-                        .name(Component.text(" "))
-                        .build()))
                 .nextPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
                         .name(Component.text("Siguiente pagina - " + page))
                         .build()))
                 .previousPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
                         .name(Component.text("Anterior pagina - " + page))
                         .build()))
+                .itemIfNoNextPage(ItemClickable.onlyItem(
+                        ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
+                                .name(Component.text(" ")).build()))
+                .itemIfNoPreviousPage(ItemClickable.onlyItem(
+                        ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
+                                .name(Component.text(" ")).build()))
                 .layoutLines(
                         "xxxxxxxxx",
                         "eeeeeeeee",
@@ -103,7 +101,6 @@ public class SettingsInventory extends UhcInventory {
                         .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                 .lore(Arrays.stream(gameScenario.getDescription())
                         .map(lore -> MessageUtil.parseStringToComponent(lore)
-                                .color(TextColor.color(255, 255, 255))
                                 .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                         .collect(Collectors.toList()));
     }

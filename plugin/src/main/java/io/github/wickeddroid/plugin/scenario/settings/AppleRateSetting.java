@@ -16,13 +16,16 @@ import team.unnamed.inject.Inject;
 
 @Setting(
         name = "Apple Rate",
-        description = "El apple rate de los arboles cambia dependiendo del host.",
+        description = {
+                "<gray>- Activa el cambio de Apple Rate.",
+                "<gold>   » <green>/uhc-staff game apple-rate [rate]"
+
+        },
         key = "apple_rate",
         material = Material.APPLE
 )
 @RegisteredSetting
 public class AppleRateSetting extends SettingScenario {
-
     @Inject private UhcGame uhcGame;
 
     @EventHandler

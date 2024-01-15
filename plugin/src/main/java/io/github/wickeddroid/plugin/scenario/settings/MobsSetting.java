@@ -13,7 +13,7 @@ import team.unnamed.inject.Inject;
 
 @Setting(
         name = "Mobs Off",
-        description = "Los mobs se encuentran desactivados",
+        description = "<gray>- Desactiva el spawneo de Mobs.",
         key = "mobs",
         material = Material.ROTTEN_FLESH
 )

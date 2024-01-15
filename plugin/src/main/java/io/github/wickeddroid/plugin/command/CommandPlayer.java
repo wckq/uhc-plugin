@@ -4,6 +4,8 @@ import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.menu.PlayerInventory;
 import io.github.wickeddroid.plugin.menu.scenario.ScenariosEnabledInventory;
+import io.github.wickeddroid.plugin.menu.settings.SettingsEnabledInventory;
+import io.github.wickeddroid.plugin.menu.settings.SettingsInventory;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
@@ -31,6 +33,7 @@ public class CommandPlayer implements CommandClass {
   private Messages messages;
   private UhcGame uhcGame;
   private PlayerInventory playerInventory;
+  private SettingsEnabledInventory settingsEnabledInventory;
 
   @Command(names = {"teamchat", "tc", "chat", "c"})
   public void teamChat(final @Sender Player sender) {
@@ -103,6 +106,11 @@ public class CommandPlayer implements CommandClass {
   @Command(names = "scenarios")
   public void scenarios(final @Sender Player sender) {
     sender.openInventory(scenariosInventory.createInventory());
+  }
+
+  @Command(names = "settings")
+  public void settings(final @Sender Player sender) {
+    sender.openInventory(settingsEnabledInventory.createInventory());
   }
 
   @Command(names = {"inv", "inventory", "invsee"}, permission = "uhc.inventory")

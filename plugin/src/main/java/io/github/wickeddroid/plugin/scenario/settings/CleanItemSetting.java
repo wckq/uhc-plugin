@@ -11,7 +11,10 @@ import team.unnamed.inject.Inject;
 
 @Setting(
         name = "CleanItem",
-        description = "Se pueden desencantar los items con /cleanitem",
+        description = {
+                "<gray>- Activa poder borrarle encantamientos a items.",
+                "<gold>   » <green>/cleanitem"
+        },
         key = "clean_item",
         material = Material.GRINDSTONE
 )

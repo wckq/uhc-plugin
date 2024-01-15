@@ -35,6 +35,16 @@ public class GameScenario {
       if(supportsOptions) {
         this.options = new HashMap<>();
       }
+    } else if (this.getClass().isAnnotationPresent(Setting.class)) {
+      final var annotation = this.getClass().getAnnotation(Setting.class);
+
+      this.name = annotation.name();
+      this.key = annotation.key();
+      this.description = annotation.description();
+      this.material = annotation.material();
+      this.enabled = false;
+      this.supportsOptions = false;
+      this.experimental = false;
     } else {
       throw new IllegalArgumentException("An error has ocurred with the following Scenario: " + this.getClass().getSimpleName());
     }

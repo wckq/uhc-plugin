@@ -44,7 +44,6 @@ public class SettingsEnabledInventory extends UhcInventory {
                                         .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                                 .lore(Arrays.stream(gameScenario.getDescription())
                                         .map(lore -> MessageUtil.parseStringToComponent(lore)
-                                                .color(TextColor.color(255, 255, 255))
                                                 .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                                         .collect(Collectors.toList()))
                                 .build()
@@ -58,6 +57,12 @@ public class SettingsEnabledInventory extends UhcInventory {
                 .previousPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
                         .name(Component.text("Previous page - " + page))
                         .build()))
+                .itemIfNoNextPage(ItemClickable.onlyItem(
+                        ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
+                                .name(Component.text(" ")).build()))
+                .itemIfNoPreviousPage(ItemClickable.onlyItem(
+                        ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
+                                .name(Component.text(" ")).build()))
                 .layoutLines(
                         "xxxxxxxxx",
                         "xeeeeeeex",
