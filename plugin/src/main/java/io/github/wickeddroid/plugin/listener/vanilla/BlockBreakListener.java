@@ -29,18 +29,6 @@ public class BlockBreakListener implements Listener {
 
     if (this.uhcGame.getUhcGameState() == UhcGameState.WAITING && !worlds.blacklist().contains(world.getName())) {
       event.setCancelled(true);
-      return;
-    }
-
-    final var block = event.getBlock();
-
-    if (block.getType().toString().endsWith("_LEAVES")) {
-      if (PluginUtil.RANDOM.nextInt(0, 100) < this.uhcGame.getAppleRate())
-      {
-        if(block.getType() == Material.OAK_LEAVES || block.getType() == Material.DARK_OAK_LEAVES) {
-          block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.APPLE));
-        }
-      }
     }
   }
 }

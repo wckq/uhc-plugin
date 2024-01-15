@@ -80,9 +80,10 @@ public class CommandPlayer implements CommandClass {
     final var inventory = sender.getInventory();
     final var item = inventory.getItemInMainHand();
 
-     if (!this.uhcGame.isCleanItem()) {
-       return;
-     }
+    if (!this.uhcGame.isCleanItem()) {
+      this.messageHandler.send(sender, this.messages.other().cleanItemDisabled());
+      return;
+    }
 
     if (item.getType() != Material.AIR) {
       if (item.getEnchantments().size() > 0 || item.getType() == Material.ENCHANTED_BOOK) {
@@ -91,8 +92,8 @@ public class CommandPlayer implements CommandClass {
         item.getEnchantments().forEach((enchantment, integer) -> item.removeEnchantment(enchantment));
 
         inventory.addItem((item.getType() == Material.ENCHANTED_BOOK) ?
-                        new ItemStack(Material.BOOK) :
-                        item);
+                new ItemStack(Material.BOOK) :
+                item);
 
         sender.playSound(sender.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 1.0F, 1.0F);
       }

@@ -23,7 +23,6 @@ public class ListenerLoader implements Loader {
   private PlayerScatteredListener playerScatteredListener;
   private PlayerPortalListener playerPortalListener;
   private BlockBreakListener blockBreakListener;
-  private LeavesDecayListener leavesDecayListener;
   private FoodLevelChangeListener foodLevelChangeListener;
   private EntityDamageListener entityDamageListener;
   private PlayerAdvancementCriterionGrantListener playerAdvancementCriterionGrantListener;
