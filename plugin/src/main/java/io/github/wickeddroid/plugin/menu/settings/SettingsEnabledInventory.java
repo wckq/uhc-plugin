@@ -5,6 +5,7 @@ import io.github.wickeddroid.api.scenario.GameScenario;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
 import io.github.wickeddroid.plugin.menu.UhcInventory;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
+import io.github.wickeddroid.plugin.scenario.SettingManager;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class SettingsEnabledInventory extends UhcInventory {
 
-    @Inject private ScenarioManager scenarioManager;
+    @Inject private SettingManager settingManager;
 
     public SettingsEnabledInventory() {
         super("Scenarios activos", 6);
@@ -32,7 +33,7 @@ public class SettingsEnabledInventory extends UhcInventory {
                 GameScenario.class, title
         );
 
-        final var entities = scenarioManager.getScenarios()
+        final var entities = settingManager.getSettings()
                 .stream()
                 .filter(GameScenario::isEnabled)
                 .collect(Collectors.toList());
