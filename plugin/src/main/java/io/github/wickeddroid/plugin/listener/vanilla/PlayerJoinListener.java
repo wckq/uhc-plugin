@@ -37,7 +37,7 @@ public class PlayerJoinListener implements Listener {
   @EventHandler
   public void onPlayerLogin(PlayerLoginEvent event) {
     var size = uhcGame.getPlayersSize();
-    var online = Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).toList().size();
+    var online = Bukkit.getOnlinePlayers().stream().filter(p -> !p.isOp()).toList().size();
 
     var whitelist = Bukkit.getWhitelistedPlayers().stream().map(oP -> oP.getName()).toList();
     var whitelistOn = Bukkit.hasWhitelist();
