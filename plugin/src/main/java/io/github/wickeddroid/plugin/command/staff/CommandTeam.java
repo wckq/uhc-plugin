@@ -83,7 +83,7 @@ public class CommandTeam implements CommandClass {
   @Command(names = "remove-all")
   public void removeAll() {
     this.uhcTeamRegistry.getTeams().forEach(uhcTeam -> this.uhcTeamManager.removeTeam(
-            Objects.requireNonNull(Bukkit.getPlayer(uhcTeam.getLeader()).getUniqueId())
+            Bukkit.getOfflinePlayer(uhcTeam.getLeader()).getUniqueId()
     ));
   }
 

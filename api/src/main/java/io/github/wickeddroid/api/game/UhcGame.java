@@ -32,6 +32,10 @@ public interface UhcGame {
 
   void setAppleRate(int appleRate);
 
+  int getPlayersSize();
+
+  void setPlayersSize(int playersSize);
+
   int getTimeForPvp();
 
   void setCobwebLimit(int cobwebLimit);

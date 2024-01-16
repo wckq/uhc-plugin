@@ -2,6 +2,7 @@ package io.github.wickeddroid.plugin.game;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Singleton;
 
@@ -19,6 +20,7 @@ public class DefaultUhcGame implements UhcGame {
   private int teamSize;
   private int worldBorder;
   private int appleRate;
+  private int playersSize;
   private int timeForPvp;
   private int timeForMeetup;
   private boolean cutClean;
@@ -36,6 +38,7 @@ public class DefaultUhcGame implements UhcGame {
     this.startTime = 0;
     this.currentTime = 0;
     this.appleRate = -1;
+    this.playersSize = Bukkit.getMaxPlayers();
     this.cobwebLimit = 64;
     this.timeForPvp = 3600;
     this.timeForMeetup = 7200;
@@ -121,6 +124,16 @@ public class DefaultUhcGame implements UhcGame {
   }
 
   @Override
+  public int getPlayersSize() {
+    return playersSize;
+  }
+
+  @Override
+  public void setPlayersSize(int playersSize) {
+    this.playersSize = playersSize;
+  }
+
+  @Override
   public void setTimeForPvp(int timeForPvp) {
     this.timeForPvp = timeForPvp;
   }
@@ -132,7 +145,7 @@ public class DefaultUhcGame implements UhcGame {
 
   @Override
   public void setCobwebLimit(int cobwebLimit) {
-
+    this.cobwebLimit = cobwebLimit;
   }
 
   @Override

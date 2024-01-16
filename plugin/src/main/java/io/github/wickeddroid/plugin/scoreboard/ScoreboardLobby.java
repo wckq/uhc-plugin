@@ -44,7 +44,7 @@ public class ScoreboardLobby extends ScoreboardCreator {
     return MessageUtil.parseStringToComponent(
             text,
             Placeholder.parsed("online-players", String.valueOf(Bukkit.getOnlinePlayers().size())),
-            Placeholder.parsed("max-players", String.valueOf(Bukkit.getServer().getMaxPlayers())),
+            Placeholder.parsed("max-players", String.valueOf(uhcGame.getPlayersSize())),
             Placeholder.parsed("team-name", uhcTeam == null ? " " : uhcTeam.getName()),
             Placeholder.parsed("team-owner", uhcTeam == null ? " " : uhcTeam.getLeader()),
             Placeholder.parsed("team-size", teamSize > 1 ? "To" + teamSize : "FFA"),
