@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.scenario;
 
 import io.github.wickeddroid.api.scenario.GameScenario;
+import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import org.bukkit.Bukkit;
@@ -63,7 +64,7 @@ public class ScenarioManager {
     return this.scenarioRegistration.getScenarios().get(key).isEnabled();
   }
 
-  public @Nullable Object getOption(String key, String option) {
+  public @Nullable OptionValue<?> getOption(String key, String option) {
     if(!isEnabled(key)) { return null; }
 
     return this.scenarioRegistration.getScenarios().get(key).getOption(option).value();

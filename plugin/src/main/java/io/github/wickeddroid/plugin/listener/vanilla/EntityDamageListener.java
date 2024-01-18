@@ -64,6 +64,25 @@ public class EntityDamageListener implements Listener {
         return;
       }
 
+      var fireLess = scenarioManager.isEnabled("fire_less");
+
+      if(fireLess) {
+        var cause = event.getCause();
+        var prevent_damage_fire = scenarioManager.getOption("fire_less", "prevent_damage_fire").getAsBoolean();
+        var prevent_damage_lava = scenarioManager.getOption("fire_less", "prevent_damage_lava").getAsBoolean();
+        var prevent_damage_burn = scenarioManager.getOption("fire_less", "prevent_damage_burn").getAsBoolean();
+        var prevent_damage_magma = scenarioManager.getOption("fire_less", "prevent_damage_magma").getAsBoolean();
+
+        if(
+                        (prevent_damage_fire && cause == EntityDamageEvent.DamageCause.FIRE) ||
+                        (prevent_damage_lava && cause == EntityDamageEvent.DamageCause.LAVA) ||
+                        (prevent_damage_burn && cause == EntityDamageEvent.DamageCause.FIRE_TICK) ||
+                        (prevent_damage_magma && cause == EntityDamageEvent.DamageCause.HOT_FLOOR)
+        ) {
+          return;
+        }
+      }
+
       if(!game.ironmanEnabled()) { return; }
 
       if(uhcGame.getIronmans().size() == 1) { return; }
