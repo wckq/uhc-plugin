@@ -1,7 +1,9 @@
 package io.github.wickeddroid.plugin.message;
 
 import io.github.wickeddroid.plugin.util.MessageUtil;
+import me.fixeddev.commandflow.annotated.annotation.Command;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
@@ -23,6 +25,37 @@ public class MessageHandler {
                     "<prefix> <white>" + message,
                     Placeholder.parsed("prefix", messages.prefix())
             )
+    );
+  }
+
+  public Component parse(final String message,
+                         final String... replacements) {
+    final var matcher = PATTERN_LABEL.matcher(message);
+
+    final var tagResolver = TagResolver
+            .builder();
+
+    var replacement = 0;
+
+    while (matcher.find()) {
+      if (replacement >= replacements.length) {
+        break;
+      }
+
+      tagResolver.resolver(
+              Placeholder.parsed(
+                      "param-" + matcher.group(1),
+                      replacements[replacement]
+              )
+      );
+
+      ++replacement;
+    }
+
+
+    return MessageUtil.parseStringToComponent(
+            message,
+            tagResolver.build()
     );
   }
 

@@ -15,6 +15,7 @@ import team.unnamed.gui.menu.type.MenuInventory;
 import team.unnamed.inject.Inject;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class ScenariosEnabledInventory extends UhcInventory {
@@ -34,6 +35,7 @@ public class ScenariosEnabledInventory extends UhcInventory {
     final var entities = scenarioManager.getScenarios()
             .stream()
             .filter(GameScenario::isEnabled)
+            .sorted(Comparator.comparing(GameScenario::getName))
             .collect(Collectors.toList());
 
     menuInventory.entities(entities)
@@ -43,7 +45,6 @@ public class ScenariosEnabledInventory extends UhcInventory {
                                     .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                             .lore(Arrays.stream(gameScenario.getDescription())
                                     .map(lore -> MessageUtil.parseStringToComponent(lore)
-                                            .color(TextColor.color(255, 255, 255))
                                             .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                                     .collect(Collectors.toList()))
                             .build()
@@ -57,6 +58,12 @@ public class ScenariosEnabledInventory extends UhcInventory {
             .previousPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
                     .name(Component.text("Previous page - " + page))
                     .build()))
+            .itemIfNoNextPage(ItemClickable.onlyItem(
+                    ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
+                            .name(Component.text(" ")).build()))
+            .itemIfNoPreviousPage(ItemClickable.onlyItem(
+                    ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
+                            .name(Component.text(" ")).build()))
             .layoutLines(
                     "xxxxxxxxx",
                     "xeeeeeeex",

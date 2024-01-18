@@ -15,7 +15,9 @@ import java.util.List;
 @RegisteredScenario
 @Scenario(
         name = "FireLess",
-        description = {""},
+        description = {
+                "<gray>El fuego no hace daño."
+        },
         key = "fire_less",
         material = Material.LAVA_BUCKET,
         supportsOptions = true
@@ -29,8 +31,8 @@ public class FireLessScenario extends ListenerScenario {
             "prevent_damage_fire",
             true,
             List.of(
-                    new OptionValue<>(true, "Activo"),
-                    new OptionValue<>(false, "Deshabilitado")
+                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(false, "Deshabilitado")
             )
     );
 
@@ -38,8 +40,8 @@ public class FireLessScenario extends ListenerScenario {
             "prevent_damage_lava",
             true,
             List.of(
-                    new OptionValue<>(true, "Activo"),
-                    new OptionValue<>(false, "Deshabilitado")
+                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(false, "Deshabilitado")
             )
     );
 
@@ -47,8 +49,8 @@ public class FireLessScenario extends ListenerScenario {
             "prevent_damage_burn",
             true,
             List.of(
-                    new OptionValue<>(true, "Activo"),
-                    new OptionValue<>(false, "Deshabilitado")
+                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(false, "Deshabilitado")
             )
     );
 
@@ -56,8 +58,8 @@ public class FireLessScenario extends ListenerScenario {
             "prevent_damage_magma",
             true,
             List.of(
-                    new OptionValue<>(true, "Activo"),
-                    new OptionValue<>(false, "Deshabilitado")
+                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(false, "Deshabilitado")
             )
     );
 

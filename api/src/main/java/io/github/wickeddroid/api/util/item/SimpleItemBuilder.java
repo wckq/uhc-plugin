@@ -17,6 +17,7 @@ public class SimpleItemBuilder implements ItemBuilder {
   private Map<Enchantment, Integer> enchantments;
   private List<ItemFlag> itemFlags;
   private List<Component> lore;
+  private Integer modelData;
 
   public SimpleItemBuilder(
           final Material material,
@@ -27,6 +28,7 @@ public class SimpleItemBuilder implements ItemBuilder {
     this.enchantments = new HashMap<>();
     this.itemFlags = new ArrayList<>();
     this.lore = new ArrayList<>();
+    this.modelData = null;
   }
 
   @Override
@@ -72,6 +74,12 @@ public class SimpleItemBuilder implements ItemBuilder {
   }
 
   @Override
+  public ItemBuilder modelData(int data) {
+    this.modelData = data;
+    return this;
+  }
+
+  @Override
   public ItemStack build() {
     final var itemStack = new ItemStack(material, amount);
 
@@ -83,6 +91,9 @@ public class SimpleItemBuilder implements ItemBuilder {
 
       itemMeta.displayName(name);
       itemMeta.lore(lore);
+      if(modelData != null) {
+        itemMeta.setCustomModelData(modelData);
+      }
 
       this.enchantments.forEach((enchantment, level) -> itemMeta.addEnchant(enchantment, level, true));
       this.itemFlags.forEach(itemMeta::addItemFlags);

@@ -6,6 +6,7 @@ import io.github.wickeddroid.api.loader.Loader;
 import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.UhcPlugin;
+import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
@@ -18,6 +19,7 @@ import team.unnamed.inject.Named;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -42,6 +44,7 @@ public class DefaultLoader implements Loader {
   private UhcTeamRegistry uhcTeamRegistry;
   private UhcPlayerRegistry uhcPlayerRegistry;
   private UhcPlugin plugin;
+  private Backup backup;
 
   @Override
   public void load() {
@@ -51,6 +54,12 @@ public class DefaultLoader implements Loader {
     this.scenarioLoader.load();
 
     Bukkit.getServer().setDefaultGameMode(GameMode.ADVENTURE);
+
+    try {
+      backup.load();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override

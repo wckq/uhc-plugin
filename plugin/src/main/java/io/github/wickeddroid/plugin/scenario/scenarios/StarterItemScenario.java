@@ -20,9 +20,14 @@ import java.util.concurrent.ThreadLocalRandom;
         name = "Starter Item",
         key = "starter_item",
         description = {
-                "- Inicia con un item al azar"
+                "<gray>- Los jugadores pueden iniciar con un item al azar:",
+                "<gold>   » Bundle",
+                "<gold>   » Golden Apple",
+                "<gold>   » Shulker Box",
+                "<gold>   » Random (Anteriores 3)",
+                "<gold>   » Random (Cualquier Item)"
         },
-        material = Material.STICK,
+        material = Material.BUNDLE,
         supportsOptions = true
 )
 public class StarterItemScenario extends ListenerScenario {
@@ -32,12 +37,12 @@ public class StarterItemScenario extends ListenerScenario {
         Option<Material> itemOptions = Option.createOption(
                 "Starter Item",
                 Material.AIR,
-                List.of(
-                        new OptionValue<>(Material.AIR, "Selección Random"),
-                        new OptionValue<>(Material.STRUCTURE_VOID, "Random (Todos los items)"),
-                        new OptionValue<>(Material.BUNDLE, "Mochila"),
-                        new OptionValue<>(Material.GOLDEN_APPLE, "Manzana Dorada"),
-                        new OptionValue<>(Material.SHULKER_BOX, "Shulker")
+                Option.createValues(
+                        Material.AIR, "Selección Random",
+                        Material.STRUCTURE_VOID, "Random (Todos los items)",
+                        Material.BUNDLE, "Mochila",
+                        Material.GOLDEN_APPLE, "Manzana Dorada",
+                        Material.SHULKER_BOX, "Shulker"
                 )
         );
 

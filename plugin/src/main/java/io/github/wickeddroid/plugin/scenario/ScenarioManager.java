@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.scenario;
 
 import io.github.wickeddroid.api.scenario.GameScenario;
+import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ import team.unnamed.inject.Inject;
 import io.github.wickeddroid.plugin.scenario.ScenarioRegistration;
 import team.unnamed.inject.InjectAll;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,19 +26,22 @@ public class ScenarioManager {
   private ScenarioRegistration scenarioRegistration;
 
   public void enableScenario(
-          final Player player,
+          @Nullable final Player player,
           final String key
   ) {
     final var scenario = (ListenerScenario) this.scenarioRegistration.getScenarios().get(key);
 
-    if (scenario == null) {
+    if (scenario == null && player != null) {
       this.messageHandler.send(player, this.messages.other().scenarioNotExists(), key);
       return;
     }
 
     scenario.setEnabled(true);
     Bukkit.getPluginManager().registerEvents(scenario, this.plugin);
-    this.messageHandler.send(player, this.messages.other().scenarioEnabled(), scenario.getName());
+
+    if(player != null) {
+      this.messageHandler.send(player, this.messages.other().scenarioEnabled(), scenario.getName());
+    }
   }
 
   public void disableScenario(
@@ -57,6 +62,12 @@ public class ScenarioManager {
 
   public boolean isEnabled(String key) {
     return this.scenarioRegistration.getScenarios().get(key).isEnabled();
+  }
+
+  public @Nullable OptionValue<?> getOption(String key, String option) {
+    if(!isEnabled(key)) { return null; }
+
+    return this.scenarioRegistration.getScenarios().get(key).getOption(option).value();
   }
 
   public Collection<GameScenario> getScenarios() {

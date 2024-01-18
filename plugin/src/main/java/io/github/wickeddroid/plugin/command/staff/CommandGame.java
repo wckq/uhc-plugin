@@ -46,6 +46,18 @@ public class CommandGame implements CommandClass {
     }
   }
 
+  @Command(names = "apple-rate")
+  public void appleRate(final @Sender Player sender, final int appleRate) {
+    this.uhcGame.setAppleRate(appleRate);
+  }
+
+  @Command(names = "players-size")
+  public void playersSize(final @Sender Player sender, final int size) {
+    if(size <= uhcGame.getTeamSize()) { return; }
+
+    this.uhcGame.setPlayersSize(size);
+  }
+
 }
 
 

@@ -14,6 +14,8 @@ public class Game {
     private boolean initialBoat = true;
     private boolean replaceGhastDrop = false;
     private boolean useExperimentalScatter = false;
+    private boolean banRegenerationPotion = true;
+    private boolean banAmplifiedStrengthPotion = true;
 
     public boolean starterInvulnerability() { return this.starterInvulnerability; }
     public int invulnerabilityDuration() { return this.invulnerabilityDuration; }
@@ -23,10 +25,14 @@ public class Game {
     public boolean initialBoat() { return this.initialBoat; }
     public boolean replaceGhastDrop() { return this.replaceGhastDrop; }
     public boolean useExperimentalScatter() { return this.useExperimentalScatter; }
+    public boolean banRegenerationPotion() { return this.banRegenerationPotion; }
+    public boolean banAmplifiedStrengthPotion() { return this.banAmplifiedStrengthPotion; }
 
     private PlayerList playerList = new PlayerList();
+    private AncientCityNerf ancientCityNerf = new AncientCityNerf();
 
     public @NonNull PlayerList playerList() { return this.playerList; }
+    public @NonNull AncientCityNerf ancientCityNerf() { return this.ancientCityNerf; }
 
 
     @ConfigSerializable
@@ -36,5 +42,26 @@ public class Game {
 
         public @NonNull String header() { return this.header; }
         public @NonNull String footer() { return this.footer; }
+    }
+
+    @ConfigSerializable
+    public static class AncientCityNerf {
+        private boolean enabled = false;
+        private boolean replaceItemOnChange = true;
+        private boolean enchantedGoldenAppleEnabled = true;
+        private int enchantedGoldenAppleChance = 20;
+        private boolean regenerationPotionEnabled = true;
+        private int regenerationPotionChance = 50;
+        private boolean diamondArmorEnabled = true;
+        private int diamondArmorChance = 33;
+
+        public boolean enabled() { return this.enabled; }
+        public boolean replaceItemOnChange() { return this.replaceItemOnChange; }
+        public boolean enchantedGoldenAppleEnabled() { return this.enchantedGoldenAppleEnabled; }
+        public int enchantedGoldenAppleChance() { return this.enchantedGoldenAppleChance; }
+        public boolean regenerationPotionEnabled() { return this.regenerationPotionEnabled; }
+        public int regenerationPotionChance() { return this.regenerationPotionChance; }
+        public boolean diamondArmorEnabled() { return this.diamondArmorEnabled; }
+        public int diamondArmorChance() { return this.diamondArmorChance; }
     }
 }

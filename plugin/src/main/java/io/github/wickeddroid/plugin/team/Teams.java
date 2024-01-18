@@ -13,6 +13,7 @@ public class Teams {
     private Customization customization = new Customization();
     private String teamPrefix = "[Team <leader>] | ";
     private String defaultName = "%s team";
+    private String fastChatTogglePrefix = "!";
     private List<String> colors = Arrays.stream(new NamedTextColor[]{
             NamedTextColor.AQUA,
             NamedTextColor.BLUE,
@@ -33,6 +34,7 @@ public class Teams {
 
     public @NonNull String teamPrefix() { return this.teamPrefix; }
     public @NonNull List<String> colors() { return this.colors; }
+    public @NonNull String fastChatTogglePrefix() { return this.fastChatTogglePrefix; }
     public boolean forceSequentiallyColors() { return this.forceSequentiallyColors; }
     public boolean friendlyFire() { return this.friendlyFire; }
     public Customization customization() { return this.customization; }

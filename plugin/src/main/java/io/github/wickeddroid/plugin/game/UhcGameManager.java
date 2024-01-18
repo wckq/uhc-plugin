@@ -13,7 +13,7 @@ import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.thread.GameThread;
 import io.github.wickeddroid.plugin.thread.ScatterThread;
 import io.github.wickeddroid.plugin.util.LocationUtil;
-import io.github.wickeddroid.plugin.world.SafeScatter;
+import io.github.wickeddroid.plugin.world.ScatterTask;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -29,6 +29,7 @@ import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.InjectIgnore;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -58,7 +59,13 @@ public class UhcGameManager {
 
     if(experimental) {
       // EXPERIMENTAL - Busca Safe Positions (Eliminando los spawn en Liquid Blocks)
-      var future = SafeScatter.scatterTask(this.worlds.worldName(),  uhcGame.getWorldBorder(), uhcGame.getWorldBorder(), count);
+      var future = ScatterTask.scatterTask(this.worlds.worldName(),  uhcGame.getWorldBorder(), uhcGame.getWorldBorder(), count, progress -> {
+        double percentage = (100D/count)*progress;
+
+        var message = messageHandler.parse(messages.other().scatterProgress(), String.valueOf(progress), String.valueOf(count), new DecimalFormat("0.00").format(percentage));
+
+        Bukkit.getOnlinePlayers().forEach(p -> p.sendActionBar(message));
+      });
 
       future.whenComplete((locations1, throwable) -> {
         locs.addAll(locations1);
@@ -78,6 +85,32 @@ public class UhcGameManager {
     }
   }
 
+
+  public void startBackup() {
+    for (final var world : Bukkit.getWorlds()) {
+      if (this.worlds.blacklist().contains(world.getName())) {
+        continue;
+      }
+
+      world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+      world.setGameRule(GameRule.DO_MOB_SPAWNING, true);
+      world.setGameRule(GameRule.DO_WEATHER_CYCLE, true);
+      world.getWorldBorder().setDamageAmount(worlds.border().initialBorderDamage());
+    }
+
+
+    gameTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this.gameThread, 0L, 20L);
+    Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, ()-> {
+      try {
+        backup.save();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }, 200L, 12000L);
+
+    Bukkit.getPluginManager().callEvent(new GameStartEvent());
+  }
+
   public void teleportPlayers(List<Location> locations, boolean tp) {
       int delayTeam = 0;
 
@@ -85,7 +118,7 @@ public class UhcGameManager {
         for (final var player : Bukkit.getOnlinePlayers()) {
           var location = locations.stream().findAny().get();
           Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(player, location), delayTeam);
-          uhcGame.addIronman(player.getName());
+          uhcGame.getIronmans().add(player.getName());
 
           delayTeam += 40;
           locations.remove(location);
@@ -95,7 +128,7 @@ public class UhcGameManager {
           var location = locations.stream().findAny().get();
           Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(team, location), delayTeam);
 
-          team.getMembers().stream().map(Bukkit::getPlayer).forEach(p -> uhcGame.addIronman(p.getName()));
+          team.getMembers().stream().map(Bukkit::getPlayer).forEach(p -> uhcGame.getIronmans().add(p.getName()));
 
           delayTeam += 40;
           locations.remove(location);

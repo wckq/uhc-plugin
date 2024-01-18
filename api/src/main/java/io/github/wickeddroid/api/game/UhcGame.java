@@ -15,6 +15,8 @@ public interface UhcGame {
   void setUhcGameState(UhcGameState uhcGameState);
 
   long getStartTime();
+  boolean loadedBackup();
+  void setLoadedBackup(boolean loadedBackup);
 
   void setStartTime(long startTime);
 
@@ -29,6 +31,10 @@ public interface UhcGame {
   int getAppleRate();
 
   void setAppleRate(int appleRate);
+
+  int getPlayersSize();
+
+  void setPlayersSize(int playersSize);
 
   int getTimeForPvp();
 
@@ -64,8 +70,6 @@ public interface UhcGame {
   int getTeamSize();
 
   void setTeamSize(int teamSize);
-
   List<String> getIronmans();
-  void addIronman(String player);
-  void removeIronman(String player);
+  List<String> getBackupPlayers();
 }

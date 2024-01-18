@@ -19,6 +19,7 @@ import team.unnamed.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class ScenariosInventory extends UhcInventory {
             GameScenario.class, title
     );
 
-    final var entities = scenarioManager.getScenarios();
+    final var entities = scenarioManager.getScenarios().stream().sorted(Comparator.comparing(GameScenario::getName)).collect(Collectors.toList());
 
     menuInventory.entities(entities)
             .entityParser(gameScenario -> ItemClickable.builder()
@@ -72,12 +73,6 @@ public class ScenariosInventory extends UhcInventory {
                     .build()
             )
             .bounds(9, 45)
-            .itemIfNoNextPage(ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE)
-                    .name(Component.text(" "))
-                    .build()))
-            .itemIfNoPreviousPage(ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE)
-                    .name(Component.text(" "))
-                    .build()))
             .nextPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
                     .name(Component.text("Siguiente pagina - " + page))
                     .build()))
@@ -118,7 +113,7 @@ public class ScenariosInventory extends UhcInventory {
 
     if(gameScenario.isSupportsOptions()) {
         loreList.add("");
-        loreList.add("<gray>Shift Click para modificar opciones");
+        loreList.add("<green>Shift <gray>+ <green>Click Izq. <gray>para modificar opciones.");
     }
 
     return ItemBuilder.newBuilder(gameScenario.getMaterial())
@@ -126,7 +121,6 @@ public class ScenariosInventory extends UhcInventory {
                     .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
             .lore(loreList.stream()
                     .map(lore -> MessageUtil.parseStringToComponent(lore)
-                            .color(TextColor.color(255, 255, 255))
                             .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                     .collect(Collectors.toList()));
   }

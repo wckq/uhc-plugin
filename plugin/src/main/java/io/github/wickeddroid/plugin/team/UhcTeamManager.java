@@ -158,7 +158,7 @@ public class UhcTeamManager {
       }
 
       member.sendMessage(MessageUtil.parseStringToComponent(
-              "<red>[Team] <white><player></white> <red>➣</red>",
+              "<red>[Team] <white><player></white> <red>➣</red> ",
               Placeholder.parsed("player", player.getName())
       ).append(message));
     }

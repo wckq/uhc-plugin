@@ -2,18 +2,26 @@ package io.github.wickeddroid.plugin.listener.vanilla;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardEndGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
 import io.github.wickeddroid.plugin.util.MessageUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.permissions.ServerOperator;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.InjectAll;
+
+import java.util.stream.Collectors;
 
 @InjectAll
 public class PlayerJoinListener implements Listener {
@@ -24,6 +32,33 @@ public class PlayerJoinListener implements Listener {
   private ScoreboardGame scoreboardGame;
   private UhcGame uhcGame;
   private Game game;
+  private Backup backup;
+
+  @EventHandler
+  public void onPlayerLogin(PlayerLoginEvent event) {
+    var size = uhcGame.getPlayersSize();
+    var online = Bukkit.getOnlinePlayers().stream().filter(p -> !p.isOp()).toList().size();
+
+    var whitelist = Bukkit.getWhitelistedPlayers().stream().map(oP -> oP.getName()).toList();
+    var whitelistOn = Bukkit.hasWhitelist();
+
+    if(whitelistOn && !whitelist.contains(event.getPlayer().getName())) {
+      event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, MessageUtil.parseStringToComponent("<red>No estás en la whitelist."));
+      return;
+    }
+
+    if(online >= size) {
+      event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, MessageUtil.parseStringToComponent("<dark_red>El server está lleno."));
+      return;
+    }
+
+    if(event.getPlayer().isBanned()) {
+      event.disallow(PlayerLoginEvent.Result.KICK_BANNED, MessageUtil.parseStringToComponent("<dark_red>Estás baneado del servidor."));
+      return;
+    }
+
+    event.allow();
+  }
 
   @EventHandler
   public void onPlayerJoin(final PlayerJoinEvent event) {
@@ -49,5 +84,14 @@ public class PlayerJoinListener implements Listener {
     }
 
     player.sendPlayerListHeaderAndFooter(MessageUtil.parseStringToComponent(game.playerList().header()), MessageUtil.parseStringToComponent(game.playerList().footer()));
+
+    if(uhcGame.loadedBackup()) {
+      if(uhcGame.getBackupPlayers().contains(playerName)) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 25, false, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 600, 25, false, false, false));
+
+        uhcGame.getBackupPlayers().remove(playerName);
+      }
+    }
   }
 }

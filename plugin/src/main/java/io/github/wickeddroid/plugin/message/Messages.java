@@ -78,6 +78,7 @@ public class Messages {
     private String changeTeamPrefixError = "No se pueden realizar cambios al prefix de los equipos.";
     private String settingChanged = "Has cambiado la configuración a \"<param-value>\"";
     private String maxLengthReached = "Has sobrepasado la cantidad máxima de <param-length> caracteres.";
+    private String sendCoords = "<gray>Estoy en <bold>X: <red><param-coordx> <gray><bold>Y: <red><param-coordy> <gray><bold>Z: <red><param-coordz>";
 
     public @NonNull String create() {
       return this.create;
@@ -176,6 +177,7 @@ public class Messages {
     public @NonNull String changeTeamPrefixError() { return this.changeTeamPrefixError; }
     public @NonNull String settingChanged() { return this.settingChanged; }
     public @NonNull String maxLengthReached() { return this.maxLengthReached; }
+    public @NonNull String sendCoords() { return this.sendCoords; }
   }
 
   @ConfigSerializable
@@ -206,6 +208,11 @@ public class Messages {
     private String scenarioNotExists = "El scenario <color:#93FF9E><param-name> <white>no existe.";
     private String scenarioEnabled = "El scenario <color:#93FF9E><param-name> <white>ha sido activado correctamente,";
     private String scenarioDisabled = "El scenario <color:#93FF9E><param-name> <white>ha sido desactivado correctamente";
+    private String scatterProgress = "<red>[<gray><param-generated>/<param-requested><red>] <green>Coordenadas Generadas (<param-percentage>%)";
+    private String settingNotExists = "La configuración <color:#93FF9E><param-name> <white>no existe.";
+    private String settingEnabled = "La configuración <color:#93FF9E><param-name> <white>ha sido activado correctamente,";
+    private String settingDisabled = "La configuración <color:#93FF9E><param-name> <white>ha sido desactivado correctamente";
+    private String cleanItemDisabled = "El clean item se encuentra desactivado.";
 
     public @NonNull String teamChatOn() {
       return this.teamChatOn;
@@ -234,5 +241,15 @@ public class Messages {
     public @NonNull String scenarioNotExists() {
       return this.scenarioNotExists;
     }
+
+    public @NonNull String scatterProgress() { return this.scatterProgress; }
+
+    public @NonNull String settingNotExists() { return this.settingNotExists; }
+
+    public @NonNull String settingDisabled() { return this.settingDisabled; }
+
+    public @NonNull String settingEnabled() { return this.settingEnabled; }
+
+    public @NonNull String cleanItemDisabled() { return this.cleanItemDisabled; }
   }
 }

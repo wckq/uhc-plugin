@@ -5,6 +5,7 @@ import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
+import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,8 @@ public class EntityDamageListener implements Listener {
   private MessageHandler messageHandler;
   @Inject
   private Game game;
+  @Inject
+  private ScenarioManager scenarioManager;
 
   private int lostIronmans = 0;
 
@@ -57,11 +60,34 @@ public class EntityDamageListener implements Listener {
         return;
       }
 
+      if(event.getCause() == EntityDamageEvent.DamageCause.FALL && scenarioManager.isEnabled("no_fall")) {
+        return;
+      }
+
+      var fireLess = scenarioManager.isEnabled("fire_less");
+
+      if(fireLess) {
+        var cause = event.getCause();
+        var prevent_damage_fire = scenarioManager.getOption("fire_less", "prevent_damage_fire").getAsBoolean();
+        var prevent_damage_lava = scenarioManager.getOption("fire_less", "prevent_damage_lava").getAsBoolean();
+        var prevent_damage_burn = scenarioManager.getOption("fire_less", "prevent_damage_burn").getAsBoolean();
+        var prevent_damage_magma = scenarioManager.getOption("fire_less", "prevent_damage_magma").getAsBoolean();
+
+        if(
+                        (prevent_damage_fire && cause == EntityDamageEvent.DamageCause.FIRE) ||
+                        (prevent_damage_lava && cause == EntityDamageEvent.DamageCause.LAVA) ||
+                        (prevent_damage_burn && cause == EntityDamageEvent.DamageCause.FIRE_TICK) ||
+                        (prevent_damage_magma && cause == EntityDamageEvent.DamageCause.HOT_FLOOR)
+        ) {
+          return;
+        }
+      }
+
       if(!game.ironmanEnabled()) { return; }
 
       if(uhcGame.getIronmans().size() == 1) { return; }
 
-      uhcGame.removeIronman(player.getName());
+      uhcGame.getIronmans().remove(player.getName());
       lostIronmans++;
 
       messageHandler.sendGlobal(messages.game().ironmanLost(), player.getName(), String.valueOf(uhcGame.getIronmans().size()));
