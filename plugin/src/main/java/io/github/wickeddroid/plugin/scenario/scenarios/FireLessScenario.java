@@ -31,8 +31,8 @@ public class FireLessScenario extends ListenerScenario {
             "prevent_damage_fire",
             true,
             List.of(
-                    new OptionValue<>(true, "Activo"),
-                    new OptionValue<>(false, "Deshabilitado")
+                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(false, "Deshabilitado")
             )
     );
 
@@ -40,8 +40,8 @@ public class FireLessScenario extends ListenerScenario {
             "prevent_damage_lava",
             true,
             List.of(
-                    new OptionValue<>(true, "Activo"),
-                    new OptionValue<>(false, "Deshabilitado")
+                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(false, "Deshabilitado")
             )
     );
 
@@ -49,8 +49,8 @@ public class FireLessScenario extends ListenerScenario {
             "prevent_damage_burn",
             true,
             List.of(
-                    new OptionValue<>(true, "Activo"),
-                    new OptionValue<>(false, "Deshabilitado")
+                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(false, "Deshabilitado")
             )
     );
 
@@ -58,8 +58,8 @@ public class FireLessScenario extends ListenerScenario {
             "prevent_damage_magma",
             true,
             List.of(
-                    new OptionValue<>(true, "Activo"),
-                    new OptionValue<>(false, "Deshabilitado")
+                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(false, "Deshabilitado")
             )
     );
 

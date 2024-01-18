@@ -37,12 +37,12 @@ public class StarterItemScenario extends ListenerScenario {
         Option<Material> itemOptions = Option.createOption(
                 "Starter Item",
                 Material.AIR,
-                List.of(
-                        new OptionValue<>(Material.AIR, "Selección Random"),
-                        new OptionValue<>(Material.STRUCTURE_VOID, "Random (Todos los items)"),
-                        new OptionValue<>(Material.BUNDLE, "Mochila"),
-                        new OptionValue<>(Material.GOLDEN_APPLE, "Manzana Dorada"),
-                        new OptionValue<>(Material.SHULKER_BOX, "Shulker")
+                Option.createValues(
+                        Material.AIR, "Selección Random",
+                        Material.STRUCTURE_VOID, "Random (Todos los items)",
+                        Material.BUNDLE, "Mochila",
+                        Material.GOLDEN_APPLE, "Manzana Dorada",
+                        Material.SHULKER_BOX, "Shulker"
                 )
         );
 

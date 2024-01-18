@@ -30,10 +30,10 @@ public class BloodDiamondScenario extends ListenerScenario {
             "damage",
             1.0D,
             List.of(
-                    new OptionValue<>(1.0, "0.5 ❤"),
-                    new OptionValue<>(2.0, "1 ❤"),
-                    new OptionValue<>(3.0, "1.5 ❤"),
-                    new OptionValue<>(4.0, "2 ❤")
+                    Option.buildValue(1.0, "0.5 ❤"),
+                    Option.buildValue(2.0, "1 ❤"),
+                    Option.buildValue(3.0, "1.5 ❤"),
+                    Option.buildValue(4.0, "2 ❤")
             )
     );
 
