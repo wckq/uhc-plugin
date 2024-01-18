@@ -63,6 +63,12 @@ public class ScenarioManager {
     return this.scenarioRegistration.getScenarios().get(key).isEnabled();
   }
 
+  public @Nullable Object getOption(String key, String option) {
+    if(!isEnabled(key)) { return null; }
+
+    return this.scenarioRegistration.getScenarios().get(key).getOption(option).value();
+  }
+
   public Collection<GameScenario> getScenarios() {
     return this.scenarioRegistration.getScenarios().values();
   }
