@@ -55,7 +55,9 @@ public class ScenarioOptionsInventory extends UhcInventory {
                                 iterator.next();
                             }
 
-                            option.setValue(iterator.current());
+                            var value = iterator.current();
+
+                            option.setValue(scenario, value);
                             event.getCurrentItem().setItemMeta(item(option).getItemMeta());
 
                             return true;

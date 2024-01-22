@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.scenario.scenarios;
 
 import io.github.wickeddroid.api.scenario.Scenario;
+import io.github.wickeddroid.api.scenario.ScenarioOption;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.plugin.scenario.ListenerScenario;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @RegisteredScenario
@@ -24,52 +26,45 @@ import java.util.List;
 )
 public class FireLessScenario extends ListenerScenario {
 
-
-  @Override
-  public void createOptions() {
-    Option<Boolean> fireCauseOption = Option.createOption(
-            "prevent_damage_fire",
-            true,
+    @ScenarioOption(optionName = "prevent_damage_fire", dynamicValue = "preventFire")
+    private LinkedList<OptionValue<Boolean>> damageFire = new LinkedList<>(
             List.of(
-                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(true, "Habilitado"),
                     Option.buildValue(false, "Deshabilitado")
             )
     );
 
-    Option<Boolean> lavaCauseOption = Option.createOption(
-            "prevent_damage_lava",
-            true,
+    private Boolean preventFire;
+
+    @ScenarioOption(optionName = "prevent_damage_lava", dynamicValue = "preventLava")
+    private LinkedList<OptionValue<Boolean>> damageLava = new LinkedList<>(
             List.of(
-                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(true, "Habilitado"),
                     Option.buildValue(false, "Deshabilitado")
             )
     );
 
-    Option<Boolean> burnCauseOption = Option.createOption(
-            "prevent_damage_burn",
-            true,
+    private Boolean preventLava;
+
+    @ScenarioOption(optionName = "prevent_damage_burn", dynamicValue = "preventBurn")
+    private LinkedList<OptionValue<Boolean>> damageBurn = new LinkedList<>(
             List.of(
-                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(true, "Habilitado"),
                     Option.buildValue(false, "Deshabilitado")
             )
     );
 
-    Option<Boolean> hotFloorOption = Option.createOption(
-            "prevent_damage_magma",
-            true,
+    private Boolean preventBurn;
+
+    @ScenarioOption(optionName = "prevent_damage_magma", dynamicValue = "preventMagma")
+    private LinkedList<OptionValue<Boolean>> damageMagma = new LinkedList<>(
             List.of(
-                    Option.buildValue(true, "Activo"),
+                    Option.buildValue(true, "Habilitado"),
                     Option.buildValue(false, "Deshabilitado")
             )
     );
 
-    this.addOptions(
-            fireCauseOption,
-            lavaCauseOption,
-            burnCauseOption,
-            hotFloorOption
-    );
-  }
+    private Boolean preventMagma;
 
   @EventHandler
   public void onEntityDamage(final EntityDamageEvent event) {
@@ -80,10 +75,10 @@ public class FireLessScenario extends ListenerScenario {
     var cause = event.getCause();
 
     if(
-            (getOption("prevent_damage_fire").value().getAsBoolean() && cause == EntityDamageEvent.DamageCause.FIRE) ||
-            (getOption("prevent_damage_lava").value().getAsBoolean() && cause == EntityDamageEvent.DamageCause.LAVA) ||
-            (getOption("prevent_damage_burn").value().getAsBoolean() && cause == EntityDamageEvent.DamageCause.FIRE_TICK) ||
-            (getOption("prevent_damage_magma").value().getAsBoolean() && cause == EntityDamageEvent.DamageCause.HOT_FLOOR)
+            (preventFire && cause == EntityDamageEvent.DamageCause.FIRE) ||
+            (preventLava && cause == EntityDamageEvent.DamageCause.LAVA) ||
+            (preventBurn && cause == EntityDamageEvent.DamageCause.FIRE_TICK) ||
+            (preventMagma && cause == EntityDamageEvent.DamageCause.HOT_FLOOR)
     ) {
       event.setDamage(0.0D);
       event.setCancelled(true);
