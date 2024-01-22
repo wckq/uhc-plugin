@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scoreboard.Team;
 
 import java.io.Serializable;
@@ -21,6 +22,7 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
   private boolean alive;
   private int kills;
   private int playersAlive;
+  private Inventory teamInventory;
 
   public DefaultUhcTeam(final String leader, final String name, final NamedTextColor color, final Component prefix, final boolean friendlyFire) {
     this.leader = leader;
@@ -29,6 +31,7 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
     this.kills = 0;
     this.playersAlive = 0;
     this.members = new ArrayList<>();
+    this.teamInventory = Bukkit.createInventory(null, 27);
 
     if (Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader) == null) {
       setTeam(Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(leader));
@@ -140,5 +143,10 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
   @Override
   public Team getTeam() {
     return this.team;
+  }
+
+  @Override
+  public Inventory getTeamInventory() {
+    return teamInventory;
   }
 }

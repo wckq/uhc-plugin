@@ -78,6 +78,28 @@ public class CommandPlayer implements CommandClass {
     ));
   }
 
+  @Command(names = {"ti", "teaminv", "teaminventory"})
+  public void teamInventory(final @Sender Player sender) {
+    final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(sender.getName());
+
+    if (uhcPlayer == null) {
+      return;
+    }
+
+    this.uhcTeamManager.getTeamByPlayer(uhcPlayer.getName());
+    if (this.uhcTeamManager.getTeamByPlayer(uhcPlayer.getName()) == null) {
+      this.messageHandler.send(sender, this.messages.team().doesNotExist());
+      return;
+    }
+
+    if(!this.uhcGame.isTeamInventory()) {
+      this.messageHandler.send(sender, this.messages.team().teamInventoryNotEnabled());
+      return;
+    }
+
+    sender.openInventory(this.uhcTeamManager.getTeamByPlayer(uhcPlayer.getName()).getTeamInventory());
+  }
+
   @Command(names = "cleanitem")
   public void cleanItem(@Sender Player sender) {
     final var inventory = sender.getInventory();

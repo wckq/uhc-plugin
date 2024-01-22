@@ -56,6 +56,10 @@ public interface UhcGame {
 
   void setCleanItem(boolean cleanItem);
 
+  boolean isTeamInventory();
+
+  void setTeamInventory(boolean teamInventory);
+
   boolean isCleanItem();
 
   void setGameStart(boolean gameStart);

@@ -79,6 +79,7 @@ public class Messages {
     private String settingChanged = "Has cambiado la configuración a \"<param-value>\"";
     private String maxLengthReached = "Has sobrepasado la cantidad máxima de <param-length> caracteres.";
     private String sendCoords = "<gray>Estoy en <bold>X: <red><param-coordx> <gray><bold>Y: <red><param-coordy> <gray><bold>Z: <red><param-coordz>";
+    private String teamInventoryNotEnabled = "<gray>El Team Inventory no se encuentra activo.";
 
     public @NonNull String create() {
       return this.create;
@@ -140,6 +141,7 @@ public class Messages {
       return this.doesNotExist;
     }
 
+
     public @NonNull String playerTeamExist() {
       return this.playerTeamExists;
     }
@@ -178,6 +180,7 @@ public class Messages {
     public @NonNull String settingChanged() { return this.settingChanged; }
     public @NonNull String maxLengthReached() { return this.maxLengthReached; }
     public @NonNull String sendCoords() { return this.sendCoords; }
+    public @NonNull String teamInventoryNotEnabled() { return this.teamInventoryNotEnabled; }
   }
 
   @ConfigSerializable

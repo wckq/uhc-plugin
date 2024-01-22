@@ -24,6 +24,7 @@ public class DefaultUhcGame implements UhcGame {
   private int timeForPvp;
   private int timeForMeetup;
   private boolean cutClean;
+  private boolean teamInventory;
   private boolean pvp;
   private boolean gameStart;
   private boolean teamEnabled;
@@ -46,6 +47,7 @@ public class DefaultUhcGame implements UhcGame {
     this.worldBorder = 2000;
     this.pvp = false;
     this.cutClean = false;
+    this.teamInventory = false;
     this.gameStart = false;
     this.teamEnabled = false;
     this.ownTeamsEnabled = false;
@@ -116,6 +118,16 @@ public class DefaultUhcGame implements UhcGame {
   @Override
   public void setAppleRate(int appleRate) {
     this.appleRate = appleRate;
+  }
+
+  @Override
+  public void setTeamInventory(boolean teamInventory) {
+    this.teamInventory = teamInventory;
+  }
+
+  @Override
+  public boolean isTeamInventory() {
+    return teamInventory;
   }
 
   @Override

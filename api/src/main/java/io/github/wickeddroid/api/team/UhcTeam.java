@@ -1,5 +1,6 @@
 package io.github.wickeddroid.api.team;
 
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scoreboard.Team;
 
 import java.util.List;
@@ -42,4 +43,6 @@ public interface UhcTeam {
 
   Team getTeam();
   void setTeam(Team team);
+
+  Inventory getTeamInventory();
 }
