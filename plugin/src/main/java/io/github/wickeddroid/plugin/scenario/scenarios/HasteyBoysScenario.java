@@ -1,6 +1,9 @@
 package io.github.wickeddroid.plugin.scenario.scenarios;
 
 import io.github.wickeddroid.api.scenario.Scenario;
+import io.github.wickeddroid.api.scenario.ScenarioOption;
+import io.github.wickeddroid.api.scenario.options.Option;
+import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
 import io.github.wickeddroid.plugin.scenario.ListenerScenario;
 import io.github.wickeddroid.plugin.scenario.RegisteredScenario;
@@ -11,6 +14,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @RegisteredScenario
 @Scenario(
         name = "HasteyBoys",
@@ -20,9 +26,20 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
                 "<aqua>   » Eficiencia III",
                 "<aqua>   » Unbreaking I"
         },
-        material = Material.DIAMOND_PICKAXE
+        material = Material.DIAMOND_PICKAXE,
+        supportsOptions = true
 )
 public class  HasteyBoysScenario extends ListenerScenario {
+
+  @ScenarioOption(optionName = "Fortuna II", dynamicValue = "fortune")
+  private LinkedList<OptionValue<Boolean>> fortuneOption = new LinkedList<>(
+          List.of(
+                  Option.buildValue(false, "Deshabilitado"),
+                  Option.buildValue(true, "Habilitado")
+          )
+  );
+
+  private Boolean fortune;
 
   @EventHandler
   public void onPrepareItemCraft(final PrepareItemCraftEvent event) {
@@ -38,12 +55,13 @@ public class  HasteyBoysScenario extends ListenerScenario {
       return;
     }
 
-    event.getInventory().setResult(
-            ItemBuilder.newBuilder(item.getType())
-                    .enchantment(Enchantment.DIG_SPEED, 3)
-                    .enchantment(Enchantment.DURABILITY, 1)
-                    .build()
-    );
+    var builder =  ItemBuilder.newBuilder(item.getType())
+            .enchantment(Enchantment.DIG_SPEED, 3)
+            .enchantment(Enchantment.DURABILITY, 1);
+
+    if(fortune) { builder.enchantment(Enchantment.LOOT_BONUS_BLOCKS, 2); }
+
+    event.getInventory().setResult(builder.build());
   }
 
   @EventHandler

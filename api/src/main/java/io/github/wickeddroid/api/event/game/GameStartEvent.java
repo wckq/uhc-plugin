@@ -4,6 +4,12 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This event is called when the UHC Game is started.
+ *
+ * @since 1.0.0-BETA
+ * @see org.bukkit.event.Event
+ */
 public class GameStartEvent extends Event {
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
