@@ -1,6 +1,6 @@
 package io.github.wickeddroid.plugin.scenario.scenarios;
 
-import io.github.wickeddroid.api.events.GameStartEvent;
+import io.github.wickeddroid.api.event.game.GameStartEvent;
 import io.github.wickeddroid.api.scenario.Scenario;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;

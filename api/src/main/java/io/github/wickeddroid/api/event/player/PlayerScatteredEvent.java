@@ -1,4 +1,4 @@
-package io.github.wickeddroid.plugin.event.game;
+package io.github.wickeddroid.api.event.player;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

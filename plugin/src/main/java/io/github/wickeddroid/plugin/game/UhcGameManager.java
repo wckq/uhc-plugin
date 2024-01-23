@@ -1,6 +1,6 @@
 package io.github.wickeddroid.plugin.game;
 
-import io.github.wickeddroid.api.events.GameStartEvent;
+import io.github.wickeddroid.api.event.game.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.backup.Backup;

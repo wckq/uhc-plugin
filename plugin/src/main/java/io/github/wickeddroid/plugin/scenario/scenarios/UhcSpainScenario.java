@@ -1,6 +1,6 @@
 package io.github.wickeddroid.plugin.scenario.scenarios;
 
-import io.github.wickeddroid.api.events.GameStartEvent;
+import io.github.wickeddroid.api.event.game.GameStartEvent;
 import io.github.wickeddroid.api.scenario.Scenario;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
 import io.github.wickeddroid.plugin.scenario.ListenerScenario;
@@ -8,11 +8,9 @@ import io.github.wickeddroid.plugin.scenario.RegisteredScenario;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;

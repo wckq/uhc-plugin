@@ -1,4 +1,4 @@
-package io.github.wickeddroid.api.events;
+package io.github.wickeddroid.api.event.game;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

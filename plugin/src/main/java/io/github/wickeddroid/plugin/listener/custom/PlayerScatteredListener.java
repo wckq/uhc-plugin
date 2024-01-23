@@ -1,6 +1,6 @@
 package io.github.wickeddroid.plugin.listener.custom;
 
-import io.github.wickeddroid.plugin.event.game.PlayerScatteredEvent;
+import io.github.wickeddroid.api.event.player.PlayerScatteredEvent;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
@@ -8,9 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import team.unnamed.inject.Inject;
 import team.unnamed.inject.InjectAll;
 
 @InjectAll

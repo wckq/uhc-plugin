@@ -1,8 +1,5 @@
-package io.github.wickeddroid.api.events;
+package io.github.wickeddroid.api.event.scenario;
 
-import io.github.wickeddroid.api.scenario.GameScenario;
-
-import io.github.wickeddroid.api.scenario.Scenario;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
 import org.bukkit.event.Cancellable;

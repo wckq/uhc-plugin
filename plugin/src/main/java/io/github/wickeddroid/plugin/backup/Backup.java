@@ -3,16 +3,13 @@ package io.github.wickeddroid.plugin.backup;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import io.github.wickeddroid.api.events.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.scenario.GameScenario;
 import io.github.wickeddroid.api.team.UhcTeam;
-import io.github.wickeddroid.plugin.UhcPlugin;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.game.UhcGameManager;
-import io.github.wickeddroid.plugin.player.DefaultUhcPlayer;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import io.github.wickeddroid.plugin.scenario.SettingManager;
@@ -21,20 +18,15 @@ import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.world.Worlds;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.Singleton;
 
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Singleton
 public class Backup {

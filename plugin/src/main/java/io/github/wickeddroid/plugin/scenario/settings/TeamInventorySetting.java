@@ -1,6 +1,6 @@
 package io.github.wickeddroid.plugin.scenario.settings;
 
-import io.github.wickeddroid.api.events.GameStartEvent;
+import io.github.wickeddroid.api.event.game.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.scenario.Setting;
 import io.github.wickeddroid.plugin.scenario.RegisteredSetting;

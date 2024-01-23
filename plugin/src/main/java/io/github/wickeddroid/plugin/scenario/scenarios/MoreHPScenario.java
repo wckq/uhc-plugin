@@ -4,7 +4,7 @@ import io.github.wickeddroid.api.scenario.Scenario;
 import io.github.wickeddroid.api.scenario.ScenarioOption;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
-import io.github.wickeddroid.plugin.event.game.PlayerScatteredEvent;
+import io.github.wickeddroid.api.event.player.PlayerScatteredEvent;
 import io.github.wickeddroid.plugin.scenario.ListenerScenario;
 import io.github.wickeddroid.plugin.scenario.RegisteredScenario;
 import org.bukkit.Material;

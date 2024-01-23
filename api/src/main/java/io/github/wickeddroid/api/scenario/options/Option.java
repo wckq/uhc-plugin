@@ -1,13 +1,12 @@
 package io.github.wickeddroid.api.scenario.options;
 
 import com.google.common.collect.Maps;
-import io.github.wickeddroid.api.events.ScenarioOptionValueChangeEvent;
+import io.github.wickeddroid.api.event.scenario.ScenarioOptionValueChangeEvent;
 import io.github.wickeddroid.api.scenario.GameScenario;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Option<T> {
     @NotNull
