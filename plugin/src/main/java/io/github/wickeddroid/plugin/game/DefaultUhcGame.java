@@ -23,7 +23,7 @@ public class DefaultUhcGame implements UhcGame {
   private int playersSize;
   private int timeForPvp;
   private int timeForMeetup;
-  private boolean cutClean;
+  private boolean cleanItem;
   private boolean teamInventory;
   private boolean pvp;
   private boolean gameStart;
@@ -46,7 +46,7 @@ public class DefaultUhcGame implements UhcGame {
     this.teamSize = 2;
     this.worldBorder = 2000;
     this.pvp = false;
-    this.cutClean = false;
+    this.cleanItem = false;
     this.teamInventory = false;
     this.gameStart = false;
     this.teamEnabled = false;
@@ -197,12 +197,12 @@ public class DefaultUhcGame implements UhcGame {
 
   @Override
   public void setCleanItem(boolean cleanItem) {
-
+      this.cleanItem = cleanItem;
   }
 
   @Override
   public boolean isCleanItem() {
-    return false;
+    return cleanItem;
   }
 
   @Override
