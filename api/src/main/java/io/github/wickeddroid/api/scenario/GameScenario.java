@@ -3,6 +3,7 @@ package io.github.wickeddroid.api.scenario;
 import io.github.wickeddroid.api.exception.NotEnabledFeatureException;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
@@ -60,6 +61,14 @@ public class GameScenario {
     }
   }
 
+  protected void addOption(Option<?> option) {
+    if (!supportsOptions) {
+      throw new NotEnabledFeatureException("Options are not enabled on this scenario.");
+    }
+
+    this.options.put(option.optionName(), option);
+  }
+
 
   public HashMap<String, Option<?>> getOptions() {
     if (!supportsOptions) {
@@ -92,38 +101,34 @@ public class GameScenario {
   }
 
   public void createOptions() {
-    try {
-      for (var f : this.getClass().getDeclaredFields()) {
-        if (!f.isAnnotationPresent(ScenarioOption.class)) {
-          return;
+      Arrays.stream(FieldUtils.getFieldsWithAnnotation(this.getClass(), ScenarioOption.class)).forEach(f -> {
+        try {
+          f.setAccessible(true);
+
+          var annotation = f.getAnnotation(ScenarioOption.class);
+
+          var linkedList = (LinkedList<OptionValue<Object>>) f.get(this);
+
+          var optName = annotation.optionName();
+          var dynamic = annotation.dynamicValue();
+
+          if (!dynamic.equals("")) {
+            var field = this.getClass().getDeclaredField(dynamic);
+            field.setAccessible(true);
+
+            field.set(this, linkedList.get(0).get());
+            dynamicValues.put(optName, dynamic);
+          }
+
+          this.addOption(Option.createOption(
+                  optName,
+                  linkedList.get(0).get(),
+                  linkedList
+          ));
+        } catch (Exception e) {
+          throw new RuntimeException(e);
         }
-
-        f.setAccessible(true);
-
-        var annotation = f.getAnnotation(ScenarioOption.class);
-
-        var linkedList = (LinkedList<OptionValue<Object>>) f.get(this);
-
-        var name = annotation.optionName();
-        var dynamic = annotation.dynamicValue();
-
-        if (!dynamic.equals("")) {
-          var field = this.getClass().getDeclaredField(dynamic);
-          field.setAccessible(true);
-
-          field.set(this, linkedList.get(0).get());
-          dynamicValues.put(name, dynamic);
-        }
-
-        this.addOptions(Option.createOption(
-                name,
-                linkedList.get(0).get(),
-                linkedList
-        ));
-      }
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+      });
   }
 
   public void changeOptionValue(String option, Object o) {
