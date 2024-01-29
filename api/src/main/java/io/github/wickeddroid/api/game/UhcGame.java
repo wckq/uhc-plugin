@@ -1,7 +1,9 @@
 package io.github.wickeddroid.api.game;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public interface UhcGame {
@@ -76,4 +78,12 @@ public interface UhcGame {
   void setTeamSize(int teamSize);
   List<String> getIronmans();
   List<String> getBackupPlayers();
+
+  @Nullable String ironman();
+
+  void setIronman(@NotNull String ironman);
+
+  @Nullable String paperman();
+
+  void setPaperman(@NotNull String paperman);
 }

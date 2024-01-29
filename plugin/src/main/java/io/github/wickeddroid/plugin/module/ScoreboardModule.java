@@ -7,6 +7,7 @@ import io.github.wickeddroid.plugin.scoreboard.ScoreboardEndGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
+import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.AbstractModule;
 import team.unnamed.inject.Provides;
@@ -41,8 +42,11 @@ public class ScoreboardModule extends AbstractModule {
   @Provides @Singleton
   public ScoreboardEndGame endGameScoreboardProvider(
           final Plugin plugin,
-          final Scoreboard scoreboard
-  ) {
-    return new ScoreboardEndGame(scoreboard, plugin);
+          final Scoreboard scoreboard,
+          final UhcGame uhcGame,
+          final UhcPlayerRegistry uhcPlayerRegistry,
+          final UhcTeamRegistry uhcTeamRegistry
+          ) {
+    return new ScoreboardEndGame(scoreboard, plugin, uhcGame, uhcPlayerRegistry, uhcTeamRegistry);
   }
 }

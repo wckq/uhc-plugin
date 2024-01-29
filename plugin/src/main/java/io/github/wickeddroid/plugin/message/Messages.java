@@ -81,6 +81,8 @@ public class Messages {
     private String sendCoords = "<gray>Estoy en <bold>X: <red><param-coordx> <gray><bold>Y: <red><param-coordy> <gray><bold>Z: <red><param-coordz>";
     private String teamInventoryNotEnabled = "<gray>El Team Inventory no se encuentra activo.";
 
+    private String teamEliminated = "<gray>El team <param-team><gray> ha sido eliminado completamente.";
+
     public @NonNull String create() {
       return this.create;
     }
@@ -181,6 +183,7 @@ public class Messages {
     public @NonNull String maxLengthReached() { return this.maxLengthReached; }
     public @NonNull String sendCoords() { return this.sendCoords; }
     public @NonNull String teamInventoryNotEnabled() { return this.teamInventoryNotEnabled; }
+    public @NonNull String teamEliminated() { return this.teamEliminated; }
   }
 
   @ConfigSerializable

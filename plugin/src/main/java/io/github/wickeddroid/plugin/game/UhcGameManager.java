@@ -7,6 +7,7 @@ import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
+import io.github.wickeddroid.plugin.scoreboard.ScoreboardEndGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
@@ -45,6 +46,8 @@ public class UhcGameManager {
   private MessageHandler messageHandler;
   private ScoreboardGame scoreboardGame;
   private ScoreboardLobby scoreboardLobby;
+
+  private ScoreboardEndGame scoreboardEndGame;
   private UhcTeamRegistry uhcTeamRegistry;
   private UhcPlayerRegistry uhcPlayerRegistry;
   private Game game;
@@ -226,5 +229,13 @@ public class UhcGameManager {
   public void endGame() {
     this.uhcGame.setUhcGameState(UhcGameState.FINISH);
     gameTask.cancel();
+
+    Bukkit.getOnlinePlayers().forEach(p -> {
+      if(scoreboardGame.getSidebar().getViewers().contains(p.getUniqueId())) {
+        scoreboardGame.getSidebar().removeViewer(p);
+      }
+
+      scoreboardEndGame.getSidebar().addViewer(p);
+    });
   }
 }

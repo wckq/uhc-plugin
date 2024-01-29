@@ -75,6 +75,8 @@ public class Backup {
                 .append("\"teams-enabled\":").append(game.isTeamEnabled()).append(",")
                 .append("\"own-teams-enabled\":").append(game.isOwnTeamsEnabled()).append(",")
                 .append("\"team-size\":").append(game.getTeamSize()).append(",")
+                .append("\"ironman\":").append("\"").append(game.ironman()).append("\",")
+                .append("\"paperman\":").append("\"").append(game.paperman()).append("\",")
                 .append("\"ironmans\":[");
 
         var it = game.getIronmans().iterator();
@@ -237,6 +239,8 @@ public class Backup {
         var ownTeamsEnabled = game.get("own-teams-enabled").getAsBoolean();
         var teamSize = game.get("team-size").getAsInt();
         var ironmans = game.get("ironmans").getAsJsonArray().asList().stream().map(JsonElement::getAsString).toList();
+        var ironman = game.get("ironman").getAsString();
+        var paperman = game.get("paperman").getAsString();
 
         uhcGame.setHost(host);
         uhcGame.setUhcGameState(state);
@@ -254,6 +258,8 @@ public class Backup {
         uhcGame.setOwnTeamsEnabled(ownTeamsEnabled);
         uhcGame.setTeamSize(teamSize);
         uhcGame.getIronmans().addAll(ironmans);
+        uhcGame.setIronman(ironman);
+        uhcGame.setPaperman(paperman);
 
         var players = json.get("players").getAsJsonArray();
 

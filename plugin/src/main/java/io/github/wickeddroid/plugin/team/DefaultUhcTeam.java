@@ -94,6 +94,8 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
   @Override
   public void decrementPlayersAlive() {
     --this.playersAlive;
+
+    if(playersAlive == 0) { setAlive(false); }
   }
 
   @Override

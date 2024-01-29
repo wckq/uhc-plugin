@@ -4,8 +4,10 @@ import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import team.unnamed.inject.Singleton;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class DefaultUhcGame implements UhcGame {
   private boolean loadedBackup;
   private List<String> ironmans;
   private List<String> backupPlayers;
+
+  private @Nullable String ironman, paperman;
 
   public DefaultUhcGame(final String host) {
     this.host = host;
@@ -248,5 +252,27 @@ public class DefaultUhcGame implements UhcGame {
   @Override
   public List<String> getBackupPlayers() {
     return backupPlayers;
+  }
+
+  @Nullable
+  @Override
+  public String ironman() {
+    return ironman;
+  }
+
+  @Override
+  public void setIronman(@NotNull String ironman) {
+    this.ironman = ironman;
+  }
+
+  @Nullable
+  @Override
+  public String paperman() {
+    return paperman;
+  }
+
+  @Override
+  public void setPaperman(@NotNull String paperman) {
+    this.paperman = paperman;
   }
 }
