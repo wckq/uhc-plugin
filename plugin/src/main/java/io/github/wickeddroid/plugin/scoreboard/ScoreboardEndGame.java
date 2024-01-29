@@ -37,8 +37,8 @@ public class ScoreboardEndGame extends ScoreboardCreator {
     final var topKills = this.uhcPlayerRegistry.getPlayers().stream().sorted(Comparator.comparingInt(UhcPlayer::getKills).reversed()).toList();
 
     return MessageUtil.parseStringToComponent(text,
-            Placeholder.parsed("winner-team", winner == null ? "N/A" : winner.getName() + " (%s)".formatted(winner.getKills())),
-            Placeholder.parsed("top-kills", topKills.get(0) != null ? topKills.get(0).getName() : "N/A"),
+            Placeholder.parsed("winner-team", winner == null ? "N/A" : winner.getName()),
+            Placeholder.parsed("top-kills", topKills.get(0) != null ? topKills.get(0).getName() + " (%s)".formatted(topKills.get(0).getKills()) : "N/A"),
             Placeholder.parsed("ironman", uhcGame.ironman() == null ? "N/A" : uhcGame.ironman()),
             Placeholder.parsed("paperman", uhcGame.paperman() == null ? "N/A" : uhcGame.paperman()),
             Placeholder.parsed("game-duration", PluginUtil.formatTime(this.uhcGame.getCurrentTime()))
