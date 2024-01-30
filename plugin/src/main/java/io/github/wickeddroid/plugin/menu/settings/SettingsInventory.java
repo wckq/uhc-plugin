@@ -97,7 +97,7 @@ public class SettingsInventory extends UhcInventory {
 
     private ItemBuilder rawItem(final GameScenario gameScenario) {
         return ItemBuilder.newBuilder(gameScenario.getMaterial())
-                .name(MessageUtil.parseStringToComponent("<color:#93FF9E>" + gameScenario.getName())
+                .name(MessageUtil.parseStringToComponent((gameScenario.isEnabled() ? "<color:#08992E>✅ " : "<color:#E01616>❌ ")+ "<color:#93FF9E>" + gameScenario.getName())
                         .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                 .lore(Arrays.stream(gameScenario.getDescription())
                         .map(lore -> MessageUtil.parseStringToComponent(lore)

@@ -2,6 +2,7 @@ package io.github.wickeddroid.api.util.item;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +25,7 @@ public interface ItemBuilder {
 
   ItemBuilder itemFlags(ItemFlag... itemFlags);
   ItemBuilder modelData(int data);
+  ItemBuilder skull(OfflinePlayer player);
 
   ItemStack build();
 

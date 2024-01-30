@@ -28,6 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.InjectIgnore;
+import team.unnamed.inject.Singleton;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @InjectAll
+@Singleton
 public class UhcGameManager {
 
   private Plugin plugin;
@@ -46,7 +48,6 @@ public class UhcGameManager {
   private MessageHandler messageHandler;
   private ScoreboardGame scoreboardGame;
   private ScoreboardLobby scoreboardLobby;
-
   private ScoreboardEndGame scoreboardEndGame;
   private UhcTeamRegistry uhcTeamRegistry;
   private UhcPlayerRegistry uhcPlayerRegistry;
@@ -118,8 +119,11 @@ public class UhcGameManager {
       int delayTeam = 0;
 
       if (!this.uhcGame.isTeamEnabled() && tp) {
-        for (final var player : Bukkit.getOnlinePlayers()) {
+        for (final var uhcPlayer : uhcPlayerRegistry.getPlayers().stream().filter(uP -> !uP.isScattered()).toList()) {
           var location = locations.stream().findAny().get();
+          var player = Bukkit.getPlayer(uhcPlayer.getUuid());
+          if(player == null) { continue; }
+
           Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(player, location), delayTeam);
           uhcGame.getIronmans().add(player.getName());
 
@@ -127,11 +131,12 @@ public class UhcGameManager {
           locations.remove(location);
         }
       } else if(tp) {
-        for (final var team : this.uhcTeamRegistry.getTeams()) {
+        for (final var team : this.uhcTeamRegistry.getTeams().stream().filter(uT -> !uT.isScattered()).toList()) {
           var location = locations.stream().findAny().get();
           Bukkit.getScheduler().runTaskLater(plugin, new ScatterThread(team, location), delayTeam);
 
           team.getMembers().stream().map(Bukkit::getPlayer).forEach(p -> uhcGame.getIronmans().add(p.getName()));
+          team.setScattered(true);
 
           delayTeam += 40;
           locations.remove(location);
@@ -193,9 +198,11 @@ public class UhcGameManager {
       return;
     }
 
+    var toTeleport = uhcPlayerRegistry.getPlayers().stream().filter(uP -> !uP.isScattered()).toList().size();
+
     Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
       try {
-        var future = requestLocations(uhcGame.isTeamEnabled() ? uhcTeamRegistry.getTeams().size() : Bukkit.getOnlinePlayers().size(), game.useExperimentalScatter());
+        var future = requestLocations(uhcGame.isTeamEnabled() ? uhcTeamRegistry.getTeams().stream().filter(uT -> !uT.isScattered()).toList().size() : toTeleport, game.useExperimentalScatter());
 
         future.whenComplete((locations, throwable) -> teleportPlayers(locations, tp));
       } catch (Exception e) {
@@ -228,7 +235,7 @@ public class UhcGameManager {
 
   public void endGame() {
     this.uhcGame.setUhcGameState(UhcGameState.FINISH);
-    gameTask.cancel();
+    Bukkit.getScheduler().cancelTask(this.gameTask.getTaskId());
 
     Bukkit.getOnlinePlayers().forEach(p -> {
       if(scoreboardGame.getSidebar().getViewers().contains(p.getUniqueId())) {

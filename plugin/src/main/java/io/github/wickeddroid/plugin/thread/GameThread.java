@@ -27,7 +27,6 @@ public class GameThread implements Runnable {
   private UhcGameHandler uhcGameHandler;
   private UhcGameManager uhcGameManager;
   private UhcTeamRegistry uhcTeamRegistry;
-
   private UhcPlayerRegistry uhcPlayerRegistry;
   private Announcements announcements;
   private ScenarioManager scenarioManager;

@@ -28,8 +28,6 @@ public class EntityDamageListener implements Listener {
   @Inject
   private ScenarioManager scenarioManager;
 
-  private int lostIronmans = 0;
-
   @EventHandler
   public void onEntityDamage(EntityDamageEvent event) {
     if (this.uhcGame.getUhcGameState() == UhcGameState.WAITING || this.uhcGame.getUhcGameState() == UhcGameState.FINISH) {
@@ -88,16 +86,17 @@ public class EntityDamageListener implements Listener {
       if(uhcGame.getIronmans().size() == 1) { return; }
 
       uhcGame.getIronmans().remove(player.getName());
-      lostIronmans++;
 
       messageHandler.sendGlobal(messages.game().ironmanLost(), player.getName(), String.valueOf(uhcGame.getIronmans().size()));
 
-      if(lostIronmans == 1 && game.papermanEnabled()) {
+      if(uhcGame.paperman() == null && game.papermanEnabled()) {
         messageHandler.sendGlobal(messages.game().papermanPlayer(), player.getName());
+        uhcGame.setPaperman(player.getName());
       }
 
       if(uhcGame.getIronmans().size() == 1) {
         messageHandler.sendGlobal(messages.game().ironmanPlayer(), uhcGame.getIronmans().get(0));
+        uhcGame.setIronman(uhcGame.getIronmans().get(0));
       }
     }
   }

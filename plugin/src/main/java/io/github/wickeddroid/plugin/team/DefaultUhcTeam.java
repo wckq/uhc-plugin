@@ -19,7 +19,7 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
   private String leader;
   private Team team;
   private String name;
-  private boolean alive;
+  private boolean alive, scattered;
   private int kills;
   private int playersAlive;
   private Inventory teamInventory;
@@ -32,6 +32,7 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
     this.playersAlive = 0;
     this.members = new ArrayList<>();
     this.teamInventory = Bukkit.createInventory(null, 27);
+    this.scattered = false;
 
     if (Bukkit.getScoreboardManager().getMainScoreboard().getTeam(leader) == null) {
       setTeam(Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(leader));
@@ -69,6 +70,16 @@ public class DefaultUhcTeam implements UhcTeam, Serializable {
   @Override
   public void incrementKills() {
     ++this.kills;
+  }
+
+  @Override
+  public boolean isScattered() {
+    return scattered;
+  }
+
+  @Override
+  public void setScattered(boolean scattered) {
+    this.scattered = scattered;
   }
 
   @Override

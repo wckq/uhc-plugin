@@ -2,9 +2,11 @@ package io.github.wickeddroid.api.util.item;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.*;
 
@@ -18,6 +20,7 @@ public class SimpleItemBuilder implements ItemBuilder {
   private List<ItemFlag> itemFlags;
   private List<Component> lore;
   private Integer modelData;
+  private OfflinePlayer skin;
 
   public SimpleItemBuilder(
           final Material material,
@@ -62,6 +65,12 @@ public class SimpleItemBuilder implements ItemBuilder {
   }
 
   @Override
+  public ItemBuilder skull(OfflinePlayer player) {
+    this.skin = player;
+    return this;
+  }
+
+  @Override
   public ItemBuilder enchantment(Enchantment enchantment, int level) {
     this.enchantments.put(enchantment, level);
     return this;
@@ -93,6 +102,10 @@ public class SimpleItemBuilder implements ItemBuilder {
       itemMeta.lore(lore);
       if(modelData != null) {
         itemMeta.setCustomModelData(modelData);
+      }
+
+      if(skin != null) {
+        ((SkullMeta)itemMeta).setOwningPlayer(skin);
       }
 
       this.enchantments.forEach((enchantment, level) -> itemMeta.addEnchant(enchantment, level, true));
