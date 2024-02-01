@@ -258,8 +258,8 @@ public class Backup {
         uhcGame.setOwnTeamsEnabled(ownTeamsEnabled);
         uhcGame.setTeamSize(teamSize);
         uhcGame.getIronmans().addAll(ironmans);
-        uhcGame.setIronman(ironman);
-        uhcGame.setPaperman(paperman);
+        uhcGame.setIronman(ironman.equals("null") ? null : ironman);
+        uhcGame.setPaperman(paperman.equals("null") ? null : paperman);
 
         var players = json.get("players").getAsJsonArray();
 

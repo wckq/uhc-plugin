@@ -35,10 +35,10 @@ import java.util.List;
 @RegisteredScenario
 @Scenario(
         name = "Player Head",
-        key = "blood_diamonds",
+        key = "player_head",
         description = {
                 "<gray>- Los <aqua>Jugadores <gray>sueltan su cabeza.",
-                "<gray>- Puede craftearse en <gold>Golden Head<grays>."
+                "<gray>- Puede craftearse en <gold>Golden Head<gray>."
         },
         material = Material.PLAYER_HEAD,
         supportsOptions = true
@@ -74,6 +74,15 @@ public class PlayerHeadScenario extends ListenerScenario {
     );
     private Material graveBlock;
 
+    @ScenarioOption(optionName = "Wither Head", dynamicValue = "witherHead")
+    private LinkedList<OptionValue<Boolean>> witherHeadValue = new LinkedList<>(
+            List.of(
+                    Option.buildValue(false, "Deshabilitado"),
+                    Option.buildValue(true, "Habilitado")
+            )
+    );
+    private Boolean witherHead;
+
     @EventHandler
     public void onGameStart(GameStartEvent event) {
         final var goldenHead = ItemBuilder
@@ -90,7 +99,27 @@ public class PlayerHeadScenario extends ListenerScenario {
 
         Bukkit.addRecipe(goldenHeadRecipe);
 
-        Bukkit.getOnlinePlayers().forEach(p -> p.discoverRecipe(goldenHeadRecipe.getKey()));
+        final var witherHeadItem = ItemBuilder
+                .newBuilder(Material.GOLDEN_APPLE)
+                .name(MessageUtil.parseStringToComponent("<dark_gray>Wither Head").decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
+                .modelData(28)
+                .build();
+
+        final var witherHeadRecipe = new ShapedRecipe(new NamespacedKey(plugin, "wither_head"), witherHeadItem);
+
+        witherHeadRecipe.shape("GGG", "GHG", "GGG");
+        witherHeadRecipe.setIngredient('G', new RecipeChoice.MaterialChoice(Material.GOLD_INGOT));
+        witherHeadRecipe.setIngredient('H', new RecipeChoice.MaterialChoice(Material.WITHER_SKELETON_SKULL));
+
+        if(witherHead) {
+            Bukkit.addRecipe(witherHeadRecipe);
+        }
+
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            p.discoverRecipe(goldenHeadRecipe.getKey());
+
+            if(witherHead) { p.discoverRecipe(witherHeadRecipe.getKey()); }
+        });
     }
 
     @EventHandler
@@ -107,11 +136,11 @@ public class PlayerHeadScenario extends ListenerScenario {
         }
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            player.removePotionEffect(PotionEffectType.ABSORPTION);
-            player.removePotionEffect(PotionEffectType.REGENERATION);
-
             if (item.getItemMeta().getCustomModelData() == 28) {
-                player.addPotionEffect(PotionEffectType.REGENERATION.createEffect(400, 1));
+                player.removePotionEffect(PotionEffectType.ABSORPTION);
+                player.removePotionEffect(PotionEffectType.REGENERATION);
+
+                player.addPotionEffect(PotionEffectType.REGENERATION.createEffect(200, 1));
                 player.addPotionEffect(PotionEffectType.ABSORPTION.createEffect(2400, 1));
             }
         }, 1L);
@@ -143,7 +172,7 @@ public class PlayerHeadScenario extends ListenerScenario {
             world.getBlockAt((int) loc.getX(), loc.getBlockY(), (int) loc.getZ()).setType(Material.NETHER_BRICK_FENCE);
             var block = world.getBlockAt((int) loc.getX(), loc.getBlockY()+1, (int) loc.getZ());
 
-            block.setType(Material.NETHER_BRICK_FENCE);
+            block.setType(Material.PLAYER_HEAD);
             ((Skull)block.getState()).setOwningPlayer(player);
         }
     }

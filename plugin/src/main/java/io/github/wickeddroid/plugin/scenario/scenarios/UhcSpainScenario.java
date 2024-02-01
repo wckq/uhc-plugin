@@ -95,29 +95,32 @@ public class UhcSpainScenario extends ListenerScenario {
         }
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            player.removePotionEffect(PotionEffectType.ABSORPTION);
-            player.removePotionEffect(PotionEffectType.REGENERATION);
-        }, 1L);
+            if(item.getItemMeta().getCustomModelData() == 19) {
+                player.removePotionEffect(PotionEffectType.ABSORPTION);
+                player.removePotionEffect(PotionEffectType.REGENERATION);
 
-
-        if (item.getItemMeta().getCustomModelData() == 19) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, (20 * 120), 1));
-            },3L);
-        } else if (item.getItemMeta().getCustomModelData() == 20) {
-            if(attribute == null) {
-                event.setCancelled(true);
-                return;
-            }
-            if(attribute.getBaseValue() >= 80.0D) {
-                event.setCancelled(true);
-                return;
             }
 
-            attribute.setBaseValue(attribute.getBaseValue() + 4.0D);
+            if(item.getItemMeta().getCustomModelData() == 20) {
+                player.removePotionEffect(PotionEffectType.ABSORPTION);
+                player.removePotionEffect(PotionEffectType.REGENERATION);
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 0));
-        }
+                if(attribute == null) {
+                    event.setCancelled(true);
+                    return;
+                }
+                if(attribute.getBaseValue() >= 80.0D) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                attribute.setBaseValue(attribute.getBaseValue() + 4.0D);
+
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 0));
+            }
+
+        }, 1L);
     }
 }

@@ -81,9 +81,9 @@ public interface UhcGame {
 
   @Nullable String ironman();
 
-  void setIronman(@NotNull String ironman);
+  void setIronman(String ironman);
 
   @Nullable String paperman();
 
-  void setPaperman(@NotNull String paperman);
+  void setPaperman(String paperman);
 }
