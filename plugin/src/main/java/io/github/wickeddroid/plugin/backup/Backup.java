@@ -104,6 +104,7 @@ public class Backup {
                     .append("{")
                     .append("\"uuid\":").append("\"").append(p.getUuid()).append("\",")
                     .append("\"name\":").append("\"").append(p.getName()).append("\",")
+                    .append("\"ip\":").append("\"").append(p.getSession().IP()).append("\",")
                     .append("\"kills\":").append(p.getKills()).append(",")
                     .append("\"alive\":").append(p.isAlive()).append(",")
                     .append("\"scattered\":").append(p.isScattered())
@@ -268,11 +269,12 @@ public class Backup {
 
             var uuid = object.get("uuid").getAsString();
             var name = object.get("name").getAsString();
+            var ip = object.get("ip").getAsString();
             var kills = object.get("kills").getAsInt();
             var alive = object.get("alive").getAsBoolean();
             var scattered = object.get("scattered").getAsBoolean();
 
-            uhcPlayerRegistry.createPlayer(UUID.fromString(uuid), name);
+            uhcPlayerRegistry.createPlayer(UUID.fromString(uuid), name, ip);
             uhcGame.getBackupPlayers().add(name);
 
             var player = uhcPlayerRegistry.getPlayer(name);
