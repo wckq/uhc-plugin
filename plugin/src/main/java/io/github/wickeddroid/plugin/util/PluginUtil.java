@@ -26,6 +26,13 @@ public class PluginUtil {
     return String.format("%02d:%02d:%02d", hours, minutes, seconds);
   }
 
+  public static String formatTimeEpisode(final long episodeSecs, long episodeDurationTicks, boolean reversed) {
+    long minutes = reversed ? (((episodeDurationTicks/20)-episodeSecs) - (((((episodeDurationTicks/20)-episodeSecs) / 60 / 60) * 60) * 60)) / 60 : (episodeSecs % 3600) / 60;
+    long seconds = reversed ? (60 - (((episodeDurationTicks/20)-episodeSecs) % 60)) % 60 : episodeSecs % 60;
+
+    return String.format("%02d:%02d", minutes, seconds);
+  }
+
   public static String formatState(UhcGameState gameState) {
     switch (gameState) {
       case PLAYING -> {

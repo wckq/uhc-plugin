@@ -3,6 +3,7 @@ package io.github.wickeddroid.plugin.thread;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.team.UhcTeam;
+import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.game.UhcGameManager;
 import io.github.wickeddroid.plugin.message.announcements.Announcements;
@@ -24,6 +25,7 @@ public class GameThread implements Runnable {
 
   private Worlds worlds;
   private UhcGame uhcGame;
+  private Game game;
   private UhcGameHandler uhcGameHandler;
   private UhcGameManager uhcGameManager;
   private UhcTeamRegistry uhcTeamRegistry;
@@ -34,8 +36,14 @@ public class GameThread implements Runnable {
   @Override
   public void run() {
     final var currentTime = (int) (Math.floor((System.currentTimeMillis() - this.uhcGame.getStartTime()) / 1000.0));
+    final var currentEpisode = game.episodes().enabled() ? (int) Math.floor((double) currentTime/game.episodes().episodeDurationTicks()) : -1;
+    final var currentEpisodeTime = game.episodes().enabled() ? (int) (Math.floor(((System.currentTimeMillis() - this.uhcGame.getStartTime()) / 1000.0) - currentEpisode*((double)game.episodes().episodeDurationTicks()/20))) : -1;
 
     this.uhcGame.setCurrentTime(currentTime);
+
+    if(game.episodes().enabled()) {
+      this.uhcGame.setCurrentEpisodeTime(currentEpisodeTime);
+    }
 
     if (currentTime == this.uhcGame.getTimeForPvp()) {
       this.uhcGameHandler.changePvp(true);
@@ -78,6 +86,7 @@ public class GameThread implements Runnable {
       if(verify.get()) { return; }
 
       var time = a.time()
+              .replaceAll("%episode-change%", String.valueOf(this.game.episodes().episodeDurationTicks()*(currentEpisode-1)+1))
               .replaceAll("%pvp%", String.valueOf(this.uhcGame.getTimeForPvp()+1))
               .replaceAll("%meetup%", String.valueOf(this.uhcGame.getTimeForMeetup()+1))
               .replaceAll("%wb-delay%", String.valueOf(this.worlds.border().worldBorderDelay()+1))
@@ -94,7 +103,6 @@ public class GameThread implements Runnable {
       if(currentTime != seconds) {
         return;
       }
-
 
       Bukkit.getOnlinePlayers().forEach(p -> {
         p.showTitle(a.title());

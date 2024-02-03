@@ -5,7 +5,6 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
 public class Game {
-
     private boolean starterInvulnerability = true;
     private int invulnerabilityDuration = 10;
     private boolean ironmanEnabled = true;
@@ -30,9 +29,11 @@ public class Game {
 
     private PlayerList playerList = new PlayerList();
     private AncientCityNerf ancientCityNerf = new AncientCityNerf();
+    private Episodes episodes = new Episodes();
 
     public @NonNull PlayerList playerList() { return this.playerList; }
     public @NonNull AncientCityNerf ancientCityNerf() { return this.ancientCityNerf; }
+    public @NonNull Episodes episodes() { return this.episodes; }
 
 
     @ConfigSerializable
@@ -63,5 +64,18 @@ public class Game {
         public int regenerationPotionChance() { return this.regenerationPotionChance; }
         public boolean diamondArmorEnabled() { return this.diamondArmorEnabled; }
         public int diamondArmorChance() { return this.diamondArmorChance; }
+    }
+
+    @ConfigSerializable
+    public static class Episodes {
+        private boolean enabled = false;
+        private boolean reversedTimer = true;
+        private long episodeDurationTicks = 24000L;
+        private int finalEpisode = 10;
+
+        public boolean enabled() { return this.enabled; }
+        public boolean reversedTimer() { return this.reversedTimer; }
+        public long episodeDurationTicks() { return this.episodeDurationTicks; }
+        public int finalEpisode() { return this.finalEpisode; }
     }
 }

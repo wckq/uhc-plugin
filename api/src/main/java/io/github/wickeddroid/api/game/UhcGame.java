@@ -26,6 +26,10 @@ public interface UhcGame {
 
   void setCurrentTime(int currentTime);
 
+  int getCurrentEpisodeTime();
+
+  void setCurrentEpisodeTime(int currentEpisodeTime);
+
   int getWorldBorder();
 
   void setWorldBorder(int worldBorder);

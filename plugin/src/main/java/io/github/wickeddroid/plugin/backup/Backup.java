@@ -64,6 +64,7 @@ public class Backup {
                 .append("\"state\":").append("\"").append(game.getUhcGameState().name()).append("\",")
                 .append("\"start-time\":").append(game.getStartTime()).append(",")
                 .append("\"current-time\":").append(game.getCurrentTime()).append(",")
+                .append("\"current-episode-time\":").append(game.getCurrentEpisodeTime()).append(",")
                 .append("\"worldborder\":").append(game.getWorldBorder()).append(",")
                 .append("\"pvp-time\":").append(game.getTimeForPvp()).append(",")
                 .append("\"meetup-time\":").append(game.getTimeForMeetup()).append(",")
@@ -228,6 +229,7 @@ public class Backup {
         var state = UhcGameState.valueOf(game.get("state").getAsString());
         var startTime = game.get("start-time").getAsLong();
         var currentTime = game.get("current-time").getAsInt();
+        var currentEpisodeTime = game.get("current-episode-time").getAsInt();
         var worldBorder = game.get("worldborder").getAsInt();
         var pvpTime = game.get("pvp-time").getAsInt();
         var meetupTime = game.get("meetup-time").getAsInt();
@@ -247,6 +249,7 @@ public class Backup {
         uhcGame.setUhcGameState(state);
         uhcGame.setStartTime(startTime);
         uhcGame.setCurrentTime(currentTime);
+        uhcGame.setCurrentEpisodeTime(currentEpisodeTime);
         uhcGame.setWorldBorder(worldBorder);
         uhcGame.setTimeForPvp(pvpTime);
         uhcGame.setTimeForMeetup(meetupTime);

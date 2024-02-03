@@ -18,6 +18,7 @@ public class DefaultUhcGame implements UhcGame {
   private UhcGameState uhcGameState;
   private long startTime;
   private int currentTime;
+  private int currentEpisodeTime;
   private int cobwebLimit;
   private int teamSize;
   private int worldBorder;
@@ -42,6 +43,7 @@ public class DefaultUhcGame implements UhcGame {
     this.uhcGameState = UhcGameState.WAITING;
     this.startTime = 0;
     this.currentTime = 0;
+    this.currentEpisodeTime = 0;
     this.appleRate = -1;
     this.playersSize = Bukkit.getMaxPlayers();
     this.cobwebLimit = 64;
@@ -107,6 +109,16 @@ public class DefaultUhcGame implements UhcGame {
   @Override
   public int getCurrentTime() {
     return this.currentTime;
+  }
+
+  @Override
+  public int getCurrentEpisodeTime() {
+    return currentEpisodeTime;
+  }
+
+  @Override
+  public void setCurrentEpisodeTime(int currentEpisodeTime) {
+    this.currentEpisodeTime = currentEpisodeTime;
   }
 
   @Override

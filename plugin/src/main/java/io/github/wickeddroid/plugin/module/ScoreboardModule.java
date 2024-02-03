@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.module;
 
 import io.github.wickeddroid.api.game.UhcGame;
+import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scoreboard.Scoreboard;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardEndGame;
@@ -30,13 +31,15 @@ public class ScoreboardModule extends AbstractModule {
           final Plugin plugin,
           final Scoreboard scoreboard,
           final UhcGame uhcGame,
-          final UhcPlayerRegistry uhcPlayerRegistry
-  ) {
+          final UhcPlayerRegistry uhcPlayerRegistry,
+          final Game game
+          ) {
     return new ScoreboardGame(
             scoreboard,
             plugin,
             uhcGame,
-            uhcPlayerRegistry
+            uhcPlayerRegistry,
+            game
     );
   }
   @Provides @Singleton

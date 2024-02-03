@@ -173,7 +173,11 @@ public class PlayerHeadScenario extends ListenerScenario {
             var block = world.getBlockAt((int) loc.getX(), loc.getBlockY()+1, (int) loc.getZ());
 
             block.setType(Material.PLAYER_HEAD);
-            ((Skull)block.getState()).setOwningPlayer(player);
+
+            var skull = (Skull)block.getState();
+            skull.setType(Material.PLAYER_HEAD);
+            skull.setOwningPlayer(player);
+            skull.update();
         }
     }
 }

@@ -43,7 +43,7 @@ public class PlayerScatteredListener implements Listener {
     }
 
     if (uhcPlayer == null) {
-      this.uhcPlayerRegistry.createPlayer(player.getUniqueId(), player.getName());
+      this.uhcPlayerRegistry.createPlayer(player.getUniqueId(), player.getName(), player.getAddress().getAddress().getHostAddress());
       this.uhcPlayerRegistry.getPlayer(player.getName()).setScattered(true);
       return;
     }
