@@ -4,7 +4,7 @@ package io.github.wickeddroid.plugin.util;
 import io.github.wickeddroid.api.game.UhcGameState;
 import org.bukkit.Bukkit;
 
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class PluginUtil {
@@ -18,6 +18,13 @@ public class PluginUtil {
   private PluginUtil() {
   }
 
+  @SafeVarargs
+  public static <E> List<E> appendList(Collection<E> list, E... e) {
+    var l2 = new ArrayList<>(list);
+    l2.addAll(Arrays.asList(e));
+
+    return l2;
+  }
   public static String formatTime(final long totalSecs){
     final var hours = (int) totalSecs / 3600;
     final var minutes = (int) (totalSecs % 3600) / 60;
@@ -26,9 +33,14 @@ public class PluginUtil {
     return String.format("%02d:%02d:%02d", hours, minutes, seconds);
   }
 
-  public static String formatTimeEpisode(final long episodeSecs, long episodeDurationTicks, boolean reversed) {
-    long minutes = reversed ? (((episodeDurationTicks/20)-episodeSecs) - (((((episodeDurationTicks/20)-episodeSecs) / 60 / 60) * 60) * 60)) / 60 : (episodeSecs % 3600) / 60;
-    long seconds = reversed ? (60 - (((episodeDurationTicks/20)-episodeSecs) % 60)) % 60 : episodeSecs % 60;
+  public static String formatTimeEpisode(final long gameTicks, long episodeDurationTicks, boolean reversed) {
+    long totalSeconds = gameTicks / 20;
+    long episodeDurationSeconds = episodeDurationTicks / 20;
+
+    long remainingSeconds = !reversed ? totalSeconds % episodeDurationSeconds : episodeDurationSeconds - totalSeconds % episodeDurationSeconds;
+
+    long minutes = remainingSeconds / 60;
+    long seconds = remainingSeconds % 60;
 
     return String.format("%02d:%02d", minutes, seconds);
   }

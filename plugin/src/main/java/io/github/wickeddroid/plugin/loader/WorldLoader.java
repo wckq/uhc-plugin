@@ -27,6 +27,10 @@ public class WorldLoader implements Loader {
 
     this.worldGenerator.createWorld(this.worlds.worldName());
 
+    this.worlds.border().worldBorderWorlds().forEach(w -> {
+      this.worldGenerator.setupWorldBorder(Bukkit.getWorld(w), this.worlds.border().worldBorder());
+    });
+
     var seed = Bukkit.getWorld(this.worlds.worldName()).getSeed();
     var rootFile = new File(".");
     var propertiesFile = new File(rootFile.getAbsolutePath() + "/server.properties");

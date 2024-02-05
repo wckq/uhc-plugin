@@ -36,8 +36,8 @@ public class GameThread implements Runnable {
   @Override
   public void run() {
     final var currentTime = (int) (Math.floor((System.currentTimeMillis() - this.uhcGame.getStartTime()) / 1000.0));
-    final var currentEpisode = game.episodes().enabled() ? (int) Math.floor((double) currentTime/game.episodes().episodeDurationTicks()) : -1;
-    final var currentEpisodeTime = game.episodes().enabled() ? (int) (Math.floor(((System.currentTimeMillis() - this.uhcGame.getStartTime()) / 1000.0) - currentEpisode*((double)game.episodes().episodeDurationTicks()/20))) : -1;
+    final var currentEpisode = game.episodes().enabled() ? (int) Math.ceil((double) currentTime/((double) game.episodes().episodeDurationTicks() / 20)) : -1;
+    final var currentEpisodeTime = game.episodes().enabled() ? (int) ((currentTime - currentEpisode*((double)game.episodes().episodeDurationTicks()/20))) : -1;
 
     this.uhcGame.setCurrentTime(currentTime);
 
@@ -86,7 +86,7 @@ public class GameThread implements Runnable {
       if(verify.get()) { return; }
 
       var time = a.time()
-              .replaceAll("%episode-change%", String.valueOf(this.game.episodes().episodeDurationTicks()*(currentEpisode-1)+1))
+              .replaceAll("%episode-change%", String.valueOf((this.game.episodes().episodeDurationTicks()*(currentEpisode-1)/20)+1))
               .replaceAll("%pvp%", String.valueOf(this.uhcGame.getTimeForPvp()+1))
               .replaceAll("%meetup%", String.valueOf(this.uhcGame.getTimeForMeetup()+1))
               .replaceAll("%wb-delay%", String.valueOf(this.worlds.border().worldBorderDelay()+1))

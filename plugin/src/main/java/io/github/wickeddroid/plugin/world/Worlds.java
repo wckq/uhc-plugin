@@ -1,11 +1,16 @@
 package io.github.wickeddroid.plugin.world;
 
+import io.github.wickeddroid.plugin.util.PluginUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.generator.WorldInfo;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @ConfigSerializable
 public class Worlds {
@@ -17,10 +22,10 @@ public class Worlds {
   private boolean hardcore = true;
   private boolean naturalRegeneration = false;
   private boolean removeWorld = true;
-
   public @NonNull List<String> blacklist() {
     return this.blacklist;
   }
+
 
   public @NonNull String worldName() {
     return this.worldName;
@@ -50,6 +55,7 @@ public class Worlds {
     private double meetupBorderDamage = 0.01D;
     private boolean keepClosingAfterMeetup = false;
     private int worldBorderDelayAfterMeetup = 1200;
+    private List<String> worldBorderWorlds = PluginUtil.appendList(Bukkit.getWorlds().stream().map(WorldInfo::getName).filter(w -> !w.equals(Bukkit.getWorlds().get(0).getName())).toList(), "uhc_world");
 
     public int worldBorder() {
       return this.worldBorder;
@@ -60,5 +66,6 @@ public class Worlds {
     public double meetupBorderDamage() { return this.meetupBorderDamage; }
     public boolean keepClosingAfterMeetup() { return this.keepClosingAfterMeetup; }
     public int worldBorderDelayAfterMeetup() { return this.worldBorderDelayAfterMeetup; }
+    public @NonNull List<String> worldBorderWorlds() { return this.worldBorderWorlds; }
   }
 }

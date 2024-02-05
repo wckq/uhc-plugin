@@ -213,24 +213,27 @@ public class UhcGameManager {
   }
 
   public void startMeetup() {
-    final var world = Bukkit.getWorld(this.worlds.worldName());
+    final var worldsBorder = this.worlds.border().worldBorderWorlds().stream().map(Bukkit::getWorld).toList();
 
-    if (world == null) {
-      return;
-    }
+    worldsBorder.forEach(world -> {
+      if (world == null) {
+        return;
+      }
 
-    final var worldBorder = world.getWorldBorder();
+      final var worldBorder = world.getWorldBorder();
 
-    this.uhcGame.setUhcGameState(UhcGameState.MEETUP);
+      this.uhcGame.setUhcGameState(UhcGameState.MEETUP);
 
-    Bukkit.getScheduler().runTask(plugin, () -> {
-      worldBorder.setSize(worlds.border().meetupWorldBorder(), worlds.border().worldBorderDelay());
-      worldBorder.setDamageAmount(worlds.border().meetupBorderDamage());
+      Bukkit.getScheduler().runTask(plugin, () -> {
+        worldBorder.setSize(worlds.border().meetupWorldBorder(), worlds.border().worldBorderDelay());
+        worldBorder.setDamageAmount(worlds.border().meetupBorderDamage());
+      });
+
+      if(!worlds.border().keepClosingAfterMeetup()) { return; }
+
+      Bukkit.getScheduler().runTaskLater(plugin, ()-> worldBorder.setSize(20, worlds.border().worldBorderDelayAfterMeetup()), worlds.border().worldBorderDelay()*20L);
+
     });
-
-    if(!worlds.border().keepClosingAfterMeetup()) { return; }
-
-    Bukkit.getScheduler().runTaskLater(plugin, ()-> worldBorder.setSize(20, worlds.border().worldBorderDelayAfterMeetup()), worlds.border().worldBorderDelay()*20L);
   }
 
   public void endGame() {

@@ -191,6 +191,7 @@ public class Messages {
     private String changePvpTime = "Has cambiado el tiempo que comience el pvp a <param-time>";
     private String changeMeetupTime = "Has cambiado el tiempo que comience el meetup a <param-time>";
     private String invalidTime = "El tiempo que has dado no es valido";
+    private String timeHigherThanEpisodes = "El tiempo no puede ser mayor al de la totalidad de episodios.";
 
     public @NonNull String changeMeetupTime() {
       return this.changeMeetupTime;
@@ -201,8 +202,10 @@ public class Messages {
     }
 
     public @NonNull String invalidTime() {
-      return invalidTime;
+      return this.invalidTime;
     }
+
+    public @NonNull String timeHigherThanEpisodes() { return this.timeHigherThanEpisodes; }
   }
 
   @ConfigSerializable

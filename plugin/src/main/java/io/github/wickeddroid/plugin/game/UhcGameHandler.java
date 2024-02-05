@@ -15,6 +15,7 @@ public class UhcGameHandler {
 
   private Announcements announcements;
   private UhcGame uhcGame;
+  private Game game;
   private Messages messages;
   private MessageHandler messageHandler;
 
@@ -40,6 +41,11 @@ public class UhcGameHandler {
       return;
     }
 
+    if(game.episodes().enabled() && time > game.episodes().finalEpisode() * (game.episodes().episodeDurationTicks()/20)) {
+      this.messageHandler.send(sender, this.messages.staff().timeHigherThanEpisodes());
+      return;
+    }
+
     this.uhcGame.setTimeForPvp(time);
     this.messageHandler.send(sender, this.messages.staff().changePvpTime(), String.valueOf(time));
   }
@@ -50,6 +56,11 @@ public class UhcGameHandler {
   ) {
     if (time < 0) {
       this.messageHandler.send(sender, this.messages.staff().invalidTime());
+      return;
+    }
+
+    if(game.episodes().enabled() && time > game.episodes().finalEpisode() * (game.episodes().episodeDurationTicks()/20)) {
+      this.messageHandler.send(sender, this.messages.staff().timeHigherThanEpisodes());
       return;
     }
 

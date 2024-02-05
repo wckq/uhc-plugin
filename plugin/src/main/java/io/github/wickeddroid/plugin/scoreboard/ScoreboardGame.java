@@ -41,7 +41,7 @@ public class ScoreboardGame extends ScoreboardCreator {
   @Override
   public Component replaceVariables(String text, Player player) {
     final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(player.getName());
-    final var currentEpisode = game.episodes().enabled() ? (int) Math.floor((double) uhcGame.getCurrentTime()/game.episodes().episodeDurationTicks()) : -1;
+    final var currentEpisode = game.episodes().enabled() ? (int) Math.ceil((double) uhcGame.getCurrentTime()/((double) game.episodes().episodeDurationTicks() / 20 )) : -1;
 
     return MessageUtil.parseStringToComponent(text,
             Placeholder.parsed("player-kills", String.valueOf(uhcPlayer.getKills())),
@@ -50,7 +50,7 @@ public class ScoreboardGame extends ScoreboardCreator {
             Placeholder.parsed("game-time", PluginUtil.formatTime(this.uhcGame.getCurrentTime())),
             Placeholder.parsed("game-state", PluginUtil.formatState(this.uhcGame.getUhcGameState())),
             Placeholder.parsed("episode", String.valueOf(currentEpisode)),
-            Placeholder.parsed("episode-time", PluginUtil.formatTimeEpisode(this.uhcGame.getCurrentEpisodeTime(), game.episodes().episodeDurationTicks(), game.episodes().reversedTimer()))
+            Placeholder.parsed("episode-time", PluginUtil.formatTimeEpisode(this.uhcGame.getCurrentTime()*20L, game.episodes().episodeDurationTicks(), game.episodes().reversedTimer()))
     );
   }
 }
