@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import team.unnamed.gui.menu.item.ItemClickable;
@@ -47,12 +48,22 @@ public class ScenarioOptionsInventory extends UhcInventory {
                         .action(event -> {
                             var iterator = new EnhancedIterator<OptionValue<?>>(option.options());
 
+                            var next = event.getClick() != ClickType.RIGHT;
+
                             iterator.setPosition(option.value());
 
-                            if(!iterator.hasNext()) {
-                                iterator.restart();
+                            if(next) {
+                                if(!iterator.hasNext()) {
+                                    iterator.restart();
+                                } else {
+                                    iterator.next();
+                                }
                             } else {
-                                iterator.next();
+                                if(!iterator.hasPrevious()) {
+                                    iterator.finish();
+                                } else {
+                                    iterator.previous();
+                                }
                             }
 
                             var value = iterator.current();
@@ -111,7 +122,9 @@ public class ScenarioOptionsInventory extends UhcInventory {
         return ItemBuilder.newBuilder(Material.CHAIN_COMMAND_BLOCK)
                 .name(MessageUtil.parseStringToComponent("<color:#93FF9E>" + option.optionName() + " option")
                         .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
-                .lore(Arrays.stream(new String[]{"<red>Opción Actual: <gold>" + option.value().getValueDisplay(), "", "<gray>¡Click para alternar!"})
+                .lore(Arrays.stream(new String[]
+                                {"<red>Opción Actual: <gold>" + option.value().getValueDisplay(), "", "<gray>» Click Izquierdo para <bold>Avanzar", "<gray>» Click Derecho para <bold>Retroceder"}
+                        )
                         .map(lore -> MessageUtil.parseStringToComponent(lore)
                                 .color(TextColor.color(255, 255, 255))
                                 .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))

@@ -7,6 +7,7 @@ import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.scenario.GameScenario;
+import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.game.UhcGameManager;
@@ -30,6 +31,8 @@ import java.util.*;
 
 @Singleton
 public class Backup {
+
+    private final Integer BACKUP_FILE_VERSION = 5;
 
     @Inject
     private Plugin plugin;
@@ -157,8 +160,16 @@ public class Backup {
         while (it.hasNext()) {
             var s = it.next();
 
-            scenariosData.append("\"").append(s.getKey()).append("\"");
+            scenariosData.append("\"").append(s.getKey());
 
+            if(s.isSupportsOptions()) {
+
+                for (var opt : s.getOptions().values()) {
+                    scenariosData.append("@").append(opt.optionName()).append("#").append(opt.options().indexOf(opt.value()));
+                }
+            }
+
+            scenariosData.append("\"");
             if(it.hasNext()) {
                 scenariosData.append(",");
             }
@@ -194,7 +205,7 @@ public class Backup {
         saveScenarios();
         saveSettings();
 
-        String json = "{\"version\":\"%s\",\"game\":%s,\"players\":%s,\"teams\":%s,\"scenarios\":%s,\"settings\":%s}".formatted(plugin.getDescription().getVersion(), gameData.toString(), playersData.toString(), teamsData.toString(), scenariosData.toString(), settingsData.toString());
+        String json = "{\"version\":%s,\"game\":%s,\"players\":%s,\"teams\":%s,\"scenarios\":%s,\"settings\":%s}".formatted(BACKUP_FILE_VERSION, gameData.toString(), playersData.toString(), teamsData.toString(), scenariosData.toString(), settingsData.toString());
 
         var file = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "uhc_backup.uhc");
 
@@ -216,10 +227,10 @@ public class Backup {
 
         var json = JsonParser.parseString(jsonString).getAsJsonObject();
 
-        var version = json.get("version").getAsString();
+        var version = json.get("version").getAsInt();
 
-        if(!version.equalsIgnoreCase(plugin.getDescription().getVersion())) {
-            Bukkit.getLogger().severe("Backup file version not supported");
+        if(version < BACKUP_FILE_VERSION) {
+            Bukkit.getLogger().severe("Backup file version is older than supported");
             return;
         }
 
@@ -321,7 +332,25 @@ public class Backup {
         scenarios.forEach(jsonElement -> {
             var s = jsonElement.getAsString();
 
-            scenarioManager.enableScenario(null, s);
+            var scenarioData = s.split("@");
+
+            var name = scenarioData[0];
+            scenarioManager.enableScenario(null, name);
+
+            for (String str : scenarioData) {
+                if(str.equalsIgnoreCase(name)) { continue; }
+
+                var str2 = str.split("#");
+                var optionName = str2[0];
+                var optionValueIndex = Integer.parseInt(str2[1]);
+
+                var scenario = scenarioManager.getScenario(name);
+                var option = scenario.getOption(optionName);
+
+                var value = option.options().get(optionValueIndex);
+                option.setValue(scenario, (OptionValue) value);
+
+            }
         });
 
         var settings = json.get("settings").getAsJsonArray();

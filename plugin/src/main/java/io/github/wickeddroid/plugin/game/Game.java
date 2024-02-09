@@ -1,5 +1,7 @@
 package io.github.wickeddroid.plugin.game;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -15,6 +17,7 @@ public class Game {
     private boolean useExperimentalScatter = false;
     private boolean banRegenerationPotion = true;
     private boolean banAmplifiedStrengthPotion = true;
+    private Sound playerDeathSound = Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.PLAYER, 1.0F, 1.0F);
 
     public boolean starterInvulnerability() { return this.starterInvulnerability; }
     public int invulnerabilityDuration() { return this.invulnerabilityDuration; }
@@ -26,6 +29,7 @@ public class Game {
     public boolean useExperimentalScatter() { return this.useExperimentalScatter; }
     public boolean banRegenerationPotion() { return this.banRegenerationPotion; }
     public boolean banAmplifiedStrengthPotion() { return this.banAmplifiedStrengthPotion; }
+    public @NonNull Sound playerDeathSound() { return this.playerDeathSound; }
 
     private PlayerList playerList = new PlayerList();
     private AncientCityNerf ancientCityNerf = new AncientCityNerf();

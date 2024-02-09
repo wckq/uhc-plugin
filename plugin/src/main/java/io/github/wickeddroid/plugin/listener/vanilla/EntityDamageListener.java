@@ -2,6 +2,7 @@ package io.github.wickeddroid.plugin.listener.vanilla;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
@@ -15,6 +16,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.units.qual.N;
 import team.unnamed.inject.Inject;
 
+import java.io.IOException;
+
 public class EntityDamageListener implements Listener {
 
   @Inject
@@ -27,6 +30,8 @@ public class EntityDamageListener implements Listener {
   private Game game;
   @Inject
   private ScenarioManager scenarioManager;
+  @Inject
+  private Backup backup;
 
   @EventHandler
   public void onEntityDamage(EntityDamageEvent event) {
@@ -97,6 +102,12 @@ public class EntityDamageListener implements Listener {
       if(uhcGame.getIronmans().size() == 1) {
         messageHandler.sendGlobal(messages.game().ironmanPlayer(), uhcGame.getIronmans().get(0));
         uhcGame.setIronman(uhcGame.getIronmans().get(0));
+      }
+
+      try {
+        backup.save();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
       }
     }
   }

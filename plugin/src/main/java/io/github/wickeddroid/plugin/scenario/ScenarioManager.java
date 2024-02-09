@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.scenario;
 
 import io.github.wickeddroid.api.scenario.GameScenario;
+import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
@@ -68,6 +69,10 @@ public class ScenarioManager {
     if(!isEnabled(key)) { return null; }
 
     return this.scenarioRegistration.getScenarios().get(key).getOption(option).value();
+  }
+
+  public @Nullable GameScenario getScenario(String key) {
+    return getScenarios().stream().filter(sc -> sc.getKey().equals(key)).findFirst().orElse(null);
   }
 
   public Collection<GameScenario> getScenarios() {

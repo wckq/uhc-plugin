@@ -25,6 +25,8 @@ public class EnhancedIterator<E> implements Iterator<E> {
         index = 0;
     }
 
+    public void finish() { index = object.size()-1; }
+
     public void setPosition(E value) {
         index = object.indexOf(value);
     }

@@ -222,6 +222,8 @@ public class Messages {
     private String settingEnabled = "La configuración <color:#93FF9E><param-name> <white>ha sido activado correctamente,";
     private String settingDisabled = "La configuración <color:#93FF9E><param-name> <white>ha sido desactivado correctamente";
     private String cleanItemDisabled = "El clean item se encuentra desactivado.";
+    private String teamsInGameTeamJoin = "El jugador <param-joined> se ha unido al equipo de <param-player>";
+    private String teamsInGamePlayerNearby = "<green>¡Tienes un jugador a <param-distance> bloques!";
 
     public @NonNull String teamChatOn() {
       return this.teamChatOn;
@@ -260,5 +262,8 @@ public class Messages {
     public @NonNull String settingEnabled() { return this.settingEnabled; }
 
     public @NonNull String cleanItemDisabled() { return this.cleanItemDisabled; }
+
+    public @NonNull String teamsInGameTeamJoin() { return this.teamsInGameTeamJoin; }
+    public @NonNull String teamsInGamePlayerNearby() { return this.teamsInGamePlayerNearby; }
   }
 }

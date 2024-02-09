@@ -52,6 +52,46 @@ public class Option<T> {
         return new OptionValue<>(value, valueDisplay);
     }
 
+    public static LinkedList<OptionValue<Boolean>> buildBooleanValues(boolean defaultValue) {
+        return new LinkedList<>(
+                List.of(
+                        Option.buildValue(defaultValue, defaultValue ? "Habilitado" : "Deshabilitado"),
+                        Option.buildValue(!defaultValue, !defaultValue ? "Habilitado" : "Deshabilitado")
+                )
+        );
+    }
+    public static LinkedList<OptionValue<Integer>> buildRangedValues(int min, int max, String valueDisplay) {
+        var l = new LinkedList<OptionValue<Integer>>();
+
+        if(min < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        for(int i = min; i < max; i++) {
+            l.add(
+                    buildValue(i, i + " " + valueDisplay)
+            );
+        }
+
+        return l;
+    }
+
+    public static LinkedList<OptionValue<Integer>> buildRangedValues(int min, int max, int range, String valueDisplay) {
+        var l = new LinkedList<OptionValue<Integer>>();
+
+        if(min < 0 || max % range != 0) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        for(int i = min; i < max; i+=range) {
+            l.add(
+                    buildValue(i, i + " " + valueDisplay)
+            );
+        }
+
+        return l;
+    }
+
     public static <T> OptionValue<T> buildValue(T value) {
         return new OptionValue<>(value);
     }

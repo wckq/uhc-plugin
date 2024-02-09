@@ -3,6 +3,7 @@ package io.github.wickeddroid.plugin.listener.vanilla;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.UhcPlugin;
+import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
@@ -31,6 +32,7 @@ public class PlayerDeathListener implements Listener {
   private UhcPlugin plugin;
   private Messages messages;
   private MessageHandler messageHandler;
+  private Backup backup;
 
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent event) {
@@ -67,16 +69,23 @@ public class PlayerDeathListener implements Listener {
       }, 30L);
     }
 
+
     if (uhcPlayer == null) {
       return;
     }
 
-    Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.playSound(Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.PLAYER, 1.0F, 1.0F)));
+    Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.playSound(game.playerDeathSound()));
 
     uhcPlayer.setAlive(false);
 
     Bukkit.getScheduler().runTaskLater(plugin, ()-> {
       player.setGameMode(game.spectatorsEnabled() ? GameMode.SPECTATOR : GameMode.ADVENTURE);
     },40L);
+
+    try {
+      backup.save();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

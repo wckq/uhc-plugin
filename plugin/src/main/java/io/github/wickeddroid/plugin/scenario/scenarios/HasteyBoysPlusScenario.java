@@ -32,12 +32,7 @@ import java.util.List;
 public class HasteyBoysPlusScenario extends ListenerScenario {
 
   @ScenarioOption(optionName = "Fortuna III", dynamicValue = "fortune")
-  private LinkedList<OptionValue<Boolean>> fortuneOption = new LinkedList<>(
-          List.of(
-                  Option.buildValue(false, "Deshabilitado"),
-                  Option.buildValue(true, "Habilitado")
-          )
-  );
+  private LinkedList<OptionValue<Boolean>> fortuneOption = Option.buildBooleanValues(false);
 
   private Boolean fortune;
 

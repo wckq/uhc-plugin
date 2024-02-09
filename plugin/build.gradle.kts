@@ -6,7 +6,7 @@ plugins {
 
 var majorVersion = "1"
 var minorVersion = "2"
-var patchVersion = "2"
+var patchVersion = "03"
 
 project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus("-BETA")
 
@@ -26,8 +26,6 @@ dependencies {
         implementation("com.github.agus5534.gui:gui-menu-adapt-v$it:45e66ff34e:dev")
         implementation(project(":uhc-plugin-adapter-v$it"))
     }
-
-
 
     implementation("commons-io:commons-io:2.13.0")
     implementation("com.google.code.gson:gson:2.10.1")
