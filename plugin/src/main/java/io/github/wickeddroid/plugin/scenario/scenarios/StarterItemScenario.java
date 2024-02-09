@@ -40,7 +40,8 @@ public class StarterItemScenario extends ListenerScenario {
             Material.STRUCTURE_VOID, "Random (Todos los items)",
             Material.BUNDLE, "Mochila",
             Material.GOLDEN_APPLE, "Manzana Dorada",
-            Material.SHULKER_BOX, "Shulker"
+            Material.SHULKER_BOX, "Shulker",
+            Material.ENCHANTED_GOLDEN_APPLE, "Notch"
     );
 
     private Material material = null;
@@ -48,7 +49,7 @@ public class StarterItemScenario extends ListenerScenario {
     @EventHandler
     public void onStart(GameStartEvent event) {
         var mats = Arrays.stream(Material.values()).filter(Material::isItem).filter(m -> !m.isLegacy()).toList();
-        var item = material == Material.AIR ? new ItemStack(List.of(Material.BUNDLE, Material.GOLDEN_APPLE, Material.SHULKER_BOX).get(ThreadLocalRandom.current().nextInt(3))) : material == Material.STRUCTURE_VOID ? new ItemStack(mats.get(ThreadLocalRandom.current().nextInt(mats.size()))): new ItemStack(material);
+        var item = material == Material.AIR ? new ItemStack(List.of(Material.BUNDLE, Material.GOLDEN_APPLE, Material.SHULKER_BOX, Material.ENCHANTED_GOLDEN_APPLE).get(ThreadLocalRandom.current().nextInt(4))) : material == Material.STRUCTURE_VOID ? new ItemStack(mats.get(ThreadLocalRandom.current().nextInt(mats.size()))): new ItemStack(material);
 
         Bukkit.getOnlinePlayers().forEach(
                 p -> p.getInventory().addItem(item)
