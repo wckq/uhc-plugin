@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.units.qual.N;
 import team.unnamed.inject.Inject;
@@ -32,6 +33,8 @@ public class EntityDamageListener implements Listener {
   private ScenarioManager scenarioManager;
   @Inject
   private Backup backup;
+  @Inject
+  private Plugin plugin;
 
   @EventHandler
   public void onEntityDamage(EntityDamageEvent event) {
@@ -48,6 +51,15 @@ public class EntityDamageListener implements Listener {
 
     if(event.getEntity() instanceof Player) {
       var player = (Player) event.getEntity();
+
+      Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+        if(player.hasPotionEffect(PotionEffectType.ABSORPTION)) {
+          if(player.getAbsorptionAmount() <= 0.0D) {
+            player.removePotionEffect(PotionEffectType.ABSORPTION);
+          }
+        }
+
+      }, 5L);
 
       var isIronman = uhcGame.getIronmans().contains(player.getName());
 
