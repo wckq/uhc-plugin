@@ -3,7 +3,10 @@ package io.github.wickeddroid.plugin.listener.vanilla;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.UhcPlugin;
+import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.game.Game;
+import io.github.wickeddroid.plugin.message.MessageHandler;
+import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import net.kyori.adventure.key.Key;
@@ -14,22 +17,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import team.unnamed.inject.Inject;
+import team.unnamed.inject.InjectAll;
 
 import java.awt.*;
 import java.io.IOException;
 
+@InjectAll
 public class PlayerDeathListener implements Listener {
 
-  @Inject
   private UhcPlayerRegistry uhcPlayerRegistry;
-  @Inject
   private UhcTeamManager uhcTeamManager;
-  @Inject
   private UhcGame uhcGame;
-  @Inject
   private Game game;
-  @Inject
   private UhcPlugin plugin;
+  private Messages messages;
+  private MessageHandler messageHandler;
+  private Backup backup;
 
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent event) {
@@ -55,23 +58,34 @@ public class PlayerDeathListener implements Listener {
     }
 
     if (uhcTeam != null) {
-      uhcTeam.decrementPlayersAlive();
+      Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+        uhcTeam.decrementPlayersAlive();
 
-      if (uhcTeam.getPlayersAlive() <= 0) {
-        uhcTeamManager.removeTeam(player.getUniqueId());
-      }
+        if (uhcTeam.getPlayersAlive() <= 0) {
+          uhcTeamManager.removeTeam(player.getUniqueId());
+
+          messageHandler.sendGlobal(messages.team().teamEliminated(), uhcTeam.getTeam().getColor() + uhcTeam.getName());
+        }
+      }, 30L);
     }
+
 
     if (uhcPlayer == null) {
       return;
     }
 
-    Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.playSound(Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.PLAYER, 1.0F, 1.0F)));
+    Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.playSound(game.playerDeathSound()));
 
     uhcPlayer.setAlive(false);
 
     Bukkit.getScheduler().runTaskLater(plugin, ()-> {
       player.setGameMode(game.spectatorsEnabled() ? GameMode.SPECTATOR : GameMode.ADVENTURE);
     },40L);
+
+    try {
+      backup.save();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

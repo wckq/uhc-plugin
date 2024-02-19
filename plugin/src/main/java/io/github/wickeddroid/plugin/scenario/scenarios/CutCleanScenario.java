@@ -67,9 +67,11 @@ public class CutCleanScenario extends ListenerScenario {
     if(!newDrops.isEmpty()) {
       event.setDropItems(false);
 
+      newDrops.forEach(d ->    block.getWorld().dropItemNaturally(block.getLocation(), d));
+
+      if(event.getExpToDrop() == 0) { return; }
       ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
       orb.setExperience(event.getExpToDrop());
-      newDrops.forEach(d ->    block.getWorld().dropItemNaturally(block.getLocation(), d));
     }
 
   }

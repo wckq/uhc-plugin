@@ -1,11 +1,10 @@
 package io.github.wickeddroid.plugin.thread;
 
 import io.github.wickeddroid.api.team.UhcTeam;
-import io.github.wickeddroid.plugin.event.game.PlayerScatteredEvent;
+import io.github.wickeddroid.api.event.player.PlayerScatteredEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class ScatterThread implements Runnable {
 

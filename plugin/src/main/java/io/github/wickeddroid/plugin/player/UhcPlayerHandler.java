@@ -1,7 +1,7 @@
 package io.github.wickeddroid.plugin.player;
 
 import io.github.wickeddroid.api.game.UhcGame;
-import io.github.wickeddroid.plugin.event.game.PlayerScatteredEvent;
+import io.github.wickeddroid.api.event.player.PlayerScatteredEvent;
 import io.github.wickeddroid.plugin.util.LocationUtil;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;

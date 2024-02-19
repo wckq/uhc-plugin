@@ -2,6 +2,7 @@ package io.github.wickeddroid.plugin.listener.vanilla;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
@@ -11,9 +12,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.units.qual.N;
 import team.unnamed.inject.Inject;
+
+import java.io.IOException;
 
 public class EntityDamageListener implements Listener {
 
@@ -27,8 +31,10 @@ public class EntityDamageListener implements Listener {
   private Game game;
   @Inject
   private ScenarioManager scenarioManager;
-
-  private int lostIronmans = 0;
+  @Inject
+  private Backup backup;
+  @Inject
+  private Plugin plugin;
 
   @EventHandler
   public void onEntityDamage(EntityDamageEvent event) {
@@ -45,6 +51,15 @@ public class EntityDamageListener implements Listener {
 
     if(event.getEntity() instanceof Player) {
       var player = (Player) event.getEntity();
+
+      Bukkit.getScheduler().runTaskLater(plugin, ()-> {
+        if(player.hasPotionEffect(PotionEffectType.ABSORPTION)) {
+          if(player.getAbsorptionAmount() <= 0.0D) {
+            player.removePotionEffect(PotionEffectType.ABSORPTION);
+          }
+        }
+
+      }, 5L);
 
       var isIronman = uhcGame.getIronmans().contains(player.getName());
 
@@ -88,16 +103,23 @@ public class EntityDamageListener implements Listener {
       if(uhcGame.getIronmans().size() == 1) { return; }
 
       uhcGame.getIronmans().remove(player.getName());
-      lostIronmans++;
 
       messageHandler.sendGlobal(messages.game().ironmanLost(), player.getName(), String.valueOf(uhcGame.getIronmans().size()));
 
-      if(lostIronmans == 1 && game.papermanEnabled()) {
+      if(uhcGame.paperman() == null && game.papermanEnabled()) {
         messageHandler.sendGlobal(messages.game().papermanPlayer(), player.getName());
+        uhcGame.setPaperman(player.getName());
       }
 
       if(uhcGame.getIronmans().size() == 1) {
         messageHandler.sendGlobal(messages.game().ironmanPlayer(), uhcGame.getIronmans().get(0));
+        uhcGame.setIronman(uhcGame.getIronmans().get(0));
+      }
+
+      try {
+        backup.save();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
       }
     }
   }

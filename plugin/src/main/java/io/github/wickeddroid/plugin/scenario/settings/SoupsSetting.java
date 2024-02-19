@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 
 @Setting(
         name = "Soups Off",
-        description = "<gray>- Desactiva las sopas sospechosas.",
+        description = "<gray>- Desactiva el consumo de las sopas sospechosas.",
         key = "soups",
         material = Material.SUSPICIOUS_STEW
 )

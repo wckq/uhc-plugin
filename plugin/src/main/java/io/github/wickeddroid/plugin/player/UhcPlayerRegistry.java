@@ -15,11 +15,13 @@ public class UhcPlayerRegistry {
 
   public void createPlayer(
           final UUID uuid,
-          final String name
+          final String name,
+          final String ip
   ) {
     this.playerMap.put(name, new DefaultUhcPlayer(
             uuid,
-            name
+            name,
+            ip
     ));
   }
 

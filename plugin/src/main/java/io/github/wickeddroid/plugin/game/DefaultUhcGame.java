@@ -4,8 +4,10 @@ import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import team.unnamed.inject.Singleton;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class DefaultUhcGame implements UhcGame {
   private UhcGameState uhcGameState;
   private long startTime;
   private int currentTime;
+  private int currentEpisodeTime;
   private int cobwebLimit;
   private int teamSize;
   private int worldBorder;
@@ -23,7 +26,8 @@ public class DefaultUhcGame implements UhcGame {
   private int playersSize;
   private int timeForPvp;
   private int timeForMeetup;
-  private boolean cutClean;
+  private boolean cleanItem;
+  private boolean teamInventory;
   private boolean pvp;
   private boolean gameStart;
   private boolean teamEnabled;
@@ -32,11 +36,14 @@ public class DefaultUhcGame implements UhcGame {
   private List<String> ironmans;
   private List<String> backupPlayers;
 
+  private @Nullable String ironman, paperman;
+
   public DefaultUhcGame(final String host) {
     this.host = host;
     this.uhcGameState = UhcGameState.WAITING;
     this.startTime = 0;
     this.currentTime = 0;
+    this.currentEpisodeTime = 0;
     this.appleRate = -1;
     this.playersSize = Bukkit.getMaxPlayers();
     this.cobwebLimit = 64;
@@ -45,7 +52,8 @@ public class DefaultUhcGame implements UhcGame {
     this.teamSize = 2;
     this.worldBorder = 2000;
     this.pvp = false;
-    this.cutClean = false;
+    this.cleanItem = false;
+    this.teamInventory = false;
     this.gameStart = false;
     this.teamEnabled = false;
     this.ownTeamsEnabled = false;
@@ -104,6 +112,16 @@ public class DefaultUhcGame implements UhcGame {
   }
 
   @Override
+  public int getCurrentEpisodeTime() {
+    return currentEpisodeTime;
+  }
+
+  @Override
+  public void setCurrentEpisodeTime(int currentEpisodeTime) {
+    this.currentEpisodeTime = currentEpisodeTime;
+  }
+
+  @Override
   public void setCurrentTime(int currentTime) {
     this.currentTime = currentTime;
   }
@@ -116,6 +134,16 @@ public class DefaultUhcGame implements UhcGame {
   @Override
   public void setAppleRate(int appleRate) {
     this.appleRate = appleRate;
+  }
+
+  @Override
+  public void setTeamInventory(boolean teamInventory) {
+    this.teamInventory = teamInventory;
+  }
+
+  @Override
+  public boolean isTeamInventory() {
+    return teamInventory;
   }
 
   @Override
@@ -185,12 +213,12 @@ public class DefaultUhcGame implements UhcGame {
 
   @Override
   public void setCleanItem(boolean cleanItem) {
-
+      this.cleanItem = cleanItem;
   }
 
   @Override
   public boolean isCleanItem() {
-    return false;
+    return cleanItem;
   }
 
   @Override
@@ -236,5 +264,27 @@ public class DefaultUhcGame implements UhcGame {
   @Override
   public List<String> getBackupPlayers() {
     return backupPlayers;
+  }
+
+  @Nullable
+  @Override
+  public String ironman() {
+    return ironman;
+  }
+
+  @Override
+  public void setIronman(@NotNull String ironman) {
+    this.ironman = ironman;
+  }
+
+  @Nullable
+  @Override
+  public String paperman() {
+    return paperman;
+  }
+
+  @Override
+  public void setPaperman(@NotNull String paperman) {
+    this.paperman = paperman;
   }
 }

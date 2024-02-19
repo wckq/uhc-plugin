@@ -1,5 +1,6 @@
 package io.github.wickeddroid.plugin.player;
 
+import io.github.wickeddroid.api.player.PlayerSession;
 import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.team.UhcTeam;
 
@@ -10,6 +11,7 @@ public class DefaultUhcPlayer implements UhcPlayer, Serializable {
 
   private final UUID uuid;
   private final String name;
+  private final PlayerSession session;
   private UhcTeam uhcTeam;
   private int kills;
   private boolean alive;
@@ -18,7 +20,8 @@ public class DefaultUhcPlayer implements UhcPlayer, Serializable {
 
   public DefaultUhcPlayer(
           final UUID uuid,
-          final String name
+          final String name,
+          final String ip
   ) {
     this.uuid = uuid;
     this.name = name;
@@ -27,6 +30,7 @@ public class DefaultUhcPlayer implements UhcPlayer, Serializable {
     this.alive = true;
     this.teamChat = false;
     this.scattered = false;
+    this.session = new PlayerSession(ip, System.currentTimeMillis());
   }
 
   @Override
@@ -37,6 +41,11 @@ public class DefaultUhcPlayer implements UhcPlayer, Serializable {
   @Override
   public String getName() {
     return name;
+  }
+
+  @Override
+  public PlayerSession getSession() {
+    return session;
   }
 
   @Override

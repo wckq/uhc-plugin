@@ -1,7 +1,9 @@
 package io.github.wickeddroid.api.game;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public interface UhcGame {
@@ -23,6 +25,10 @@ public interface UhcGame {
   int getCurrentTime();
 
   void setCurrentTime(int currentTime);
+
+  int getCurrentEpisodeTime();
+
+  void setCurrentEpisodeTime(int currentEpisodeTime);
 
   int getWorldBorder();
 
@@ -54,9 +60,13 @@ public interface UhcGame {
 
   boolean isGameStart();
 
+  boolean isCleanItem();
+
   void setCleanItem(boolean cleanItem);
 
-  boolean isCleanItem();
+  boolean isTeamInventory();
+
+  void setTeamInventory(boolean teamInventory);
 
   void setGameStart(boolean gameStart);
 
@@ -72,4 +82,12 @@ public interface UhcGame {
   void setTeamSize(int teamSize);
   List<String> getIronmans();
   List<String> getBackupPlayers();
+
+  @Nullable String ironman();
+
+  void setIronman(String ironman);
+
+  @Nullable String paperman();
+
+  void setPaperman(String paperman);
 }

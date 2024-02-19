@@ -1,4 +1,4 @@
-package io.github.wickeddroid.plugin.event.game;
+package io.github.wickeddroid.api.event.player;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -6,6 +6,13 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This event is called when a Player is Scattered (Teleported).
+ *
+ * @since 1.2.0-BETA
+ * @see org.bukkit.event.Event
+ * @see io.github.wickeddroid.api.team.ScatterTask
+ */
 public class PlayerScatteredEvent extends Event {
 
   private static final HandlerList HANDLER_LIST = new HandlerList();
@@ -13,6 +20,14 @@ public class PlayerScatteredEvent extends Event {
   private final Location location;
   private final boolean laterScatter;
 
+  /**
+   *
+   * @param player The {@link Player} that is scattered.
+   * @param location The {@link Location} where the player is scattered.
+   * @param laterScatter If player is scattered after the game is started.
+   *
+   * @since 1.2.0-BETA
+   */
   public PlayerScatteredEvent(
           final Player player,
           final Location location,

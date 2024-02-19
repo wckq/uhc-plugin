@@ -57,6 +57,21 @@ public class PlayerJoinListener implements Listener {
       return;
     }
 
+    if(event.getPlayer().isOnline()) {
+      event.disallow(PlayerLoginEvent.Result.KICK_OTHER, MessageUtil.parseStringToComponent("<dark_red>¡Ya estás conectado al servidor!"));
+      return;
+    }
+
+    var ip = event.getAddress().getHostAddress();
+    final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(event.getPlayer().getName());
+
+    if(uhcPlayer != null) {
+      if(!ip.equalsIgnoreCase(uhcPlayer.getSession().IP()) && (System.currentTimeMillis() - uhcPlayer.getSession().lastConnect() > 300000)) {
+        event.disallow(PlayerLoginEvent.Result.KICK_OTHER, MessageUtil.parseStringToComponent("<dark_red>Por seguridad del servidor se ha prevenido el ingreso."));
+        return;
+      }
+    }
+
     event.allow();
   }
 
@@ -72,7 +87,10 @@ public class PlayerJoinListener implements Listener {
         player.setGameMode(GameMode.SPECTATOR);
       }
 
-      this.uhcPlayerRegistry.createPlayer(player.getUniqueId(), playerName);
+      this.uhcPlayerRegistry.createPlayer(player.getUniqueId(), playerName, player.getAddress().getAddress().getHostAddress());
+    } else {
+      uhcPlayer.getSession().setIP(player.getAddress().getAddress().getHostAddress());
+      uhcPlayer.getSession().updateLastConnect();
     }
 
     if (this.uhcGame.getUhcGameState() == UhcGameState.WAITING) {

@@ -1,6 +1,6 @@
 package io.github.wickeddroid.plugin.scenario.scenarios;
 
-import io.github.wickeddroid.api.events.GameStartEvent;
+import io.github.wickeddroid.api.event.game.GameStartEvent;
 import io.github.wickeddroid.api.scenario.Scenario;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
 import io.github.wickeddroid.plugin.scenario.ListenerScenario;
@@ -8,11 +8,9 @@ import io.github.wickeddroid.plugin.scenario.RegisteredScenario;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -97,29 +95,32 @@ public class UhcSpainScenario extends ListenerScenario {
         }
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            player.removePotionEffect(PotionEffectType.ABSORPTION);
-            player.removePotionEffect(PotionEffectType.REGENERATION);
-        }, 1L);
+            if(item.getItemMeta().getCustomModelData() == 19) {
+                player.removePotionEffect(PotionEffectType.ABSORPTION);
+                player.removePotionEffect(PotionEffectType.REGENERATION);
 
-
-        if (item.getItemMeta().getCustomModelData() == 19) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, (20 * 120), 1));
-            },3L);
-        } else if (item.getItemMeta().getCustomModelData() == 20) {
-            if(attribute == null) {
-                event.setCancelled(true);
-                return;
-            }
-            if(attribute.getBaseValue() >= 80.0D) {
-                event.setCancelled(true);
-                return;
             }
 
-            attribute.setBaseValue(attribute.getBaseValue() + 4.0D);
+            if(item.getItemMeta().getCustomModelData() == 20) {
+                player.removePotionEffect(PotionEffectType.ABSORPTION);
+                player.removePotionEffect(PotionEffectType.REGENERATION);
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 0));
-        }
+                if(attribute == null) {
+                    event.setCancelled(true);
+                    return;
+                }
+                if(attribute.getBaseValue() >= 80.0D) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                attribute.setBaseValue(attribute.getBaseValue() + 4.0D);
+
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 0));
+            }
+
+        }, 1L);
     }
 }

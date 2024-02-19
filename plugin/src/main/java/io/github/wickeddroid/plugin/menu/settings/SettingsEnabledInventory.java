@@ -24,7 +24,7 @@ public class SettingsEnabledInventory extends UhcInventory {
     @Inject private SettingManager settingManager;
 
     public SettingsEnabledInventory() {
-        super("Scenarios activos", 6);
+        super("Settings activas", 6);
     }
 
     @Override

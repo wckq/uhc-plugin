@@ -9,6 +9,7 @@ public interface UhcPlayer {
   UUID getUuid();
   String getName();
   UhcTeam getUhcTeam();
+  PlayerSession getSession();
   void setUhcTeam(UhcTeam uhcTeam);
   int getKills();
   void setKills(int kills);

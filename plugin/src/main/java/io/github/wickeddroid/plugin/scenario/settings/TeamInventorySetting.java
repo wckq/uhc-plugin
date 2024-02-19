@@ -10,22 +10,22 @@ import org.bukkit.event.EventHandler;
 import team.unnamed.inject.Inject;
 
 @Setting(
-        name = "CleanItem",
+        name = "Team Inventory",
         description = {
-                "<gray>- Activa poder borrarle encantamientos a items.",
-                "<gold>   » <green>/cleanitem"
+                "<gray>- Activa el Team Inventory.",
+                "<gold>   » <green>/ti"
         },
-        key = "clean_item",
-        material = Material.GRINDSTONE
+        key = "team_inventory",
+        material = Material.ENDER_CHEST
 )
 @RegisteredSetting
-public class CleanItemSetting extends SettingScenario {
+public class TeamInventorySetting extends SettingScenario {
 
     @Inject
     private UhcGame uhcGame;
 
     @EventHandler
     public void onGameStart(final GameStartEvent event) {
-        this.uhcGame.setCleanItem(true);
+        this.uhcGame.setTeamInventory(true);
     }
 }

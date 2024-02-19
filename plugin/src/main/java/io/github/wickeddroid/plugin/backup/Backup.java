@@ -3,16 +3,14 @@ package io.github.wickeddroid.plugin.backup;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import io.github.wickeddroid.api.events.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.scenario.GameScenario;
+import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.api.team.UhcTeam;
-import io.github.wickeddroid.plugin.UhcPlugin;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.game.UhcGameManager;
-import io.github.wickeddroid.plugin.player.DefaultUhcPlayer;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import io.github.wickeddroid.plugin.scenario.SettingManager;
@@ -21,23 +19,20 @@ import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.world.Worlds;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.Singleton;
 
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Singleton
 public class Backup {
+
+    private final Integer BACKUP_FILE_VERSION = 5;
 
     @Inject
     private Plugin plugin;
@@ -72,6 +67,7 @@ public class Backup {
                 .append("\"state\":").append("\"").append(game.getUhcGameState().name()).append("\",")
                 .append("\"start-time\":").append(game.getStartTime()).append(",")
                 .append("\"current-time\":").append(game.getCurrentTime()).append(",")
+                .append("\"current-episode-time\":").append(game.getCurrentEpisodeTime()).append(",")
                 .append("\"worldborder\":").append(game.getWorldBorder()).append(",")
                 .append("\"pvp-time\":").append(game.getTimeForPvp()).append(",")
                 .append("\"meetup-time\":").append(game.getTimeForMeetup()).append(",")
@@ -83,6 +79,8 @@ public class Backup {
                 .append("\"teams-enabled\":").append(game.isTeamEnabled()).append(",")
                 .append("\"own-teams-enabled\":").append(game.isOwnTeamsEnabled()).append(",")
                 .append("\"team-size\":").append(game.getTeamSize()).append(",")
+                .append("\"ironman\":").append("\"").append(game.ironman()).append("\",")
+                .append("\"paperman\":").append("\"").append(game.paperman()).append("\",")
                 .append("\"ironmans\":[");
 
         var it = game.getIronmans().iterator();
@@ -110,6 +108,7 @@ public class Backup {
                     .append("{")
                     .append("\"uuid\":").append("\"").append(p.getUuid()).append("\",")
                     .append("\"name\":").append("\"").append(p.getName()).append("\",")
+                    .append("\"ip\":").append("\"").append(p.getSession().IP()).append("\",")
                     .append("\"kills\":").append(p.getKills()).append(",")
                     .append("\"alive\":").append(p.isAlive()).append(",")
                     .append("\"scattered\":").append(p.isScattered())
@@ -161,8 +160,16 @@ public class Backup {
         while (it.hasNext()) {
             var s = it.next();
 
-            scenariosData.append("\"").append(s.getKey()).append("\"");
+            scenariosData.append("\"").append(s.getKey());
 
+            if(s.isSupportsOptions()) {
+
+                for (var opt : s.getOptions().values()) {
+                    scenariosData.append("@").append(opt.optionName()).append("#").append(opt.options().indexOf(opt.value()));
+                }
+            }
+
+            scenariosData.append("\"");
             if(it.hasNext()) {
                 scenariosData.append(",");
             }
@@ -198,7 +205,7 @@ public class Backup {
         saveScenarios();
         saveSettings();
 
-        String json = "{\"version\":\"%s\",\"game\":%s,\"players\":%s,\"teams\":%s,\"scenarios\":%s,\"settings\":%s}".formatted(plugin.getDescription().getVersion(), gameData.toString(), playersData.toString(), teamsData.toString(), scenariosData.toString(), settingsData.toString());
+        String json = "{\"version\":%s,\"game\":%s,\"players\":%s,\"teams\":%s,\"scenarios\":%s,\"settings\":%s}".formatted(BACKUP_FILE_VERSION, gameData.toString(), playersData.toString(), teamsData.toString(), scenariosData.toString(), settingsData.toString());
 
         var file = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "uhc_backup.uhc");
 
@@ -220,10 +227,10 @@ public class Backup {
 
         var json = JsonParser.parseString(jsonString).getAsJsonObject();
 
-        var version = json.get("version").getAsString();
+        var version = json.get("version").getAsInt();
 
-        if(!version.equalsIgnoreCase(plugin.getDescription().getVersion())) {
-            Bukkit.getLogger().severe("Backup file version not supported");
+        if(version < BACKUP_FILE_VERSION) {
+            Bukkit.getLogger().severe("Backup file version is older than supported");
             return;
         }
 
@@ -233,6 +240,7 @@ public class Backup {
         var state = UhcGameState.valueOf(game.get("state").getAsString());
         var startTime = game.get("start-time").getAsLong();
         var currentTime = game.get("current-time").getAsInt();
+        var currentEpisodeTime = game.get("current-episode-time").getAsInt();
         var worldBorder = game.get("worldborder").getAsInt();
         var pvpTime = game.get("pvp-time").getAsInt();
         var meetupTime = game.get("meetup-time").getAsInt();
@@ -245,11 +253,14 @@ public class Backup {
         var ownTeamsEnabled = game.get("own-teams-enabled").getAsBoolean();
         var teamSize = game.get("team-size").getAsInt();
         var ironmans = game.get("ironmans").getAsJsonArray().asList().stream().map(JsonElement::getAsString).toList();
+        var ironman = game.get("ironman").getAsString();
+        var paperman = game.get("paperman").getAsString();
 
         uhcGame.setHost(host);
         uhcGame.setUhcGameState(state);
         uhcGame.setStartTime(startTime);
         uhcGame.setCurrentTime(currentTime);
+        uhcGame.setCurrentEpisodeTime(currentEpisodeTime);
         uhcGame.setWorldBorder(worldBorder);
         uhcGame.setTimeForPvp(pvpTime);
         uhcGame.setTimeForMeetup(meetupTime);
@@ -262,6 +273,8 @@ public class Backup {
         uhcGame.setOwnTeamsEnabled(ownTeamsEnabled);
         uhcGame.setTeamSize(teamSize);
         uhcGame.getIronmans().addAll(ironmans);
+        uhcGame.setIronman(ironman.equals("null") ? null : ironman);
+        uhcGame.setPaperman(paperman.equals("null") ? null : paperman);
 
         var players = json.get("players").getAsJsonArray();
 
@@ -270,11 +283,12 @@ public class Backup {
 
             var uuid = object.get("uuid").getAsString();
             var name = object.get("name").getAsString();
+            var ip = object.get("ip").getAsString();
             var kills = object.get("kills").getAsInt();
             var alive = object.get("alive").getAsBoolean();
             var scattered = object.get("scattered").getAsBoolean();
 
-            uhcPlayerRegistry.createPlayer(UUID.fromString(uuid), name);
+            uhcPlayerRegistry.createPlayer(UUID.fromString(uuid), name, ip);
             uhcGame.getBackupPlayers().add(name);
 
             var player = uhcPlayerRegistry.getPlayer(name);
@@ -318,7 +332,25 @@ public class Backup {
         scenarios.forEach(jsonElement -> {
             var s = jsonElement.getAsString();
 
-            scenarioManager.enableScenario(null, s);
+            var scenarioData = s.split("@");
+
+            var name = scenarioData[0];
+            scenarioManager.enableScenario(null, name);
+
+            for (String str : scenarioData) {
+                if(str.equalsIgnoreCase(name)) { continue; }
+
+                var str2 = str.split("#");
+                var optionName = str2[0];
+                var optionValueIndex = Integer.parseInt(str2[1]);
+
+                var scenario = scenarioManager.getScenario(name);
+                var option = scenario.getOption(optionName);
+
+                var value = option.options().get(optionValueIndex);
+                option.setValue(scenario, (OptionValue) value);
+
+            }
         });
 
         var settings = json.get("settings").getAsJsonArray();

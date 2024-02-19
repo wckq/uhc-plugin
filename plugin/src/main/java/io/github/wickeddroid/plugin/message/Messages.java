@@ -79,6 +79,9 @@ public class Messages {
     private String settingChanged = "Has cambiado la configuración a \"<param-value>\"";
     private String maxLengthReached = "Has sobrepasado la cantidad máxima de <param-length> caracteres.";
     private String sendCoords = "<gray>Estoy en <bold>X: <red><param-coordx> <gray><bold>Y: <red><param-coordy> <gray><bold>Z: <red><param-coordz>";
+    private String teamInventoryNotEnabled = "<gray>El Team Inventory no se encuentra activo.";
+
+    private String teamEliminated = "<gray>El team <param-team><gray> ha sido eliminado completamente.";
 
     public @NonNull String create() {
       return this.create;
@@ -140,6 +143,7 @@ public class Messages {
       return this.doesNotExist;
     }
 
+
     public @NonNull String playerTeamExist() {
       return this.playerTeamExists;
     }
@@ -178,6 +182,8 @@ public class Messages {
     public @NonNull String settingChanged() { return this.settingChanged; }
     public @NonNull String maxLengthReached() { return this.maxLengthReached; }
     public @NonNull String sendCoords() { return this.sendCoords; }
+    public @NonNull String teamInventoryNotEnabled() { return this.teamInventoryNotEnabled; }
+    public @NonNull String teamEliminated() { return this.teamEliminated; }
   }
 
   @ConfigSerializable
@@ -185,6 +191,7 @@ public class Messages {
     private String changePvpTime = "Has cambiado el tiempo que comience el pvp a <param-time>";
     private String changeMeetupTime = "Has cambiado el tiempo que comience el meetup a <param-time>";
     private String invalidTime = "El tiempo que has dado no es valido";
+    private String timeHigherThanEpisodes = "El tiempo no puede ser mayor al de la totalidad de episodios.";
 
     public @NonNull String changeMeetupTime() {
       return this.changeMeetupTime;
@@ -195,8 +202,10 @@ public class Messages {
     }
 
     public @NonNull String invalidTime() {
-      return invalidTime;
+      return this.invalidTime;
     }
+
+    public @NonNull String timeHigherThanEpisodes() { return this.timeHigherThanEpisodes; }
   }
 
   @ConfigSerializable
@@ -213,6 +222,8 @@ public class Messages {
     private String settingEnabled = "La configuración <color:#93FF9E><param-name> <white>ha sido activado correctamente,";
     private String settingDisabled = "La configuración <color:#93FF9E><param-name> <white>ha sido desactivado correctamente";
     private String cleanItemDisabled = "El clean item se encuentra desactivado.";
+    private String teamsInGameTeamJoin = "El jugador <param-joined> se ha unido al equipo de <param-player>";
+    private String teamsInGamePlayerNearby = "<green>¡Tienes un jugador a <param-distance> bloques!";
 
     public @NonNull String teamChatOn() {
       return this.teamChatOn;
@@ -251,5 +262,8 @@ public class Messages {
     public @NonNull String settingEnabled() { return this.settingEnabled; }
 
     public @NonNull String cleanItemDisabled() { return this.cleanItemDisabled; }
+
+    public @NonNull String teamsInGameTeamJoin() { return this.teamsInGameTeamJoin; }
+    public @NonNull String teamsInGamePlayerNearby() { return this.teamsInGamePlayerNearby; }
   }
 }

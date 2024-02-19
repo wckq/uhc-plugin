@@ -3,11 +3,11 @@ package io.github.wickeddroid.api.scenario;
 import io.github.wickeddroid.api.exception.NotEnabledFeatureException;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class GameScenario {
 
@@ -19,6 +19,7 @@ public class GameScenario {
   private boolean enabled;
   private final boolean supportsOptions;
   private HashMap<String, Option<?>> options;
+  private Map<String, String> dynamicValues;
 
   public GameScenario() {
     if (this.getClass().isAnnotationPresent(Scenario.class)) {
@@ -32,8 +33,9 @@ public class GameScenario {
       this.enabled = false;
       this.supportsOptions = annotation.supportsOptions();
 
-      if(supportsOptions) {
+      if (supportsOptions) {
         this.options = new HashMap<>();
+        this.dynamicValues = new HashMap<>();
       }
     } else if (this.getClass().isAnnotationPresent(Setting.class)) {
       final var annotation = this.getClass().getAnnotation(Setting.class);
@@ -51,17 +53,25 @@ public class GameScenario {
   }
 
   protected void addOptions(Option<?>... options) {
-    for(var option : options) {
-      if(!supportsOptions) {
+    for (var option : options) {
+      if (!supportsOptions) {
         throw new NotEnabledFeatureException("Options are not enabled on this scenario.");
       }
       this.options.put(option.optionName(), option);
     }
   }
 
+  protected void addOption(Option<?> option) {
+    if (!supportsOptions) {
+      throw new NotEnabledFeatureException("Options are not enabled on this scenario.");
+    }
+
+    this.options.put(option.optionName(), option);
+  }
+
 
   public HashMap<String, Option<?>> getOptions() {
-    if(!supportsOptions) {
+    if (!supportsOptions) {
       throw new NotEnabledFeatureException("Options are not enabled on this scenario.");
     }
 
@@ -69,13 +79,13 @@ public class GameScenario {
   }
 
   public <T> T getOptionValue(String name) {
-    if(!supportsOptions) {
+    if (!supportsOptions) {
       throw new NotEnabledFeatureException("Options are not enabled on this scenario.");
     }
 
     var option = options.get(name);
 
-    if(option == null) {
+    if (option == null) {
       throw new NullPointerException("Not valid option");
     }
 
@@ -83,14 +93,58 @@ public class GameScenario {
   }
 
   public Option<?> getOption(String name) {
-    if(!supportsOptions) {
+    if (!supportsOptions) {
       throw new NotEnabledFeatureException("Options are not enabled on this scenario.");
     }
 
     return options.get(name);
   }
 
-  public void createOptions() {}
+  public void createOptions() {
+      Arrays.stream(FieldUtils.getFieldsWithAnnotation(this.getClass(), ScenarioOption.class)).forEach(f -> {
+        try {
+          f.setAccessible(true);
+
+          var annotation = f.getAnnotation(ScenarioOption.class);
+
+          var linkedList = (LinkedList<OptionValue<Object>>) f.get(this);
+
+          var optName = annotation.optionName();
+          var dynamic = annotation.dynamicValue();
+
+          if (!dynamic.equals("")) {
+            var field = this.getClass().getDeclaredField(dynamic);
+            field.setAccessible(true);
+
+            field.set(this, linkedList.get(0).get());
+            dynamicValues.put(optName, dynamic);
+          }
+
+          this.addOption(Option.createOption(
+                  optName,
+                  linkedList.get(0).get(),
+                  linkedList
+          ));
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      });
+  }
+
+  public void changeOptionValue(String option, Object o) {
+    if(dynamicValues.containsKey(option)) {
+      try {
+        var dynamic = dynamicValues.get(option);
+
+        var field = this.getClass().getDeclaredField(dynamic);
+        field.setAccessible(true);
+
+        field.set(this, o);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
 
   public String getName() {
     return this.name;

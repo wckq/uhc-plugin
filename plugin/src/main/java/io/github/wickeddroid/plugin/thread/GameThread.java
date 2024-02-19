@@ -1,10 +1,13 @@
 package io.github.wickeddroid.plugin.thread;
 
 import io.github.wickeddroid.api.game.UhcGame;
+import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.team.UhcTeam;
+import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.game.UhcGameManager;
 import io.github.wickeddroid.plugin.message.announcements.Announcements;
+import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.world.Worlds;
@@ -22,17 +25,25 @@ public class GameThread implements Runnable {
 
   private Worlds worlds;
   private UhcGame uhcGame;
+  private Game game;
   private UhcGameHandler uhcGameHandler;
   private UhcGameManager uhcGameManager;
   private UhcTeamRegistry uhcTeamRegistry;
+  private UhcPlayerRegistry uhcPlayerRegistry;
   private Announcements announcements;
   private ScenarioManager scenarioManager;
 
   @Override
   public void run() {
     final var currentTime = (int) (Math.floor((System.currentTimeMillis() - this.uhcGame.getStartTime()) / 1000.0));
+    final var currentEpisode = game.episodes().enabled() ? (int) Math.ceil((double) currentTime/((double) game.episodes().episodeDurationTicks() / 20)) : -1;
+    final var currentEpisodeTime = game.episodes().enabled() ? (int) ((currentTime - currentEpisode*((double)game.episodes().episodeDurationTicks()/20))) : -1;
 
     this.uhcGame.setCurrentTime(currentTime);
+
+    if(game.episodes().enabled()) {
+      this.uhcGame.setCurrentEpisodeTime(currentEpisodeTime);
+    }
 
     if (currentTime == this.uhcGame.getTimeForPvp()) {
       this.uhcGameHandler.changePvp(true);
@@ -52,7 +63,10 @@ public class GameThread implements Runnable {
       this.uhcGame.setWorldBorder((int) world.getWorldBorder().getSize() / 2);
     }
 
-    if(this.uhcTeamRegistry.getTeams().stream().filter(UhcTeam::isAlive).toList().size() == 1 && uhcGame.isTeamEnabled()) {
+    if(
+            (this.uhcTeamRegistry.getTeams().stream().filter(UhcTeam::isAlive).toList().size() == 1 && uhcGame.isTeamEnabled())
+            || (!uhcGame.isTeamEnabled() && uhcPlayerRegistry.getPlayers().stream().filter(UhcPlayer::isAlive).toList().size() == 1)
+    ) {
       this.uhcGameManager.endGame();
     }
 
@@ -72,6 +86,7 @@ public class GameThread implements Runnable {
       if(verify.get()) { return; }
 
       var time = a.time()
+              .replaceAll("%episode-change%", String.valueOf((this.game.episodes().episodeDurationTicks()*(currentEpisode-1)/20)+1))
               .replaceAll("%pvp%", String.valueOf(this.uhcGame.getTimeForPvp()+1))
               .replaceAll("%meetup%", String.valueOf(this.uhcGame.getTimeForMeetup()+1))
               .replaceAll("%wb-delay%", String.valueOf(this.worlds.border().worldBorderDelay()+1))
@@ -88,7 +103,6 @@ public class GameThread implements Runnable {
       if(currentTime != seconds) {
         return;
       }
-
 
       Bukkit.getOnlinePlayers().forEach(p -> {
         p.showTitle(a.title());
