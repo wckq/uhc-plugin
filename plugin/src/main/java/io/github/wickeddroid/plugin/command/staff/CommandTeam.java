@@ -93,7 +93,15 @@ public class CommandTeam implements CommandClass {
           final Player target,
           final Player leader
   ) {
-    this.uhcTeamHandler.addPlayerToTeam(leader, target, true);
+    this.uhcTeamHandler.forcePlayerToTeam(leader, target);
+  }
+
+  @Command(names = "force-leave")
+  public void forceLeave(
+          final @Sender Player sender,
+          final Player target
+  ) {
+    this.uhcTeamHandler.removePlayerOfTeam(target);
   }
 
   @Command(
