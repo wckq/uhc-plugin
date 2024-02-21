@@ -13,7 +13,6 @@ public class Game {
     private boolean papermanEnabled = true;
     private boolean spectatorsEnabled = false;
     private boolean initialBoat = true;
-    private boolean replaceGhastDrop = false;
     private boolean useExperimentalScatter = false;
     private boolean banRegenerationPotion = true;
     private boolean banAmplifiedStrengthPotion = true;
@@ -25,7 +24,6 @@ public class Game {
     public boolean papermanEnabled() { return this.papermanEnabled; }
     public boolean spectatorsEnabled() { return this.spectatorsEnabled; }
     public boolean initialBoat() { return this.initialBoat; }
-    public boolean replaceGhastDrop() { return this.replaceGhastDrop; }
     public boolean useExperimentalScatter() { return this.useExperimentalScatter; }
     public boolean banRegenerationPotion() { return this.banRegenerationPotion; }
     public boolean banAmplifiedStrengthPotion() { return this.banAmplifiedStrengthPotion; }
