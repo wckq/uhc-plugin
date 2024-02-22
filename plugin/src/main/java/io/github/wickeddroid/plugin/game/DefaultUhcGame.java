@@ -26,6 +26,8 @@ public class DefaultUhcGame implements UhcGame {
   private int playersSize;
   private int timeForPvp;
   private int timeForMeetup;
+  private int timeForFinalHeal;
+  private int finalHealAmplifier;
   private boolean cleanItem;
   private boolean teamInventory;
   private boolean pvp;
@@ -49,6 +51,8 @@ public class DefaultUhcGame implements UhcGame {
     this.cobwebLimit = 64;
     this.timeForPvp = 3600;
     this.timeForMeetup = 7200;
+    this.timeForFinalHeal = 7200;
+    this.finalHealAmplifier = 0;
     this.teamSize = 2;
     this.worldBorder = 2000;
     this.pvp = false;
@@ -124,6 +128,26 @@ public class DefaultUhcGame implements UhcGame {
   @Override
   public void setCurrentTime(int currentTime) {
     this.currentTime = currentTime;
+  }
+
+  @Override
+  public int getTimeForFinalHeal() {
+    return timeForFinalHeal;
+  }
+
+  @Override
+  public void setTimeForFinalHeal(int timeForFinalHeal) {
+    this.timeForFinalHeal = timeForFinalHeal;
+  }
+
+  @Override
+  public int getFinalHealAmplifier() {
+    return finalHealAmplifier;
+  }
+
+  @Override
+  public void setFinalHealAmplifier(int finalHealAmplifier) {
+    this.finalHealAmplifier = finalHealAmplifier;
   }
 
   @Override

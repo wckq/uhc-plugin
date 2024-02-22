@@ -58,6 +58,11 @@ public class CommandGame implements CommandClass {
     this.uhcGame.setPlayersSize(size);
   }
 
+  @Command(names = "final-heal-time")
+  public void finalHealTime(final @Sender Player sender, final int time) {
+    this.uhcGame.setTimeForFinalHeal(time);
+  }
+
 }
 
 
