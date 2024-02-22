@@ -3,6 +3,8 @@ package io.github.wickeddroid.plugin.command.staff;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.game.UhcGameManager;
+import io.github.wickeddroid.plugin.message.MessageHandler;
+import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.world.Worlds;
 import me.fixeddev.commandflow.annotated.CommandClass;
@@ -26,6 +28,8 @@ public class CommandGame implements CommandClass {
   private UhcTeamRegistry uhcTeamRegistry;
   private UhcGameManager uhcGameManager;
   private Backup backup;
+  private MessageHandler messageHandler;
+  private Messages messages;
 
   @Command(names = "host")
   public void host(final @Sender Player sender) {
@@ -61,6 +65,18 @@ public class CommandGame implements CommandClass {
   @Command(names = "final-heal-time")
   public void finalHealTime(final @Sender Player sender, final int time) {
     this.uhcGame.setTimeForFinalHeal(time);
+    messageHandler.send(sender, messages.staff().changeFinalHealTime(), String.valueOf(time));
+  }
+
+  @Command(names = "final-heal-amplifier")
+  public void finalHealAmplifier(final @Sender Player sender, final int amplifier) {
+    if(amplifier < 0 || amplifier > 15) {
+      messageHandler.send(sender, messages.staff().invalidAmplifier(), "0", "15");
+      return;
+    }
+
+    this.uhcGame.setFinalHealAmplifier(amplifier);
+    messageHandler.send(sender, messages.staff().changeFinalHealAmplifier(), String.valueOf(amplifier));
   }
 
 }

@@ -190,8 +190,11 @@ public class Messages {
   public static class Staff {
     private String changePvpTime = "Has cambiado el tiempo que comience el pvp a <param-time>";
     private String changeMeetupTime = "Has cambiado el tiempo que comience el meetup a <param-time>";
+    private String changeFinalHealTime = "Has cambiado el tiempo que ocurra Final Heal a <param-time>";
+    private String changeFinalHealAmplifier = "Has cambiado el amplificador de Final Heal a <param-amplifier>";
     private String invalidTime = "El tiempo que has dado no es valido";
     private String timeHigherThanEpisodes = "El tiempo no puede ser mayor al de la totalidad de episodios.";
+    private String invalidAmplifier = "No puedes colocar este nivel de amplificador. Debe ser entre <param-min> y <param-max>";
 
     public @NonNull String changeMeetupTime() {
       return this.changeMeetupTime;
@@ -206,6 +209,12 @@ public class Messages {
     }
 
     public @NonNull String timeHigherThanEpisodes() { return this.timeHigherThanEpisodes; }
+
+    public @NonNull String changeFinalHealTime() { return this.changeFinalHealTime; }
+
+    public @NonNull String invalidAmplifier() { return this.invalidAmplifier; }
+
+    public @NonNull String changeFinalHealAmplifier() { return this.changeFinalHealAmplifier; }
   }
 
   @ConfigSerializable
