@@ -1,5 +1,6 @@
 package io.github.wickeddroid.plugin.module;
 
+import io.github.wickeddroid.api.util.glowing.GlowingEntities;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.AbstractModule;
 
@@ -14,6 +15,7 @@ public class UhcPluginModule extends AbstractModule {
   @Override
   protected void configure() {
     bind(Plugin.class).toInstance(plugin);
+    bind(GlowingEntities.class).toInstance(new GlowingEntities(plugin));
 
     install(new GameModule());
     install(new LoaderModule());

@@ -29,10 +29,32 @@ public class UhcTeamHandler {
   @InjectIgnore
   private final Cache<String, String> inviteCache = new DynamicCache<>(5, TimeUnit.MINUTES);
 
-  public void addPlayerToTeam(
+  public boolean forcePlayerToTeam(
+          final Player teamMember,
+          final Player player
+  ) {
+    final var playerName = player.getName();
+    final var uhcTeam = this.uhcTeamManager.getTeamByPlayer(teamMember.getName());
+    final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(playerName);
+
+    if (uhcTeam == null) {
+      this.messageHandler.send(player, this.messages.team().playerDoesNotTeamExist());
+      return false;
+    }
+
+    if (this.uhcTeamManager.getTeamByPlayer(player.getName()) != null) {
+      this.uhcTeamManager.removeTeam(player.getUniqueId());
+    }
+
+    uhcPlayer.setUhcTeam(uhcTeam);
+    uhcTeam.addMember(playerName);
+
+    return true;
+  }
+
+  public boolean addPlayerToTeam(
           final Player leader,
-          final Player player,
-          final boolean forceJoin
+          final Player player
   ) {
     final var playerName = player.getName();
     final var uhcTeam = this.uhcTeamManager.getTeamByPlayer(leader.getName());
@@ -41,25 +63,28 @@ public class UhcTeamHandler {
 
     if (uhcTeam == null) {
       this.messageHandler.send(player, this.messages.team().playerDoesNotTeamExist());
-      return;
+      return false;
     }
 
-    if (!forceJoin && (teamInvite == null || !teamInvite.equals(uhcTeam.getName()))) {
+    if (teamInvite == null || !teamInvite.equals(uhcTeam.getName())) {
       this.messageHandler.send(player, this.messages.team().inviteDoesNotExist(), uhcTeam.getName());
-      return;
+      return false;
     }
 
     if (this.uhcTeamManager.getTeamByPlayer(player.getName()) != null) {
       this.messageHandler.send(player, this.messages.team().alreadyExists());
-      return;
+      return false;
     }
 
     this.messageHandler.send(leader, this.messages.team().joinPlayer(), playerName);
     this.messageHandler.send(player, this.messages.team().join(), uhcTeam.getName());
-    this.inviteCache.invalidate(playerName);
 
     uhcPlayer.setUhcTeam(uhcTeam);
     uhcTeam.addMember(playerName);
+
+    this.inviteCache.invalidate(playerName);
+
+    return true;
   }
 
   public void removePlayerOfTeam(

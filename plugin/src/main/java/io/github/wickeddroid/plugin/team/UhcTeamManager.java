@@ -131,7 +131,7 @@ public class UhcTeamManager {
           for (var j = 0;j<teamSize - 1;j++) {
             final var member = playersWithoutTeam.remove(0);
 
-            this.uhcTeamHandler.addPlayerToTeam(leader, member, true);
+            this.uhcTeamHandler.forcePlayerToTeam(leader, member);
           }
         }
       }

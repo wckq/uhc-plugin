@@ -5,6 +5,7 @@ import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.api.loader.Loader;
 import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.team.UhcTeam;
+import io.github.wickeddroid.api.util.glowing.GlowingEntities;
 import io.github.wickeddroid.plugin.UhcPlugin;
 import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
@@ -45,6 +46,7 @@ public class DefaultLoader implements Loader {
   private UhcPlayerRegistry uhcPlayerRegistry;
   private UhcPlugin plugin;
   private Backup backup;
+  private GlowingEntities glowingEntities;
 
   @Override
   public void load() {
@@ -65,5 +67,6 @@ public class DefaultLoader implements Loader {
   @Override
   public void unload() {
     this.worldLoader.unload();
+    this.glowingEntities.disable();
   }
 }

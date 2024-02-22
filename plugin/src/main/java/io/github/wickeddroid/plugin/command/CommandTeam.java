@@ -77,7 +77,7 @@ public class CommandTeam implements CommandClass {
       return;
     }
 
-    this.uhcTeamHandler.addPlayerToTeam(target, sender, false);
+    this.uhcTeamHandler.addPlayerToTeam(target, sender);
   }
 
   @Command(names = "leave")

@@ -107,14 +107,16 @@ public class Option<T> {
             T v2, String d2,
             T v3, String d3,
             T v4, String d4,
-            T v5, String d5
+            T v5, String d5,
+            T v6, String d6
     ) {
         return new LinkedList<>(List.of(
                 buildValue(v1, d1),
                 buildValue(v2, d2),
                 buildValue(v3, d3),
                 buildValue(v4, d4),
-                buildValue(v5, d5)
+                buildValue(v5, d5),
+                buildValue(v6, d6)
         ));
     }
 }

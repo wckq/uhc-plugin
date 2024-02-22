@@ -19,6 +19,7 @@ public class ScoreboardGame extends ScoreboardCreator {
   private final UhcGame uhcGame;
   private final Game game;
   private final UhcPlayerRegistry uhcPlayerRegistry;
+  private final Scoreboard scoreboard;
 
   public ScoreboardGame(
           final Scoreboard scoreboard,
@@ -29,6 +30,7 @@ public class ScoreboardGame extends ScoreboardCreator {
   ) {
     super(scoreboard.title(), plugin);
 
+    this.scoreboard = scoreboard;
     this.uhcGame = uhcGame;
     this.uhcPlayerRegistry = uhcPlayerRegistry;
     this.game = game;
@@ -50,7 +52,8 @@ public class ScoreboardGame extends ScoreboardCreator {
             Placeholder.parsed("game-time", PluginUtil.formatTime(this.uhcGame.getCurrentTime())),
             Placeholder.parsed("game-state", PluginUtil.formatState(this.uhcGame.getUhcGameState())),
             Placeholder.parsed("episode", String.valueOf(currentEpisode)),
-            Placeholder.parsed("episode-time", PluginUtil.formatTimeEpisode(this.uhcGame.getCurrentTime()*20L, game.episodes().episodeDurationTicks(), game.episodes().reversedTimer()))
+            Placeholder.parsed("episode-time", PluginUtil.formatTimeEpisode(this.uhcGame.getCurrentTime()*20L, game.episodes().episodeDurationTicks(), game.episodes().reversedTimer())),
+            Placeholder.component("team-members", PluginUtil.formatTeamHP(player, uhcPlayer.getUhcTeam(), scoreboard.game()))
     );
   }
 }

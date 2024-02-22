@@ -2,7 +2,13 @@ package io.github.wickeddroid.plugin.util;
 
 
 import io.github.wickeddroid.api.game.UhcGameState;
+import io.github.wickeddroid.api.team.UhcTeam;
+import io.github.wickeddroid.plugin.scoreboard.Scoreboard;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -43,6 +49,66 @@ public class PluginUtil {
     long seconds = remainingSeconds % 60;
 
     return String.format("%02d:%02d", minutes, seconds);
+  }
+
+  public static Component formatTeamHP(Player player, UhcTeam uhcTeam, Scoreboard.Game scoreboardGame) {
+    Component c = Component.text("");
+
+    if(uhcTeam == null) { return c; }
+
+    if(scoreboardGame.displayDeadPlayers() ? uhcTeam.getMembers().stream().filter(p -> !p.equalsIgnoreCase(player.getName())).toList().size()-1 > scoreboardGame.maxTeamDisplay() : uhcTeam.getPlayersAlive()-1 > scoreboardGame.maxTeamDisplay()) {
+      return c;
+    }
+    var it = uhcTeam.getMembers().iterator();
+
+    while (it.hasNext()) {
+      var name = it.next();
+      var pl = Bukkit.getOfflinePlayer(name);
+
+      if(name.equalsIgnoreCase(player.getName())) { continue; }
+
+      if(!scoreboardGame.displayDeadPlayers() && !pl.isOnline()) {
+        continue;
+      }
+
+      if(!pl.isOnline()) {
+        c = c.append(
+                MessageUtil.parseStringToComponent(
+                        scoreboardGame.teamDisplay(),
+                        Placeholder.parsed("player-name", name),
+                        Placeholder.parsed("player-hp", ""),
+                        Placeholder.parsed("status-symbol", scoreboardGame.symbols().disconnected())
+                )
+        );
+
+        continue;
+      }
+
+      var onlinePlayer = pl.getPlayer();
+      if(onlinePlayer.getGameMode() != GameMode.SURVIVAL) {
+        if(!scoreboardGame.displayDeadPlayers()) { continue; }
+
+        c = c.append(
+                MessageUtil.parseStringToComponent(
+                        scoreboardGame.teamDisplay(),
+                        Placeholder.parsed("player-name", name),
+                        Placeholder.parsed("player-hp", ""),
+                        Placeholder.parsed("status-symbol", scoreboardGame.symbols().dead())
+                )
+        );
+      } else {
+        c = c.append(
+                MessageUtil.parseStringToComponent(
+                        scoreboardGame.teamDisplay(),
+                        Placeholder.parsed("player-name", name),
+                        Placeholder.parsed("player-hp", String.valueOf(Math.round(player.getHealth()))),
+                        Placeholder.parsed("status-symbol", scoreboardGame.symbols().alive())
+                )
+        );
+      }
+    }
+
+    return c;
   }
 
   public static String formatState(UhcGameState gameState) {
