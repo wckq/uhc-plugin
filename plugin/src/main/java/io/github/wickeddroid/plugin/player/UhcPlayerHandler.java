@@ -2,6 +2,7 @@ package io.github.wickeddroid.plugin.player;
 
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.event.player.PlayerScatteredEvent;
+import io.github.wickeddroid.plugin.game.Game;
 import io.github.wickeddroid.plugin.util.LocationUtil;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ public class UhcPlayerHandler {
 
   @Inject private Worlds worlds;
   @Inject private UhcGame uhcGame;
+  @Inject private Game game;
 
   public void scatterPlayer(
           final Player player,
@@ -23,8 +25,11 @@ public class UhcPlayerHandler {
       return;
     }
 
-    uhcGame.getIronmans().add(player.getName());
-
     Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location, laterScatter));
+
+
+    if(laterScatter && !game.laterScatterIronman()) { return; }
+
+    uhcGame.getIronmans().add(player.getName());
   }
 }

@@ -116,6 +116,7 @@ public class UhcGameManager {
   }
 
   public void teleportPlayers(List<Location> locations, boolean tp) {
+      uhcGame.getIronmans().clear();
       int delayTeam = 0;
 
       if (!this.uhcGame.isTeamEnabled() && tp) {
