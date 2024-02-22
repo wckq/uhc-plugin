@@ -16,6 +16,7 @@ public class Game {
     private boolean useExperimentalScatter = false;
     private boolean banRegenerationPotion = true;
     private boolean banAmplifiedStrengthPotion = true;
+    private boolean useLoginSecurityPrevention = false;
     private Sound playerDeathSound = Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.PLAYER, 1.0F, 1.0F);
 
     public boolean starterInvulnerability() { return this.starterInvulnerability; }
@@ -27,6 +28,7 @@ public class Game {
     public boolean useExperimentalScatter() { return this.useExperimentalScatter; }
     public boolean banRegenerationPotion() { return this.banRegenerationPotion; }
     public boolean banAmplifiedStrengthPotion() { return this.banAmplifiedStrengthPotion; }
+    public boolean useLoginSecurityPrevention() { return this.useLoginSecurityPrevention; }
     public @NonNull Sound playerDeathSound() { return this.playerDeathSound; }
 
     private PlayerList playerList = new PlayerList();
