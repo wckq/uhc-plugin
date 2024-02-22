@@ -51,8 +51,8 @@ public class DefaultUhcGame implements UhcGame {
     this.cobwebLimit = 64;
     this.timeForPvp = 3600;
     this.timeForMeetup = 7200;
-    this.timeForFinalHeal = 7200;
-    this.finalHealAmplifier = 0;
+    this.timeForFinalHeal = -1;
+    this.finalHealAmplifier = 4;
     this.teamSize = 2;
     this.worldBorder = 2000;
     this.pvp = false;
