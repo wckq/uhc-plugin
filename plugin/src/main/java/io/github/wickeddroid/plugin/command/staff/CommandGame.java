@@ -79,6 +79,23 @@ public class CommandGame implements CommandClass {
     messageHandler.send(sender, messages.staff().changeFinalHealAmplifier(), String.valueOf(amplifier));
   }
 
+  @Command(names = "final-resistance-time")
+  public void finalResistanceTime(final @Sender Player sender, final int time) {
+    this.uhcGame.setTimeForFinalResistance(time);
+    messageHandler.send(sender, messages.staff().changeFinalResistanceTime(), String.valueOf(time));
+  }
+
+  @Command(names = "final-resistance-amplifier")
+  public void finalResistanceAmplifier(final @Sender Player sender, final int amplifier) {
+    if(amplifier < 0 || amplifier > 5) {
+      messageHandler.send(sender, messages.staff().invalidAmplifier(), "0", "5");
+      return;
+    }
+
+    this.uhcGame.setFinalResistanceAmplifier(amplifier);
+    messageHandler.send(sender, messages.staff().changeFinalResistanceAmplifier(), String.valueOf(amplifier));
+  }
+
 }
 
 

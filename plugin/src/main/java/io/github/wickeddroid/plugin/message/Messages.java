@@ -192,6 +192,8 @@ public class Messages {
     private String changeMeetupTime = "Has cambiado el tiempo que comience el meetup a <param-time>";
     private String changeFinalHealTime = "Has cambiado el tiempo que ocurra Final Heal a <param-time>";
     private String changeFinalHealAmplifier = "Has cambiado el amplificador de Final Heal a <param-amplifier>";
+    private String changeFinalResistanceTime = "Has cambiado el tiempo que ocurra Final Resistance a <param-time>";
+    private String changeFinalResistanceAmplifier = "Has cambiado el amplificador de Final Resistance a <param-amplifier>";
     private String invalidTime = "El tiempo que has dado no es valido";
     private String timeHigherThanEpisodes = "El tiempo no puede ser mayor al de la totalidad de episodios.";
     private String invalidAmplifier = "No puedes colocar este nivel de amplificador. Debe ser entre <param-min> y <param-max>";
@@ -211,6 +213,10 @@ public class Messages {
     public @NonNull String timeHigherThanEpisodes() { return this.timeHigherThanEpisodes; }
 
     public @NonNull String changeFinalHealTime() { return this.changeFinalHealTime; }
+
+    public @NonNull String changeFinalResistanceTime() { return this.changeFinalResistanceTime; }
+
+    public @NonNull String changeFinalResistanceAmplifier() { return this.changeFinalResistanceAmplifier; }
 
     public @NonNull String invalidAmplifier() { return this.invalidAmplifier; }
 

@@ -59,6 +59,10 @@ public class GameThread implements Runnable {
       Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(PotionEffectType.HEAL.createEffect(2, this.uhcGame.getFinalHealAmplifier())));
     }
 
+    if(currentTime >= this.uhcGame.getTimeForFinalResistance() && this.uhcGame.getTimeForFinalResistance() > 0) {
+      Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(60, this.uhcGame.getFinalResistanceAmplifier())));
+    }
+
     if (currentTime >= this.uhcGame.getTimeForMeetup()) {
       final var world = Bukkit.getWorld(this.worlds.worldName());
 

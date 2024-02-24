@@ -56,6 +56,14 @@ public interface UhcGame {
 
   void setFinalHealAmplifier(int finalHealAmplifier);
 
+  int getTimeForFinalResistance();
+
+  void setTimeForFinalResistance(int timeForFinalResistance);
+
+  int getFinalResistanceAmplifier();
+
+  void setFinalResistanceAmplifier(int finalResistanceAmplifier);
+
   void setTimeForPvp(int timeForPvp);
 
   int getTimeForMeetup();

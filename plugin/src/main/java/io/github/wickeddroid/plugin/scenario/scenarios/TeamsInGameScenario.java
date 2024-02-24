@@ -137,10 +137,6 @@ public class TeamsInGameScenario extends ListenerScenario {
 
                         player.sendActionBar(messageHandler.parse(messages.other().teamsInGamePlayerNearby(), String.valueOf(Math.round(distance))));
                     }
-
-                    if(glowing) {
-                        //checkGlowing(player, playersNearbyWarning);
-                    }
                 }
 
                 var playersNearby = player.getNearbyEntities(range, 2.65D, range).stream().filter(e -> e.getType() == EntityType.PLAYER && !team.getMembers().contains(e.getName())).map(e -> (Player)e).filter(p -> p.getGameMode() == GameMode.SURVIVAL).toList();
@@ -156,8 +152,6 @@ public class TeamsInGameScenario extends ListenerScenario {
 
                         if(join) {
                             messageHandler.sendGlobal(messages.other().teamsInGameTeamJoin(), player2.getName(), player.getName());
-
-                            //checkGlowing(player2, Collections.emptyList());
                         }
                     }
                 });
