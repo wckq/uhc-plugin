@@ -18,5 +18,6 @@ subprojects {
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
         maven("https://repo.codemc.io/repository/nms/")
         maven("https://repo.unnamed.team/repository/unnamed-public/")
+        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     }
 }

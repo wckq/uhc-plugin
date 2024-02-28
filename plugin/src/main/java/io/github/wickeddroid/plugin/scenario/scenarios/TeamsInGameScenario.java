@@ -3,10 +3,12 @@ package io.github.wickeddroid.plugin.scenario.scenarios;
 import io.github.wickeddroid.api.event.game.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.scenario.Scenario;
 import io.github.wickeddroid.api.scenario.ScenarioOption;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
+import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.api.util.glowing.GlowingEntities;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
@@ -19,6 +21,7 @@ import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -30,6 +33,7 @@ import team.unnamed.inject.Inject;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RegisteredScenario
 @Scenario(
@@ -77,7 +81,7 @@ public class TeamsInGameScenario extends ListenerScenario {
     private Boolean rangeWarning;
 
     @ScenarioOption(optionName = "Bloques de Advertencia", dynamicValue = "rangeWarningRange")
-    private LinkedList<OptionValue<Integer>> rangeWarningRangeOption = Option.buildRangedValues(5, 75, 5, "Bloques");
+    private LinkedList<OptionValue<Integer>> rangeWarningRangeOption = Option.buildRangedValues(20, 90, 5, "Bloques");
 
     private Integer rangeWarningRange;
 
@@ -113,48 +117,46 @@ public class TeamsInGameScenario extends ListenerScenario {
             Bukkit.getOnlinePlayers().forEach(player -> {
                 if(player.getGameMode() != GameMode.SURVIVAL) { return; }
 
-                var team = uhcTeamRegistry.getTeam(player.getName());
+            });
 
-                if(team == null) { return; }
-                
-                if(team.getMembers().size() != 1) { return; }
+            uhcTeamRegistry.getTeams().forEach(uhcTeam -> {
+                if(uhcTeam == null) { return; }
+                if(!uhcTeam.isAlive()) { return; }
 
-                var uhcPlayer = uhcPlayerRegistry.getPlayer(player.getName());
+                if(uhcTeam.getMembers().size() >= uhcGame.getTeamSize()) { return; }
 
-                if(uhcPlayer == null) { return; }
+                var player = uhcTeam.getMembers().stream().map(s -> uhcPlayerRegistry.getPlayer(s)).toList().stream().filter(uhcPlayer -> uhcPlayer.isAlive() && Bukkit.getOfflinePlayer(uhcPlayer.getName()).isOnline()).findFirst().orElse(null);
+
+                if(player == null) { return; }
 
                 if(rangeWarning) {
-                    var playersNearbyWarning = player.getNearbyEntities(rangeWarningRange, rangeWarningRange, range).stream().filter(e -> e.getType() == EntityType.PLAYER && !team.getMembers().contains(e.getName())).map(e -> (Player)e).filter(p -> p.getGameMode() == GameMode.SURVIVAL).toList();
+                    var teamsNearbyWarning= onRadius(Bukkit.getPlayer(player.getName()), rangeWarningRange);
 
-                    if(!playersNearbyWarning.isEmpty()) {
-                        playersNearbyWarning.forEach(p -> {
-                            var distance = p.getLocation().distance(player.getLocation());
+                    if(!teamsNearbyWarning.isEmpty()) {
+                        var nearTeam =  teamsNearbyWarning.get(0);
+                        var teamPlayer = nearTeam.getMembers().stream().map(s -> uhcPlayerRegistry.getPlayer(s)).toList().stream().filter(uhcPlayer -> uhcPlayer.isAlive() && Bukkit.getOfflinePlayer(uhcPlayer.getName()).isOnline()).findFirst().orElse(null);
+                        var onlinePlayer = Bukkit.getPlayer(player.getName());
+                        var distance = onlinePlayer.getLocation().distance(Bukkit.getPlayer(teamPlayer.getName()).getLocation());
 
-                            p.sendActionBar(messageHandler.parse(messages.other().teamsInGamePlayerNearby(), String.valueOf(Math.round(distance))));
-                        });
-
-                        var distance = player.getLocation().distance(playersNearbyWarning.get(0).getLocation());
-
-                        player.sendActionBar(messageHandler.parse(messages.other().teamsInGamePlayerNearby(), String.valueOf(Math.round(distance))));
+                        onlinePlayer.sendActionBar(messageHandler.parse(messages.other().teamsInGamePlayerNearby(), String.valueOf(Math.round(distance))));
+                        Bukkit.getPlayer(teamPlayer.getName()).sendActionBar(messageHandler.parse(messages.other().teamsInGamePlayerNearby(), String.valueOf(Math.round(distance))));
                     }
                 }
 
-                var playersNearby = player.getNearbyEntities(range, 2.65D, range).stream().filter(e -> e.getType() == EntityType.PLAYER && !team.getMembers().contains(e.getName())).map(e -> (Player)e).filter(p -> p.getGameMode() == GameMode.SURVIVAL).toList();
+                var teamsNearby = onRadius(Bukkit.getPlayer(player.getName()), range);
 
-                if(playersNearby.isEmpty()) { return; }
+                if(teamsNearby.isEmpty()) { return; }
 
-                playersNearby.forEach(player2 -> {
-                    var uhcPlayer2 = uhcPlayerRegistry.getPlayer(player2.getName());
-                    if(uhcPlayer2 == null) { return; }
+                var nearestTeam = teamsNearby.get(0);
 
-                    if(team.getMembers().size() < uhcGame.getTeamSize()) {
-                        var join = uhcTeamHandler.forcePlayerToTeam(player, player2);
+                if(nearestTeam == null) { return; }
 
-                        if(join) {
-                            messageHandler.sendGlobal(messages.other().teamsInGameTeamJoin(), player2.getName(), player.getName());
-                        }
-                    }
-                });
+                var join = uhcTeamHandler.forceTeamJoin(uhcTeam, nearestTeam);
+
+                if(join) {
+                    messageHandler.sendGlobal(messages.other().teamsInGameTeamJoin(), nearestTeam.getName(), uhcTeam.getName());
+                }
+
             });
 
         }, 1L, delay*20L);
@@ -163,35 +165,41 @@ public class TeamsInGameScenario extends ListenerScenario {
 
     private void checkGlowing() {
         Bukkit.getOnlinePlayers().forEach(p -> {
-            var nearby = p.getNearbyEntities(rangeWarningRange, rangeWarningRange, range).stream().filter(e -> e.getType() == EntityType.PLAYER).map(e -> (Player)e).filter(pl -> pl.getGameMode() == GameMode.SURVIVAL).toList();
+            var nearby = onRadius(p, rangeWarningRange);
 
             var team = uhcTeamRegistry.getTeam(p.getName());
 
             if(team == null) { return; }
 
-            nearby.forEach(n -> {
-                if(team.getMembers().contains(n.getName())) {
-                    try {
-                        removeGlowing(n, p);
-                    } catch (ReflectiveOperationException e) {
-                        throw new RuntimeException(e);
-                    }
+            nearby.forEach(t -> {
+                if(team == t) {
+                        t.getMembers().forEach(s -> {
+                            try {
+                                removeGlowing(Bukkit.getPlayer(s), p);
+                            } catch (ReflectiveOperationException e) {
+                                throw new RuntimeException(e);
+                            } catch (NullPointerException ignored) {}
+                        });
                 } else {
-                    try {
-                        addGlowing(n, p);
-                    } catch (ReflectiveOperationException e) {
-                        throw new RuntimeException(e);
-                    }
+                    t.getMembers().forEach(s -> {
+                        try {
+                            addGlowing(Bukkit.getPlayer(s), p);
+                        } catch (ReflectiveOperationException e) {
+                            throw new RuntimeException(e);
+                        } catch (NullPointerException ignored) {}
+                    });
                 }
             });
 
 
-            Bukkit.getOnlinePlayers().stream().filter(o -> !nearby.contains(o) && o.getUniqueId() != p.getUniqueId()).forEach(viewer -> {
-                try {
-                    removeGlowing(viewer, p);
-                } catch (ReflectiveOperationException e) {
-                    throw new RuntimeException(e);
-                }
+            uhcTeamRegistry.getTeams().stream().filter(t -> !nearby.contains(t)).forEach(uhcTeam -> {
+                uhcTeam.getMembers().forEach(s -> {
+                    try {
+                        removeGlowing(Bukkit.getPlayer(s), p);
+                    } catch (ReflectiveOperationException e) {
+                        throw new RuntimeException(e);
+                    } catch (NullPointerException ignored) {}
+                });
             });
         });
 
@@ -236,6 +244,69 @@ public class TeamsInGameScenario extends ListenerScenario {
             glowingEntities.unsetGlowing(viewer, victim);
             victimList.remove(viewer);
         }
+    }
+
+    private List<UhcTeam> onRadius(Player center, double radius) {
+        List<UhcTeam> pl = new ArrayList<>();
+        var location = center.getLocation();
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p.getGameMode() != GameMode.SURVIVAL){
+                continue;
+            }
+
+            if(p.getWorld().getEnvironment() != center.getWorld().getEnvironment()) {
+                continue;
+            }
+
+            if(!p.getWorld().getName().equals(center.getWorld().getName())) {
+                continue;
+            }
+
+            if(p.getLocation().distance(location) > radius) {
+                continue;
+            }
+
+            if(p.getName().equals(center.getName())){
+                continue;
+            }
+
+            var team = uhcTeamRegistry.getTeam(p.getName());
+
+            if(team == null) {
+                continue;
+            }
+
+            if(team.getMembers().size() >= uhcGame.getTeamSize()) {
+                continue;
+            }
+
+            if(team.getMembers().contains(center.getName())) {
+                continue;
+            }
+
+            var uhcTeam = uhcTeamRegistry.getTeam(center.getName());
+
+            if(uhcTeam == null) {
+                continue;
+            }
+
+            if(team.getMembers().size() + uhcTeam.getMembers().size() > uhcGame.getTeamSize()) {
+                continue;
+            }
+
+            pl.add(uhcTeamRegistry.getTeam(p.getName()));
+        }
+
+        pl.sort(Comparator.comparing(uhcTeam -> uhcTeam.getMembers().stream().map(s -> uhcPlayerRegistry.getPlayer(s)).toList().stream().filter(uhcPlayer -> uhcPlayer.isAlive() && Bukkit.getOfflinePlayer(uhcPlayer.getName()).isOnline()).findFirst().orElse(null), (o1, o2) -> {
+            if(o1 == null) { return 1; }
+            if(o2 == null) { return -1; }
+            var distance1 = Bukkit.getPlayer(o1.getName()).getLocation().distance(location);
+            var distance2 = Bukkit.getPlayer(o2.getName()).getLocation().distance(location);
+
+            return Double.compare(distance1, distance2);
+        }));
+
+        return pl;
     }
 
 }

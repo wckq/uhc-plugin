@@ -1,5 +1,6 @@
 package io.github.wickeddroid.plugin.message;
 
+import io.github.wickeddroid.api.util.PlaceholderProvider;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import me.fixeddev.commandflow.annotated.annotation.Command;
 import net.kyori.adventure.audience.Audience;
@@ -22,7 +23,7 @@ public class MessageHandler {
   ) {
     receiver.sendMessage(
             MessageUtil.parseStringToComponent(
-                    "<prefix> <white>" + message,
+                    PlaceholderProvider.parse(receiver, "<prefix> <white>" + message),
                     Placeholder.parsed("prefix", messages.prefix())
             )
     );
@@ -88,7 +89,7 @@ public class MessageHandler {
 
     receiver.sendMessage(
             MessageUtil.parseStringToComponent(
-                    "<prefix> <white>" + message,
+                    PlaceholderProvider.parse(receiver, "<prefix> <white>" + message),
                     Placeholder.parsed("prefix", messages.prefix()),
                     tagResolver.build()
             )
