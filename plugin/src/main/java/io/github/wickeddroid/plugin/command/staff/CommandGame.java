@@ -50,11 +50,6 @@ public class CommandGame implements CommandClass {
     }
   }
 
-  @Command(names = "apple-rate")
-  public void appleRate(final @Sender Player sender, final int appleRate) {
-    this.uhcGame.setAppleRate(appleRate);
-  }
-
   @Command(names = "players-size")
   public void playersSize(final @Sender Player sender, final int size) {
     if(size <= uhcGame.getTeamSize()) { return; }
@@ -62,39 +57,6 @@ public class CommandGame implements CommandClass {
     this.uhcGame.setPlayersSize(size);
   }
 
-  @Command(names = "final-heal-time")
-  public void finalHealTime(final @Sender Player sender, final int time) {
-    this.uhcGame.setTimeForFinalHeal(time);
-    messageHandler.send(sender, messages.staff().changeFinalHealTime(), String.valueOf(time));
-  }
-
-  @Command(names = "final-heal-amplifier")
-  public void finalHealAmplifier(final @Sender Player sender, final int amplifier) {
-    if(amplifier < 0 || amplifier > 15) {
-      messageHandler.send(sender, messages.staff().invalidAmplifier(), "0", "15");
-      return;
-    }
-
-    this.uhcGame.setFinalHealAmplifier(amplifier);
-    messageHandler.send(sender, messages.staff().changeFinalHealAmplifier(), String.valueOf(amplifier));
-  }
-
-  @Command(names = "final-resistance-time")
-  public void finalResistanceTime(final @Sender Player sender, final int time) {
-    this.uhcGame.setTimeForFinalResistance(time);
-    messageHandler.send(sender, messages.staff().changeFinalResistanceTime(), String.valueOf(time));
-  }
-
-  @Command(names = "final-resistance-amplifier")
-  public void finalResistanceAmplifier(final @Sender Player sender, final int amplifier) {
-    if(amplifier < 0 || amplifier > 5) {
-      messageHandler.send(sender, messages.staff().invalidAmplifier(), "0", "5");
-      return;
-    }
-
-    this.uhcGame.setFinalResistanceAmplifier(amplifier);
-    messageHandler.send(sender, messages.staff().changeFinalResistanceAmplifier(), String.valueOf(amplifier));
-  }
 
 }
 

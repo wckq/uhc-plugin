@@ -1,5 +1,6 @@
 package io.github.wickeddroid.plugin.player;
 
+import io.github.wickeddroid.api.event.UhcEventManager;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.event.player.PlayerScatteredEvent;
 import io.github.wickeddroid.plugin.game.Game;
@@ -25,8 +26,7 @@ public class UhcPlayerHandler {
       return;
     }
 
-    Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location, laterScatter));
-
+    UhcEventManager.fireScatter(player, location, laterScatter);
 
     if(laterScatter && !game.laterScatterIronman()) { return; }
 

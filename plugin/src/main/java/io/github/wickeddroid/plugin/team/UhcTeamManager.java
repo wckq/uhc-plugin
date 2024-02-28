@@ -1,5 +1,6 @@
 package io.github.wickeddroid.plugin.team;
 
+import io.github.wickeddroid.api.event.UhcEventManager;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.message.MessageHandler;
@@ -65,6 +66,7 @@ public class UhcTeamManager {
     this.messageHandler.send(leader, this.messages.team().create(), name);
 
     uhcPlayer.setUhcTeam(this.getTeamByLeader(leader.getName()));
+    UhcEventManager.fireTeamPlayerJoin(leader, this.getTeamByLeader(leader.getName()));
   }
 
 
@@ -95,6 +97,7 @@ public class UhcTeamManager {
       }
 
       this.messageHandler.send(player, this.messages.team().leave(), uhcTeam.getName());
+      UhcEventManager.fireTeamPlayerLeave(player, uhcTeam);
       this.uhcPlayerRegistry.getPlayer(member).setUhcTeam(null);
     }
 
@@ -102,6 +105,9 @@ public class UhcTeamManager {
       this.messageHandler.send(leaderOP.getPlayer(), this.messages.team().remove());
 
     }
+
+    UhcEventManager.fireTeamEliminated(uhcTeam);
+
     this.uhcTeamRegistry.removeTeam(leaderOP.getName());
   }
 

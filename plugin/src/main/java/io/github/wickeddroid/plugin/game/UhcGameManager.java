@@ -1,5 +1,6 @@
 package io.github.wickeddroid.plugin.game;
 
+import io.github.wickeddroid.api.event.UhcEventManager;
 import io.github.wickeddroid.api.event.game.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
@@ -53,6 +54,7 @@ public class UhcGameManager {
   private UhcPlayerRegistry uhcPlayerRegistry;
   private Game game;
   private Backup backup;
+  private UhcEventManager uhcEventManager;
   @InjectIgnore
   private BukkitTask gameTask;
 
@@ -112,7 +114,7 @@ public class UhcGameManager {
       }
     }, 200L, 12000L);
 
-    Bukkit.getPluginManager().callEvent(new GameStartEvent());
+    UhcEventManager.fireGameStart();
   }
 
   public void teleportPlayers(List<Location> locations, boolean tp) {
@@ -239,6 +241,7 @@ public class UhcGameManager {
 
   public void endGame() {
     this.uhcGame.setUhcGameState(UhcGameState.FINISH);
+    UhcEventManager.fireGameEnd();
     Bukkit.getScheduler().cancelTask(this.gameTask.getTaskId());
 
     Bukkit.getOnlinePlayers().forEach(p -> {

@@ -1,5 +1,6 @@
 package io.github.wickeddroid.api.event.scenario;
 
+import io.github.wickeddroid.api.event.UhcEvent;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
 import org.bukkit.event.Cancellable;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * @see org.bukkit.event.Event
  * @see Option
  */
-public class ScenarioOptionValueChangeEvent<T> extends Event implements Cancellable {
+public class ScenarioOptionValueChangeEvent<T> extends UhcEvent implements Cancellable {
 
     private boolean cancelled = false;
 

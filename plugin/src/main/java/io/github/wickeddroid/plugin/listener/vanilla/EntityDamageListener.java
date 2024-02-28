@@ -1,5 +1,7 @@
 package io.github.wickeddroid.plugin.listener.vanilla;
 
+import io.github.wickeddroid.api.event.UhcEventManager;
+import io.github.wickeddroid.api.event.player.PlayerIronmanStatusChangeEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.backup.Backup;
@@ -104,15 +106,18 @@ public class EntityDamageListener implements Listener {
 
       uhcGame.getIronmans().remove(player.getName());
 
+      UhcEventManager.firePlayerIronmanStatusChange(player, PlayerIronmanStatusChangeEvent.Status.LOST, PlayerIronmanStatusChangeEvent.Status.COMPETITOR);
       messageHandler.sendGlobal(messages.game().ironmanLost(), player.getName(), String.valueOf(uhcGame.getIronmans().size()));
 
       if(uhcGame.paperman() == null && game.papermanEnabled()) {
         messageHandler.sendGlobal(messages.game().papermanPlayer(), player.getName());
+        UhcEventManager.firePlayerIronmanStatusChange(player, PlayerIronmanStatusChangeEvent.Status.PAPERMAN, PlayerIronmanStatusChangeEvent.Status.LOST);
         uhcGame.setPaperman(player.getName());
       }
 
       if(uhcGame.getIronmans().size() == 1) {
         messageHandler.sendGlobal(messages.game().ironmanPlayer(), uhcGame.getIronmans().get(0));
+        UhcEventManager.firePlayerIronmanStatusChange(player, PlayerIronmanStatusChangeEvent.Status.WINNER, PlayerIronmanStatusChangeEvent.Status.COMPETITOR);
         uhcGame.setIronman(uhcGame.getIronmans().get(0));
       }
 

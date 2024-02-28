@@ -64,7 +64,7 @@ public class PlayerDeathListener implements Listener {
         if (uhcTeam.getPlayersAlive() <= 0) {
           uhcTeamManager.removeTeam(player.getUniqueId());
 
-          messageHandler.sendGlobal(messages.team().teamEliminated(), uhcTeam.getTeam().getColor() + uhcTeam.getName());
+          messageHandler.sendGlobal(messages.team().teamEliminated(), uhcTeam.getName());
         }
       }, 30L);
     }
