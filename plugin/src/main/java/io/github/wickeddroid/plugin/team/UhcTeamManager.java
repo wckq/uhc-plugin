@@ -3,6 +3,7 @@ package io.github.wickeddroid.plugin.team;
 import io.github.wickeddroid.api.event.UhcEventManager;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.team.UhcTeam;
+import io.github.wickeddroid.api.util.LuckPermsProvider;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
@@ -10,7 +11,9 @@ import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.InjectIgnore;
@@ -163,9 +166,10 @@ public class UhcTeamManager {
         return;
       }
 
+
       member.sendMessage(MessageUtil.parseStringToComponent(
               "<red>[Team] <white><player></white> <red>➣</red> ",
-              Placeholder.parsed("player", player.getName())
+              Placeholder.component("player", LegacyComponentSerializer.legacyAmpersand().deserialize(LuckPermsProvider.getPrefix(player) + player.getName() + LuckPermsProvider.getSuffix(player)))
       ).append(message));
     }
   }
