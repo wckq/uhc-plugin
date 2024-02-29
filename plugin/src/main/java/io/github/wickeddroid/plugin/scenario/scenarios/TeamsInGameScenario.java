@@ -3,7 +3,6 @@ package io.github.wickeddroid.plugin.scenario.scenarios;
 import io.github.wickeddroid.api.event.game.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
-import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.api.scenario.Scenario;
 import io.github.wickeddroid.api.scenario.ScenarioOption;
 import io.github.wickeddroid.api.scenario.options.Option;
@@ -18,22 +17,15 @@ import io.github.wickeddroid.plugin.scenario.RegisteredScenario;
 import io.github.wickeddroid.plugin.team.UhcTeamHandler;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
-import io.github.wickeddroid.plugin.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RegisteredScenario
 @Scenario(
@@ -167,7 +159,7 @@ public class TeamsInGameScenario extends ListenerScenario {
         Bukkit.getOnlinePlayers().forEach(p -> {
             var nearby = onRadius(p, rangeWarningRange);
 
-            var team = uhcTeamRegistry.getTeam(p.getName());
+            var team = uhcTeamManager.getTeamByPlayer(p.getName());
 
             if(team == null) { return; }
 
@@ -270,7 +262,7 @@ public class TeamsInGameScenario extends ListenerScenario {
                 continue;
             }
 
-            var team = uhcTeamRegistry.getTeam(p.getName());
+            var team = uhcTeamManager.getTeamByPlayer(p.getName());
 
             if(team == null) {
                 continue;
@@ -284,7 +276,7 @@ public class TeamsInGameScenario extends ListenerScenario {
                 continue;
             }
 
-            var uhcTeam = uhcTeamRegistry.getTeam(center.getName());
+            var uhcTeam = uhcTeamManager.getTeamByPlayer(center.getName());
 
             if(uhcTeam == null) {
                 continue;
@@ -294,7 +286,7 @@ public class TeamsInGameScenario extends ListenerScenario {
                 continue;
             }
 
-            pl.add(uhcTeamRegistry.getTeam(p.getName()));
+            pl.add(uhcTeamManager.getTeamByPlayer(p.getName()));
         }
 
         pl.sort(Comparator.comparing(uhcTeam -> uhcTeam.getMembers().stream().map(s -> uhcPlayerRegistry.getPlayer(s)).toList().stream().filter(uhcPlayer -> uhcPlayer.isAlive() && Bukkit.getOfflinePlayer(uhcPlayer.getName()).isOnline()).findFirst().orElse(null), (o1, o2) -> {

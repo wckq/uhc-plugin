@@ -29,13 +29,6 @@ public class PlayerQuitListener implements Listener {
 
     uhcPlayer.getSession().updateLastConnect();
 
-    if (uhcGame.getUhcGameState() != UhcGameState.WAITING) {
-      return;
-    }
-
-    if (uhcPlayer != null) {
-      this.uhcPlayerRegistry.removePlayer(playerName);
-    }
 
     if (this.uhcGame.getUhcGameState() == UhcGameState.WAITING) {
       this.scoreboardLobby.getSidebar().removeViewer(player);
@@ -43,6 +36,14 @@ public class PlayerQuitListener implements Listener {
       this.scoreboardEndGame.getSidebar().removeViewer(player);
     } else {
       this.scoreboardGame.getSidebar().removeViewer(player);
+    }
+
+    if (uhcGame.getUhcGameState() != UhcGameState.WAITING) {
+      return;
+    }
+
+    if(uhcPlayer.getUhcTeam() == null) {
+      this.uhcPlayerRegistry.removePlayer(playerName);
     }
   }
 }

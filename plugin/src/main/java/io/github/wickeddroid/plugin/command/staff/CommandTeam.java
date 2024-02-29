@@ -75,10 +75,9 @@ public class CommandTeam implements CommandClass {
   }
 
   @Command(names = "remove")
-  public void remove(final OfflinePlayer target) {
+  public void remove(final Player target) {
     this.uhcTeamManager.removeTeam(target.getUniqueId());
   }
-
 
   @Command(names = "remove-all")
   public void removeAll() {

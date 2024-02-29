@@ -14,6 +14,7 @@ import io.github.wickeddroid.plugin.scenario.ListenerScenario;
 import io.github.wickeddroid.plugin.scenario.RegisteredScenario;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.util.MessageUtil;
+import io.github.wickeddroid.plugin.util.PluginUtil;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -69,7 +70,8 @@ public class PlayerHeadScenario extends ListenerScenario {
                     Option.buildValue(Material.BEDROCK, "Bedrock"),
                     Option.buildValue(Material.GOLD_BLOCK, "Bloque de Oro"),
                     Option.buildValue(Material.EMERALD_BLOCK, "Bloque de Esmeralda"),
-                    Option.buildValue(Material.IRON_BLOCK, "Bloque de Hierro")
+                    Option.buildValue(Material.IRON_BLOCK, "Bloque de Hierro"),
+                    Option.buildValue(Material.BARRIER, "Random (Anteriores)")
             )
     );
     private Material graveBlock;
@@ -168,7 +170,7 @@ public class PlayerHeadScenario extends ListenerScenario {
             var loc = player.getLocation();
             var world = loc.getWorld();
 
-            world.getBlockAt((int) loc.getX(), loc.getBlockY()-1, (int) loc.getZ()).setType(graveBlock);
+            world.getBlockAt((int) loc.getX(), loc.getBlockY()-1, (int) loc.getZ()).setType(graveBlock == Material.BARRIER ? List.of(Material.BEDROCK, Material.GOLD_BLOCK, Material.IRON_BLOCK, Material.EMERALD_BLOCK).get(PluginUtil.RANDOM.nextInt(4)) : graveBlock);
             world.getBlockAt((int) loc.getX(), loc.getBlockY(), (int) loc.getZ()).setType(Material.NETHER_BRICK_FENCE);
             var block = world.getBlockAt((int) loc.getX(), loc.getBlockY()+1, (int) loc.getZ());
 

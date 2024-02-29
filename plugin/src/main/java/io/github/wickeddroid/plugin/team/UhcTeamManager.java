@@ -13,7 +13,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.InjectIgnore;
@@ -106,7 +105,6 @@ public class UhcTeamManager {
 
     if(leaderOP.isOnline()) {
       this.messageHandler.send(leaderOP.getPlayer(), this.messages.team().remove());
-
     }
 
     UhcEventManager.fireTeamEliminated(uhcTeam);
@@ -175,7 +173,7 @@ public class UhcTeamManager {
   }
 
   public UhcTeam getTeamByLeader(final String leader) {
-    return this.uhcTeamRegistry.getTeam(leader);
+    return this.uhcTeamRegistry.getTeamByLeader(leader);
   }
 
   public UhcTeam getTeamByPlayer(final String player) {

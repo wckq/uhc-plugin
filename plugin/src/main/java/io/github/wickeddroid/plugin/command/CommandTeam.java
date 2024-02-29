@@ -1,8 +1,6 @@
 package io.github.wickeddroid.plugin.command;
 
 import io.github.wickeddroid.api.game.UhcGame;
-import io.github.wickeddroid.plugin.game.DefaultUhcGame;
-import io.github.wickeddroid.plugin.game.UhcGameManager;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.team.Teams;
@@ -14,7 +12,6 @@ import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
 import me.fixeddev.commandflow.annotated.annotation.Named;
 import me.fixeddev.commandflow.annotated.annotation.OptArg;
-import me.fixeddev.commandflow.annotated.annotation.SubCommandClasses;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
@@ -102,7 +99,7 @@ public class CommandTeam implements CommandClass {
       return;
     }
 
-    var team = uhcTeamRegistry.getTeam(sender.getName());
+    var team = uhcTeamManager.getTeamByPlayer(sender.getName());
 
     if(team == null) {
       messageHandler.send(sender, messages.team().playerDoesNotTeamExist());
@@ -126,7 +123,7 @@ public class CommandTeam implements CommandClass {
       return;
     }
 
-    var team = uhcTeamRegistry.getTeam(sender.getName());
+    var team = uhcTeamManager.getTeamByPlayer(sender.getName());
 
     if(team == null) {
       messageHandler.send(sender, messages.team().playerDoesNotTeamExist());
