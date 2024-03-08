@@ -9,5 +9,5 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public interface ScatterTask {
-    @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, boolean preventLiquid, boolean aboveSeaLevel, List<Biome> bannedBiomes, Consumer<Integer> progress) throws Exception;
+    @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, boolean preventLiquid, boolean aboveSeaLevel, List<Biome> bannedBiomes, EnvironmentAdapter adapter, Consumer<Integer> progress) throws Exception;
 }

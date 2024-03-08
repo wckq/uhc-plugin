@@ -14,8 +14,11 @@ import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.thread.GameThread;
 import io.github.wickeddroid.plugin.thread.ScatterThread;
-import io.github.wickeddroid.plugin.world.ScatterTask;
+import io.github.wickeddroid.plugin.world.scatter.ScatterTask;
 import io.github.wickeddroid.plugin.world.Worlds;
+import io.github.wickeddroid.plugin.world.scatter.adapters.EndAdapter;
+import io.github.wickeddroid.plugin.world.scatter.adapters.NetherAdapter;
+import io.github.wickeddroid.plugin.world.scatter.adapters.OverworldAdapter;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +35,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 
 @InjectAll
 @Singleton
@@ -52,28 +54,33 @@ public class UhcGameManager {
   private Game game;
   private Backup backup;
   private UhcEventManager uhcEventManager;
+  private OverworldAdapter overworldAdapter;
+  private NetherAdapter netherAdapter;
+  private EndAdapter endAdapter;
   @InjectIgnore
   private BukkitTask gameTask;
 
   private CompletableFuture<List<Location>> requestLocations(int count, World world) throws Exception {
     List<Location> locs = new ArrayList<>();
-
+    var env = world.getEnvironment();
+    var adapter = env == World.Environment.THE_END ? endAdapter : env == World.Environment.NETHER ? netherAdapter : overworldAdapter;
     CompletableFuture<List<Location>> complFuture = new CompletableFuture<>();
 
-      var future = ScatterTask.scatterTask(world.getName(),  uhcGame.getWorldBorder(), uhcGame.getWorldBorder(), count, worlds.scatter().preventLiquidSpawn(), worlds.scatter().aboveSeaLevel(), worlds.scatter().bannedBiomes(), progress -> {
-          double percentage = (100D/count)*progress;
+    var future = ScatterTask.scatterTask(world.getName(),  uhcGame.getWorldBorder(), uhcGame.getWorldBorder(), count, worlds.scatter().preventLiquidSpawn(), worlds.scatter().aboveSeaLevel(), worlds.scatter().bannedBiomes(), adapter, progress -> {
+      double percentage = (100D/count)*progress;
 
-          var message = messageHandler.parse(messages.other().scatterProgress(), String.valueOf(progress), String.valueOf(count), new DecimalFormat("0.00").format(percentage));
+      var message = messageHandler.parse(messages.other().scatterProgress(), String.valueOf(progress), String.valueOf(count), new DecimalFormat("0.00").format(percentage));
 
-          Bukkit.getOnlinePlayers().forEach(p -> p.sendActionBar(message));
-      });
+      Bukkit.getOnlinePlayers().forEach(p -> p.sendActionBar(message));
+    });
 
-      future.whenComplete((locations, throwable) -> {
-          locs.addAll(locations);
-          complFuture.complete(locs);
-      });
+    future.whenComplete((locations, throwable) -> {
+      locs.addAll(locations);
+      complFuture.complete(locs);
+    });
 
-      return complFuture;
+
+    return complFuture;
   }
 
   public void startBackup() {
