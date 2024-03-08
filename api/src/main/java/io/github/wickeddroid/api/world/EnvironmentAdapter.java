@@ -19,7 +19,7 @@ public interface EnvironmentAdapter {
     boolean safe(Location location, List<Biome> bannedBiomes, boolean preventLiquid, boolean aboveSeaLevel);
 
     default void checkSupport(World world) {
-        if(world.getEnvironment() == environment()) {
+        if(world.getEnvironment() != environment()) {
             throw new RuntimeException("Unsupported Environment for adapter");
         }
     }
