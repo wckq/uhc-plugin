@@ -5,10 +5,11 @@ plugins {
 }
 
 var majorVersion = "1"
-var minorVersion = "2"
-var patchVersion = "04"
+var minorVersion = "3"
+var patchVersion = "0"
+var extraData = "-BETA-pre1"
 
-project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus("-BETA")
+project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus(extraData)
 
 dependencies {
     paperweight.paperDevBundle("1.19.2-R0.1-SNAPSHOT")
