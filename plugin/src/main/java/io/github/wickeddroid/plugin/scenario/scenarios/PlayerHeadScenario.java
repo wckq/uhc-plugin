@@ -65,10 +65,12 @@ public class PlayerHeadScenario extends ListenerScenario {
     private LinkedList<OptionValue<Material>> blockValue = new LinkedList<>(
             List.of(
                     Option.buildValue(Material.BEDROCK, "Bedrock"),
-                    Option.buildValue(Material.GOLD_BLOCK, "Bloque de Oro"),
-                    Option.buildValue(Material.EMERALD_BLOCK, "Bloque de Esmeralda"),
-                    Option.buildValue(Material.IRON_BLOCK, "Bloque de Hierro"),
+                    Option.buildValue(Material.REDSTONE_BLOCK, "Bloque de Redstone"),
                     Option.buildValue(Material.COPPER_BLOCK, "Bloque de Cobre"),
+                    Option.buildValue(Material.LAPIS_BLOCK, "Bloque de Lapislázuli"),
+                    Option.buildValue(Material.IRON_BLOCK, "Bloque de Hierro"),
+                    Option.buildValue(Material.EMERALD_BLOCK, "Bloque de Esmeralda"),
+                    Option.buildValue(Material.GOLD_BLOCK, "Bloque de Oro"),
                     Option.buildValue(Material.BARRIER, "Random (Anteriores)")
             )
     );
@@ -168,7 +170,7 @@ public class PlayerHeadScenario extends ListenerScenario {
             var loc = player.getLocation();
             var world = loc.getWorld();
 
-            world.getBlockAt((int) loc.getX(), loc.getBlockY()-1, (int) loc.getZ()).setType(graveBlock == Material.BARRIER ? List.of(Material.BEDROCK, Material.GOLD_BLOCK, Material.IRON_BLOCK, Material.EMERALD_BLOCK, Material.COPPER_BLOCK).get(PluginUtil.RANDOM.nextInt(4)) : graveBlock);
+            world.getBlockAt((int) loc.getX(), loc.getBlockY()-1, (int) loc.getZ()).setType(graveBlock == Material.BARRIER ? List.of(Material.BEDROCK, Material.GOLD_BLOCK, Material.IRON_BLOCK, Material.EMERALD_BLOCK, Material.COPPER_BLOCK, Material.REDSTONE_BLOCK, Material.LAPIS_BLOCK).get(PluginUtil.RANDOM.nextInt(6)) : graveBlock);
             world.getBlockAt((int) loc.getX(), loc.getBlockY(), (int) loc.getZ()).setType(Material.NETHER_BRICK_FENCE);
             var block = world.getBlockAt((int) loc.getX(), loc.getBlockY()+1, (int) loc.getZ());
 
