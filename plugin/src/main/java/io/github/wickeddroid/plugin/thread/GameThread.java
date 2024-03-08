@@ -12,6 +12,7 @@ import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.mariuszgromada.math.mxparser.Expression;
@@ -28,6 +29,7 @@ public class GameThread implements Runnable {
   private Worlds worlds;
   private UhcGame uhcGame;
   private Game game;
+  private Plugin plugin;
   private UhcGameHandler uhcGameHandler;
   private UhcGameManager uhcGameManager;
   private UhcTeamRegistry uhcTeamRegistry;
@@ -56,11 +58,15 @@ public class GameThread implements Runnable {
     }
 
     if(currentTime == this.uhcGame.getTimeForFinalHeal()) {
-      Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(PotionEffectType.HEAL.createEffect(2, this.uhcGame.getFinalHealAmplifier())));
+      Bukkit.getScheduler().runTask(plugin, ()-> {
+        Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(PotionEffectType.HEAL.createEffect(2, this.uhcGame.getFinalHealAmplifier())));
+      });
     }
 
     if(currentTime >= this.uhcGame.getTimeForFinalResistance() && this.uhcGame.getTimeForFinalResistance() > 0) {
-      Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(60, this.uhcGame.getFinalResistanceAmplifier())));
+      Bukkit.getScheduler().runTask(plugin, ()-> {
+        Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(60, this.uhcGame.getFinalResistanceAmplifier())));
+      });
     }
 
     if (currentTime >= this.uhcGame.getTimeForMeetup()) {
