@@ -14,7 +14,6 @@ public class Game {
     private boolean spectatorsEnabled = false;
     private boolean laterScatterIronman = false;
     private boolean initialBoat = true;
-    private boolean useExperimentalScatter = false;
     private boolean banRegenerationPotion = true;
     private boolean banAmplifiedStrengthPotion = true;
     private boolean useLoginSecurityPrevention = false;
@@ -27,7 +26,6 @@ public class Game {
     public boolean spectatorsEnabled() { return this.spectatorsEnabled; }
     public boolean laterScatterIronman() { return this.laterScatterIronman; }
     public boolean initialBoat() { return this.initialBoat; }
-    public boolean useExperimentalScatter() { return this.useExperimentalScatter; }
     public boolean banRegenerationPotion() { return this.banRegenerationPotion; }
     public boolean banAmplifiedStrengthPotion() { return this.banAmplifiedStrengthPotion; }
     public boolean useLoginSecurityPrevention() { return this.useLoginSecurityPrevention; }

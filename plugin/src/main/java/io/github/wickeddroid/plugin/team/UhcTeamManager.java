@@ -8,7 +8,10 @@ import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.util.MessageUtil;
+import io.papermc.paper.adventure.PaperAdventure;
+import io.papermc.paper.adventure.providers.LegacyComponentSerializerProviderImpl;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -36,7 +39,6 @@ public class UhcTeamManager {
   private Teams teams;
   @InjectIgnore
   private Iterator<String> iterator;
-
   public void createTeam(
           final Player leader,
           String name

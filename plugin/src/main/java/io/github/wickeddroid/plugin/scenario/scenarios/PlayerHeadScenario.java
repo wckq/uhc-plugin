@@ -4,22 +4,19 @@ import io.github.wickeddroid.api.event.game.GameStartEvent;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.api.scenario.Scenario;
-import io.github.wickeddroid.api.scenario.ScenarioOption;
+import io.github.wickeddroid.api.scenario.options.ScenarioOption;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
-import io.github.wickeddroid.plugin.game.UhcGameManager;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scenario.ListenerScenario;
 import io.github.wickeddroid.plugin.scenario.RegisteredScenario;
-import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import io.github.wickeddroid.plugin.util.PluginUtil;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Skull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -71,6 +68,7 @@ public class PlayerHeadScenario extends ListenerScenario {
                     Option.buildValue(Material.GOLD_BLOCK, "Bloque de Oro"),
                     Option.buildValue(Material.EMERALD_BLOCK, "Bloque de Esmeralda"),
                     Option.buildValue(Material.IRON_BLOCK, "Bloque de Hierro"),
+                    Option.buildValue(Material.COPPER_BLOCK, "Bloque de Cobre"),
                     Option.buildValue(Material.BARRIER, "Random (Anteriores)")
             )
     );
@@ -170,7 +168,7 @@ public class PlayerHeadScenario extends ListenerScenario {
             var loc = player.getLocation();
             var world = loc.getWorld();
 
-            world.getBlockAt((int) loc.getX(), loc.getBlockY()-1, (int) loc.getZ()).setType(graveBlock == Material.BARRIER ? List.of(Material.BEDROCK, Material.GOLD_BLOCK, Material.IRON_BLOCK, Material.EMERALD_BLOCK).get(PluginUtil.RANDOM.nextInt(4)) : graveBlock);
+            world.getBlockAt((int) loc.getX(), loc.getBlockY()-1, (int) loc.getZ()).setType(graveBlock == Material.BARRIER ? List.of(Material.BEDROCK, Material.GOLD_BLOCK, Material.IRON_BLOCK, Material.EMERALD_BLOCK, Material.COPPER_BLOCK).get(PluginUtil.RANDOM.nextInt(4)) : graveBlock);
             world.getBlockAt((int) loc.getX(), loc.getBlockY(), (int) loc.getZ()).setType(Material.NETHER_BRICK_FENCE);
             var block = world.getBlockAt((int) loc.getX(), loc.getBlockY()+1, (int) loc.getZ());
 

@@ -2,6 +2,7 @@ package io.github.wickeddroid.plugin.world;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Constructor;
@@ -9,11 +10,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-@ApiStatus.Experimental
 public class ScatterTask {
 
 
-    public static @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, Consumer<Integer> progress) throws Exception {
+    public static @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, boolean preventLiquid, boolean aboveSeaLevel, List<Biome> bannedBiomes, Consumer<Integer> progress) throws Exception {
         Constructor<?> task;
         try {
             String className = "io.github.wickeddroid.adapter."+VERSION+".SafeScatter";
@@ -25,7 +25,7 @@ public class ScatterTask {
 
         io.github.wickeddroid.api.team.ScatterTask scatterTask = (io.github.wickeddroid.api.team.ScatterTask) task.newInstance();
 
-        return scatterTask.scatterTask(worldName, maxX, maxZ, count, progress);
+        return scatterTask.scatterTask(worldName, maxX, maxZ, count, preventLiquid, aboveSeaLevel, bannedBiomes, progress);
     }
 
 

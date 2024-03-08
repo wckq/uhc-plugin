@@ -3,8 +3,12 @@ package io.github.wickeddroid.adapter.v1_19_R2;
 import io.github.wickeddroid.api.team.ScatterTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 import java.util.Arrays;
@@ -15,7 +19,7 @@ import java.util.function.Consumer;
 
 public class SafeScatter implements ScatterTask {
     @Override
-    public @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, Consumer<Integer> progress) throws Exception {
+    public @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, boolean preventLiquid, boolean aboveSeaLevel, List<Biome> bannedBiomes, Consumer<Integer> progress) throws Exception {
         final var world = Bukkit.getWorld(worldName);
         List<Location> locations = new ArrayList<>();
 
@@ -42,7 +46,11 @@ public class SafeScatter implements ScatterTask {
             final var x = ThreadLocalRandom.current().nextInt(-maxX, maxX);
             final var z = ThreadLocalRandom.current().nextInt(-maxZ, maxX);
 
-            final var y = world.getHighestBlockYAt(x, z);
+            final @Nullable Integer y = world.getEnvironment() == World.Environment.NETHER ? highestYNether(world, x, z) : Integer.valueOf(world.getHighestBlockYAt(x, z) + 1);
+
+            if(y == null) {
+                continue;
+            }
 
             var chunkX = x >> 4;
             var chunkZ = z >> 4;
@@ -50,7 +58,19 @@ public class SafeScatter implements ScatterTask {
             Consumer<?> consumer = (Consumer<Object>) o -> {
                 var loc = new Location(world, x, y, z);
 
-                if (loc.getWorld().getBlockAt(loc).isLiquid()) {
+                if (loc.getWorld().getBlockAt(loc).isLiquid() && preventLiquid) {
+                    return;
+                }
+
+                if(bannedBiomes.contains(loc.getWorld().getBlockAt(loc).getBiome())) {
+                    return;
+                }
+
+                if(aboveSeaLevel && world.getEnvironment() == World.Environment.NORMAL && y <= 63) {
+                    return;
+                }
+
+                if(world.getEnvironment() == World.Environment.THE_END && (y == 0 || !world.getBlockAt(x, y-2, z).isSolid())) {
                     return;
                 }
 
@@ -72,5 +92,26 @@ public class SafeScatter implements ScatterTask {
     public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().substring(CRAFTBUKKIT.length() + 1);
     protected static Class<?> getCraftBukkit(String name) throws ClassNotFoundException {
         return Class.forName(CRAFTBUKKIT + "." + VERSION + "." + name);
+    }
+
+    protected @Nullable Integer highestYNether(World world, int x, int z) {
+        Integer currentY = null;
+        for(int y = 127 ; y > 0 ; y--) {
+            var block = world.getBlockAt(x, y, z);
+
+            if(block.getType() != Material.AIR) { continue; }
+
+            var upBlock =  world.getBlockAt(x, y+1, z);
+
+            if(upBlock.getType() != Material.AIR) { continue; }
+
+            var belowBlock = world.getBlockAt(x, y-1, z);
+
+            if(!belowBlock.getType().isSolid() || belowBlock.getType() == Material.LAVA || belowBlock.getType() == Material.MAGMA_BLOCK) { continue; }
+
+            currentY = y+1;
+        }
+
+        return currentY;
     }
 }

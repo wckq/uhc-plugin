@@ -10,8 +10,11 @@ import io.github.wickeddroid.plugin.world.Worlds;
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
 import me.fixeddev.commandflow.annotated.annotation.Named;
+import me.fixeddev.commandflow.annotated.annotation.OptArg;
 import me.fixeddev.commandflow.annotated.annotation.SubCommandClasses;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.InjectAll;
@@ -37,8 +40,8 @@ public class CommandGame implements CommandClass {
   }
 
   @Command(names = "start")
-  public void start(final @Sender Player sender, @Named("scatter") boolean tp) {
-    this.uhcGameManager.startGame(sender, tp);
+  public void start(final @Sender Player sender, @Named("scatter") boolean tp, @OptArg World world) {
+    this.uhcGameManager.startGame(sender, tp, world == null ? Bukkit.getWorld(worlds.worldName()) : world);
   }
 
   @Command(names = "backup")

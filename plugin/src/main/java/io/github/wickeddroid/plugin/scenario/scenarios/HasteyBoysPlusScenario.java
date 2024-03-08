@@ -1,7 +1,7 @@
 package io.github.wickeddroid.plugin.scenario.scenarios;
 
 import io.github.wickeddroid.api.scenario.Scenario;
-import io.github.wickeddroid.api.scenario.ScenarioOption;
+import io.github.wickeddroid.api.scenario.options.ScenarioOption;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
@@ -15,7 +15,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 
 import java.util.LinkedList;
-import java.util.List;
 
 @RegisteredScenario
 @Scenario(

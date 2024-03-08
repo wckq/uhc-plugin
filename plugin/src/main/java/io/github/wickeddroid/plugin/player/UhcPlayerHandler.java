@@ -2,34 +2,34 @@ package io.github.wickeddroid.plugin.player;
 
 import io.github.wickeddroid.api.event.UhcEventManager;
 import io.github.wickeddroid.api.game.UhcGame;
-import io.github.wickeddroid.api.event.player.PlayerScatteredEvent;
 import io.github.wickeddroid.plugin.game.Game;
-import io.github.wickeddroid.plugin.util.LocationUtil;
+import io.github.wickeddroid.plugin.game.UhcGameManager;
+import io.github.wickeddroid.plugin.world.ScatterTask;
 import io.github.wickeddroid.plugin.world.Worlds;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 
-public class UhcPlayerHandler {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
-  @Inject private Worlds worlds;
-  @Inject private UhcGame uhcGame;
-  @Inject private Game game;
+public class UhcPlayerHandler {
+  @Inject private UhcGameManager uhcGameManager;
 
   public void scatterPlayer(
           final Player player,
-          final boolean laterScatter
+          final boolean laterScatter,
+          final World world
   ) {
-    final var location = LocationUtil.generateRandomLocation(uhcGame, worlds.worldName());
-
-    if (location == null) {
-      return;
+    try {
+      uhcGameManager.scatterPlayer(player, laterScatter, world);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
-
-    UhcEventManager.fireScatter(player, location, laterScatter);
-
-    if(laterScatter && !game.laterScatterIronman()) { return; }
-
-    uhcGame.getIronmans().add(player.getName());
   }
 }

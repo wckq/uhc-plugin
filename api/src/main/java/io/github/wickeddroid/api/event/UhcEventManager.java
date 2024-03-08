@@ -65,7 +65,7 @@ public interface UhcEventManager {
        return event;
    }
 
-   private static void fire(UhcEvent event) {
+   static void fire(UhcEvent event) {
        new BukkitRunnable() {
            @Override
            public void run() {

@@ -224,6 +224,16 @@ public class Messages {
   }
 
   @ConfigSerializable
+  public static class Scenarios {
+
+  }
+
+  @ConfigSerializable
+  public static class Settings {
+
+  }
+
+  @ConfigSerializable
   public static class Other {
     private String teamChatOn = "Te has cambiado al chat de equipo.";
     private String teamChatOff = "Te has cambiado al chat global.";

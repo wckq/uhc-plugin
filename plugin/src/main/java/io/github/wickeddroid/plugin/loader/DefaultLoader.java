@@ -12,6 +12,7 @@ import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.util.SaveLoad;
+import io.github.wickeddroid.plugin.world.ScatterTask;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import team.unnamed.inject.Inject;
@@ -62,6 +63,24 @@ public class DefaultLoader implements Loader {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+
+    Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
+      try {
+        var task = ScatterTask.scatterTask(Bukkit.getWorlds().get(2).getName(), 2000, 2000, 75, true, true, Collections.emptyList(), i ->{});
+
+        task.whenComplete((locations, throwable) -> {
+          locations.forEach(location -> {
+            Bukkit.getLogger().info(String.format("Y = %s | Biome = %s | Block = %s",
+                    Math.round(location.getY()),
+                    location.getBlock().getBiome(),
+                    location.getBlock().getType()
+                    ));
+          });
+        });
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 
   @Override
