@@ -5,3 +5,10 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.5")
     compileOnly("io.netty:netty-transport:4.1.106.Final")
 }
+
+var majorVersion = "1"
+var minorVersion = "0"
+var patchVersion = "0"
+var extraData = "-BETA-pre1"
+
+project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus(extraData)
