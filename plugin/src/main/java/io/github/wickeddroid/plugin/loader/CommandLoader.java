@@ -1,19 +1,25 @@
 package io.github.wickeddroid.plugin.loader;
 
+import bukkit.BukkitMapCommandManager;
 import io.github.wickeddroid.api.loader.Loader;
 import io.github.wickeddroid.plugin.command.CommandPlayer;
 import io.github.wickeddroid.plugin.command.CommandTeam;
 import io.github.wickeddroid.plugin.command.CommandUhcStaff;
 import io.github.wickeddroid.plugin.scenario.ScenarioRegistration;
-import me.fixeddev.commandflow.annotated.AnnotatedCommandTreeBuilder;
-import me.fixeddev.commandflow.annotated.CommandClass;
-import me.fixeddev.commandflow.annotated.builder.AnnotatedCommandBuilderImpl;
-import me.fixeddev.commandflow.annotated.part.PartInjector;
-import me.fixeddev.commandflow.annotated.part.defaults.DefaultsModule;
-import me.fixeddev.commandflow.bukkit.BukkitCommandManager;
-import me.fixeddev.commandflow.bukkit.factory.BukkitModule;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
+import team.unnamed.commandflow.annotated.AnnotatedCommandTreeBuilder;
+import team.unnamed.commandflow.annotated.CommandClass;
+import team.unnamed.commandflow.annotated.builder.AnnotatedCommandBuilder;
+import team.unnamed.commandflow.annotated.part.PartInjector;
+import team.unnamed.commandflow.annotated.part.defaults.DefaultsModule;
+
+import team.unnamed.commandflow.bukkit.factory.BukkitModule;
+import team.unnamed.commandflow.command.Command;
 import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.Injector;
+
+import java.lang.reflect.Field;
 
 @InjectAll
 public class CommandLoader implements Loader {
@@ -36,15 +42,17 @@ public class CommandLoader implements Loader {
   }
 
   private void registerCommands(CommandClass... commandClasses) {
+
+
     final var partInjector = PartInjector.create();
     partInjector.install(new DefaultsModule());
     partInjector.install(new BukkitModule());
 
     final var treeBuilder = AnnotatedCommandTreeBuilder.create(
-            new AnnotatedCommandBuilderImpl(partInjector),
+            AnnotatedCommandBuilder.create(partInjector),
             ((clazz, parent) -> this.injector.getInstance(clazz))
     );
-    final var commandManager = new BukkitCommandManager("uhc");
+    final var commandManager = new BukkitMapCommandManager("uhc");
 
     for (final var commandClass : commandClasses) {
       commandManager.registerCommands(treeBuilder.fromClass(commandClass));

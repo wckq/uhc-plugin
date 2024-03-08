@@ -3,9 +3,9 @@ package io.github.wickeddroid.plugin.command.staff;
 import io.github.wickeddroid.api.scenario.GameScenario;
 import io.github.wickeddroid.plugin.menu.scenario.ScenariosInventory;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
-import me.fixeddev.commandflow.annotated.CommandClass;
-import me.fixeddev.commandflow.annotated.annotation.Command;
-import me.fixeddev.commandflow.bukkit.annotation.Sender;
+import team.unnamed.commandflow.annotated.CommandClass;
+import team.unnamed.commandflow.annotated.annotation.Command;
+import team.unnamed.commandflow.annotated.annotation.Sender;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
 

@@ -18,9 +18,14 @@ dependencies {
 
     implementation("com.github.agus5534.gui:gui-menu-api:45e66ff34e")
 
-    implementation("me.fixeddev:commandflow-bukkit:0.5.2")
+    implementation("team.unnamed:commandflow-bukkit:0.7.0")
+    implementation("team.unnamed:commandflow-bukkit-common:0.7.0")
+    implementation("team.unnamed:commandflow-bukkit-commandmap:0.7.0")
+    implementation("team.unnamed:commandflow-api:0.7.0")
+    implementation("team.unnamed:commandflow-brigadier:0.7.0")
+    implementation("team.unnamed:commandflow-brigadier-common:0.7.0")
     implementation("team.unnamed:inject:2.0.0")
-    implementation("net.kyori:adventure-api:4.15.0")
+    compileOnly("net.kyori:adventure-api:4.15.0")
     arrayOf("1_19_R1", "1_19_R2", "1_19_R3", "1_20_R1", "1_20_R2").forEach {
         implementation("com.github.agus5534.gui:gui-menu-adapt-v$it:45e66ff34e:dev")
         implementation(project(":uhc-plugin-adapter-v$it"))

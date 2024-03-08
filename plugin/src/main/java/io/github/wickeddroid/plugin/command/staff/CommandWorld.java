@@ -1,8 +1,8 @@
 package io.github.wickeddroid.plugin.command.staff;
 
-import me.fixeddev.commandflow.annotated.CommandClass;
-import me.fixeddev.commandflow.annotated.annotation.Command;
-import me.fixeddev.commandflow.bukkit.annotation.Sender;
+import team.unnamed.commandflow.annotated.CommandClass;
+import team.unnamed.commandflow.annotated.annotation.Command;
+import team.unnamed.commandflow.annotated.annotation.Sender;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
