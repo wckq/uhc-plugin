@@ -7,8 +7,18 @@ dependencies {
 }
 
 var majorVersion = "1"
-var minorVersion = "0"
+var minorVersion = "3"
 var patchVersion = "0"
 var extraData = "-BETA-pre1"
 
 project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus(extraData)
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            artifactId = "api"
+            version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus(extraData)
+            from(components["java"])
+        }
+    }
+}

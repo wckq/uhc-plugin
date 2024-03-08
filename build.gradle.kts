@@ -7,6 +7,12 @@ group = "io.github.wickeddroid"
 version = "1.0-SNAPSHOT"
 
 subprojects {
+
+    if(project.name.contains("api")) {
+        apply(plugin = "maven-publish")
+    }
+
+    group = "io.github.wickeddroid."+project.name;
     apply(plugin = "java")
     apply(plugin = "com.github.johnrengelman.shadow")
 
