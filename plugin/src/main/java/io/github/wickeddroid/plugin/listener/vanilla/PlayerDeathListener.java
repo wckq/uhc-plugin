@@ -16,6 +16,7 @@ import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.InjectAll;
 
@@ -29,7 +30,7 @@ public class PlayerDeathListener implements Listener {
   private UhcTeamManager uhcTeamManager;
   private UhcGame uhcGame;
   private Game game;
-  private UhcPlugin plugin;
+  private Plugin plugin;
   private Messages messages;
   private MessageHandler messageHandler;
   private Backup backup;
