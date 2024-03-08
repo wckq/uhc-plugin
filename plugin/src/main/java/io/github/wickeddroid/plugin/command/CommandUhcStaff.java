@@ -6,10 +6,7 @@ import io.github.wickeddroid.plugin.game.UhcGameManager;
 import io.github.wickeddroid.plugin.player.UhcPlayerHandler;
 import io.github.wickeddroid.plugin.world.Worlds;
 import team.unnamed.commandflow.annotated.CommandClass;
-import team.unnamed.commandflow.annotated.annotation.Command;
-import team.unnamed.commandflow.annotated.annotation.OptArg;
-import team.unnamed.commandflow.annotated.annotation.SubCommandClasses;
-import team.unnamed.commandflow.annotated.annotation.Sender;
+import team.unnamed.commandflow.annotated.annotation.*;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -28,7 +25,7 @@ public class CommandUhcStaff implements CommandClass {
   public void scatter(
           final @Sender Player sender,
           final Player target,
-          @OptArg World world
+          @OptArg(value = "uhc_world") @Named("world") World world
           ) {
     try {
       this.uhcGameManager.scatterPlayer(target, true, world == null ? Bukkit.getWorld(worlds.worldName()) : world);

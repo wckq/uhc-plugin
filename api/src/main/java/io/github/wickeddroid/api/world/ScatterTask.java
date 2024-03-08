@@ -1,4 +1,4 @@
-package io.github.wickeddroid.api.team;
+package io.github.wickeddroid.api.world;
 
 import org.bukkit.Location;
 import org.bukkit.block.Biome;

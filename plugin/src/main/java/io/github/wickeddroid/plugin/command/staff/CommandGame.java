@@ -40,7 +40,7 @@ public class CommandGame implements CommandClass {
   }
 
   @Command(names = "start")
-  public void start(final @Sender Player sender, @Named("scatter") boolean tp, @OptArg World world) {
+  public void start(final @Sender Player sender, @Named("scatter") boolean tp, @OptArg(value = "uhc_world") @Named("world") World world) {
     this.uhcGameManager.startGame(sender, tp, world == null ? Bukkit.getWorld(worlds.worldName()) : world);
   }
 

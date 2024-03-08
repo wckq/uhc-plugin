@@ -3,7 +3,6 @@ package io.github.wickeddroid.plugin.world;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Biome;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -23,7 +22,7 @@ public class ScatterTask {
             throw new ExceptionInInitializerError("Unsupported Experimental Scatter version.");
         }
 
-        io.github.wickeddroid.api.team.ScatterTask scatterTask = (io.github.wickeddroid.api.team.ScatterTask) task.newInstance();
+        io.github.wickeddroid.api.world.ScatterTask scatterTask = (io.github.wickeddroid.api.world.ScatterTask) task.newInstance();
 
         return scatterTask.scatterTask(worldName, maxX, maxZ, count, preventLiquid, aboveSeaLevel, bannedBiomes, progress);
     }

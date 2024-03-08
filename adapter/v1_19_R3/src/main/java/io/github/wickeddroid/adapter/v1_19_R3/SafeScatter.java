@@ -1,6 +1,6 @@
 package io.github.wickeddroid.adapter.v1_19_R3;
 
-import io.github.wickeddroid.api.team.ScatterTask;
+import io.github.wickeddroid.api.world.ScatterTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

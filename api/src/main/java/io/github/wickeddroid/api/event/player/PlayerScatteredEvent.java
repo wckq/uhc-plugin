@@ -1,9 +1,9 @@
 package io.github.wickeddroid.api.event.player;
 
 import io.github.wickeddroid.api.event.UhcEvent;
+import io.github.wickeddroid.api.world.ScatterTask;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @since 1.2.0-BETA
  * @see org.bukkit.event.Event
- * @see io.github.wickeddroid.api.team.ScatterTask
+ * @see ScatterTask
  */
 public class PlayerScatteredEvent extends UhcEvent {
 
