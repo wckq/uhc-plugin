@@ -27,10 +27,6 @@ public class NetherAdapter implements EnvironmentAdapter {
 
             if(block.getType() != Material.AIR) { continue; }
 
-            var upBlock =  world.getBlockAt(x, y+1, z);
-
-            if(upBlock.getType() != Material.AIR) { continue; }
-
             currentY = y+1;
         }
 
@@ -41,7 +37,13 @@ public class NetherAdapter implements EnvironmentAdapter {
     public boolean safe(Location location, List<Biome> bannedBiomes, boolean preventLiquid, boolean aboveSeaLevel) {
         var belowBlock = location.getWorld().getBlockAt((int) location.getX(), (int) (location.getY()-1), (int) location.getZ());
 
+        var upBlock = location.getWorld().getBlockAt((int) location.getX(), (int) (location.getY()+1), (int) location.getZ());
+
         if(!belowBlock.getType().isSolid() || belowBlock.getType() == Material.LAVA || belowBlock.getType() == Material.MAGMA_BLOCK) {
+            return false;
+        }
+
+        if(upBlock.getType() != Material.AIR) {
             return false;
         }
 
