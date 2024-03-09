@@ -168,7 +168,7 @@ public class CommandPlayer implements CommandClass {
     sender.openInventory(settingsEnabledInventory.createInventory());
   }
 
-  @Command(names = {"inv", "inventory", "invsee"}, permission = "uhc.inventory")
+  @Command(names = {"inv", "inventory", "invsee"}, permission = "uhc.staff.inventory")
   public void inventory(final @Sender Player sender, final Player target) {
     if(sender.getGameMode() == GameMode.SPECTATOR) {
       playerInventory.openInv(target, sender);

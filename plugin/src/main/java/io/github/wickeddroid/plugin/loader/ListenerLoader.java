@@ -29,6 +29,7 @@ public class ListenerLoader implements Loader {
   private BlockPlaceListener blockPlaceListener;
   private BrewEventListener brewEventListener;
   private LootGenerateListener lootGenerateListener;
+  private PlayerInteractAtEntityListener playerInteractAtEntityListener;
 
   @Override
   public void load() {
@@ -49,7 +50,8 @@ public class ListenerLoader implements Loader {
             blockPlaceListener,
             blockBreakListener,
             brewEventListener,
-            lootGenerateListener
+            lootGenerateListener,
+            playerInteractAtEntityListener
     );
   }
 
