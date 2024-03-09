@@ -30,7 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
                 "<gold>   » Random (Anteriores 3)",
                 "<gold>   » Random (Cualquier Item)"
         },
-        material = Material.BUNDLE,
+        material = Material.NETHER_STAR,
         supportsOptions = true
 )
 public class StarterItemScenario extends ListenerScenario {
