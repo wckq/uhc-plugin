@@ -4,10 +4,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+
 @SuppressWarnings("")
 @ConfigSerializable
 public class Messages {
-
   private String prefix = "<gradient:#FEE679:#E5BF18>UHC ➣";
   private Team team = new Team();
   private Other other = new Other();
@@ -33,7 +33,6 @@ public class Messages {
   public @NonNull String prefix() {
     return this.prefix;
   }
-
   @ConfigSerializable
   public static class Game {
     private String hasStarted = "El juego ya ha empezado.";
@@ -221,16 +220,6 @@ public class Messages {
     public @NonNull String invalidAmplifier() { return this.invalidAmplifier; }
 
     public @NonNull String changeFinalHealAmplifier() { return this.changeFinalHealAmplifier; }
-  }
-
-  @ConfigSerializable
-  public static class Scenarios {
-
-  }
-
-  @ConfigSerializable
-  public static class Settings {
-
   }
 
   @ConfigSerializable

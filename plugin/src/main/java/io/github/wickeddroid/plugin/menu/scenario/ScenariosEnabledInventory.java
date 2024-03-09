@@ -3,6 +3,7 @@ package io.github.wickeddroid.plugin.menu.scenario;
 import io.github.wickeddroid.api.scenario.GameScenario;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
 import io.github.wickeddroid.plugin.menu.UhcInventory;
+import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.Component;
@@ -14,8 +15,10 @@ import team.unnamed.gui.menu.item.ItemClickable;
 import team.unnamed.gui.menu.type.MenuInventory;
 import team.unnamed.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScenariosEnabledInventory extends UhcInventory {
@@ -43,10 +46,7 @@ public class ScenariosEnabledInventory extends UhcInventory {
                     ItemBuilder.newBuilder(gameScenario.getMaterial())
                             .name(MessageUtil.parseStringToComponent("<color:#93FF9E>" + gameScenario.getName())
                                     .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
-                            .lore(Arrays.stream(gameScenario.getDescription())
-                                    .map(lore -> MessageUtil.parseStringToComponent(lore)
-                                            .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
-                                    .collect(Collectors.toList()))
+                            .lore(getLore(gameScenario))
                             .build()
             ))
             .itemsPerRow(7)
@@ -78,5 +78,23 @@ public class ScenariosEnabledInventory extends UhcInventory {
             );
 
     return menuInventory.build();
+  }
+
+
+  private List<Component> getLore(GameScenario gameScenario) {
+      var list = Arrays.stream(gameScenario.getDescription())
+              .map(lore -> MessageUtil.parseStringToComponent(lore)
+                      .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)).collect(Collectors.toCollection(ArrayList::new));
+
+      if(gameScenario.isSupportsOptions()) {
+          list.add(Component.text(""));
+          list.add(MessageUtil.parseStringToComponent("<blue><bold>Opciones »"));
+
+          gameScenario.getOptions().forEach((string, option) -> {
+              list.add(MessageUtil.parseStringToComponent("<red>"+string+" <gray>» <red>"+option.value().getValueDisplay()));
+          });
+      }
+
+      return list;
   }
 }

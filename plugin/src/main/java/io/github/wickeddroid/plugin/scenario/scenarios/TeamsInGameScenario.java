@@ -29,7 +29,7 @@ import java.util.*;
 
 @RegisteredScenario
 @Scenario(
-        name = "Teams In Game",
+        name = "Teams in Game",
         key = "tig",
         description = {
                 "<gray>- Los equipos se forman en la partida.",
