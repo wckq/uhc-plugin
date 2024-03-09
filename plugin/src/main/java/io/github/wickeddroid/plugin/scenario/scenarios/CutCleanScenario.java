@@ -108,7 +108,11 @@ public class CutCleanScenario extends ListenerScenario {
             Material.RABBIT, Material.COOKED_RABBIT
     );
 
-    var dropsMaterial = drops.stream().collect(Collectors.toMap(ItemStack::getType, itemStack -> itemStack));
+    var dropsMaterial = drops.stream().collect(Collectors.toMap(ItemStack::getType,
+            itemStack -> itemStack,
+            (item1, item2) -> {
+                return item1.add(item2.getAmount());
+            }));
 
     dropReplacements.forEach((from, to) -> {
 
