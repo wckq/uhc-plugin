@@ -238,6 +238,8 @@ public class Messages {
     private String cleanItemDisabled = "El clean item se encuentra desactivado.";
     private String teamsInGameTeamJoin = "El equipo <param-who> se ha unido al equipo <param-joined>";
     private String teamsInGamePlayerNearby = "<green>¡Tienes un jugador a <param-distance> bloques!";
+    private String killsTop ="<gold>Kills Top: <br><param-top>";
+    private String invalidCount = "El número que introdujiste no es válido.";
 
     public @NonNull String teamChatOn() {
       return this.teamChatOn;
@@ -279,5 +281,7 @@ public class Messages {
 
     public @NonNull String teamsInGameTeamJoin() { return this.teamsInGameTeamJoin; }
     public @NonNull String teamsInGamePlayerNearby() { return this.teamsInGamePlayerNearby; }
+    public @NonNull String killsTop() { return this.killsTop; }
+    public @NonNull String invalidCount() { return this.invalidCount; }
   }
 }
