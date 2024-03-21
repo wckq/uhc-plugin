@@ -101,7 +101,7 @@ public class PluginUtil {
                 MessageUtil.parseStringToComponent(
                         scoreboardGame.teamDisplay(),
                         Placeholder.parsed("player-name", name),
-                        Placeholder.parsed("player-hp", String.valueOf(Math.round(player.getHealth()))),
+                        Placeholder.parsed("player-hp", String.valueOf(Math.round(pl.getPlayer().getHealth()))),
                         Placeholder.parsed("status-symbol", scoreboardGame.symbols().alive())
                 )
         );
