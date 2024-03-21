@@ -4,6 +4,7 @@ package io.github.wickeddroid.plugin.menu.settings;
 import io.github.wickeddroid.api.scenario.GameScenario;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
 import io.github.wickeddroid.plugin.menu.UhcInventory;
+import io.github.wickeddroid.plugin.menu.util.MenuUtils;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import io.github.wickeddroid.plugin.scenario.SettingManager;
 import io.github.wickeddroid.plugin.util.MessageUtil;
@@ -49,21 +50,13 @@ public class SettingsEnabledInventory extends UhcInventory {
                                         .collect(Collectors.toList()))
                                 .build()
                 ))
-                .itemsPerRow(7)
-                .skippedSlots(9, 17, 27, 35, 36, 44, 46, 52)
-                .bounds(9, 45)
-                .nextPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
-                        .name(Component.text("Next page - " + page))
-                        .build()))
-                .previousPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
-                        .name(Component.text("Previous page - " + page))
-                        .build()))
-                .itemIfNoNextPage(ItemClickable.onlyItem(
-                        ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
-                                .name(Component.text(" ")).build()))
-                .itemIfNoPreviousPage(ItemClickable.onlyItem(
-                        ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
-                                .name(Component.text(" ")).build()))
+                .bounds(MenuUtils.PAGINATED_BOUND_FROM, MenuUtils.PAGINATED_BOUND_TO)
+                .itemsPerRow(MenuUtils.PAGINATED_ROW_ITEMS_COUNT)
+                .nextPageItem(MenuUtils::NEXT_PAGE)
+                .previousPageItem(MenuUtils::PREVIOUS_PAGE)
+                .itemIfNoNextPage(MenuUtils.NO_NEXT_PREVIOUS_PAGE)
+                .itemIfNoPreviousPage(MenuUtils.NO_NEXT_PREVIOUS_PAGE)
+                .fillBorders(MenuUtils.BORDER_PANEL)
                 .layoutLines(
                         "xxxxxxxxx",
                         "xeeeeeeex",
@@ -72,10 +65,7 @@ public class SettingsEnabledInventory extends UhcInventory {
                         "xeeeeeeex",
                         "pxxxxxxxn"
                 )
-                .layoutItem('x', ItemClickable.onlyItem(
-                        ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
-                                .build())
-                );
+                .layoutItem('x', MenuUtils.BORDER_PANEL);
 
         return menuInventory.build();
     }

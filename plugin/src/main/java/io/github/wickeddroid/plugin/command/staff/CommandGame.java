@@ -37,6 +37,7 @@ public class CommandGame implements CommandClass {
   @Command(names = "host")
   public void host(final @Sender Player sender) {
     this.uhcGame.setHost(sender.getName());
+    messageHandler.send(sender, messages.other().getDeprecatedWarning(), "1.4.0-BETA", "/uhcstaff");
   }
 
   @Command(names = "start")

@@ -28,6 +28,7 @@ public class CommandSetting implements CommandClass {
             final @Sender Player sender
     ) {
         sender.openInventory(settingsInventory.createInventory());
+        messageHandler.send(sender, messages.other().getDeprecatedWarning(), "1.4.0-BETA", "/uhcstaff");
     }
 
     @Command(names = "apple-rate")

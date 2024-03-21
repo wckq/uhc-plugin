@@ -12,12 +12,15 @@ var extraData = "-BETA-pre3"
 project.version = majorVersion.plus(".").plus(minorVersion).plus(".").plus(patchVersion).plus(extraData)
 
 dependencies {
+    implementation("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
+
     paperweight.paperDevBundle("1.19.2-R0.1-SNAPSHOT")
 
     implementation("org.spongepowered:configurate-gson:4.1.2")
     implementation("me.catcoder:bukkit-sidebar:6.2.5-SNAPSHOT")
 
-    implementation("com.github.agus5534.gui:gui-menu-api:45e66ff34e")
+    implementation("com.github.Agus5534.gui:gui-menu-api:b876cc3a18")
 
     implementation("team.unnamed:commandflow-bukkit:0.7.0")
     implementation("team.unnamed:commandflow-bukkit-common:0.7.0")
@@ -28,7 +31,7 @@ dependencies {
     implementation("team.unnamed:inject:2.0.0")
     compileOnly("net.kyori:adventure-api:4.15.0")
     arrayOf("1_19_R1", "1_19_R2", "1_19_R3", "1_20_R1", "1_20_R2").forEach {
-        implementation("com.github.agus5534.gui:gui-menu-adapt-v$it:45e66ff34e:dev")
+        implementation("com.github.Agus5534.gui:gui-menu-adapt-v$it:b876cc3a18:dev")
         implementation(project(":uhc-plugin-adapter-v$it"))
     }
 
@@ -47,9 +50,11 @@ tasks {
 
         options.release.set(17)
     }
+
     runServer {
         minecraftVersion("1.19.4")
     }
+
     shadowJar {
         val packageName = "io.github.wickeddroid.libs"
 

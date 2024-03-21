@@ -6,6 +6,7 @@ import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.api.util.EnhancedIterator;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
 import io.github.wickeddroid.plugin.menu.UhcInventory;
+import io.github.wickeddroid.plugin.menu.util.MenuUtils;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import team.unnamed.gui.menu.item.ItemClickable;
 import team.unnamed.gui.menu.type.MenuInventory;
+import team.unnamed.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,14 +25,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScenarioOptionsInventory extends UhcInventory {
-    private final GameScenario scenario;
-    private final ScenariosInventory oldInv;
 
-    public ScenarioOptionsInventory(GameScenario scenario, ScenariosInventory oldInv) {
-        super("Opciones de " + scenario.getName(), 6);
+    @Inject
+    private ScenariosInventory scenariosInventory;
 
+    public ScenarioOptionsInventory() {
+        super("Opciones de Scenario", 6);
+    }
+
+    private GameScenario scenario;
+
+    public Inventory createWithScenario(GameScenario scenario) {
         this.scenario = scenario;
-        this.oldInv = oldInv;
+
+        return createInventory();
     }
 
     @Override
@@ -73,46 +81,25 @@ public class ScenarioOptionsInventory extends UhcInventory {
 
                             return true;
                         }).build())
-                .bounds(9, 45)
-                .itemIfNoNextPage(ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE)
-                        .name(Component.text(" "))
-                        .build()))
-                .itemIfNoPreviousPage(ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE)
-                        .name(Component.text(" "))
-                        .build()))
-                .nextPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
-                        .name(Component.text("Siguiente pagina - " + page))
-                        .build()))
-                .previousPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
-                        .name(Component.text("Anterior pagina - " + page))
-                        .build()))
-                .itemIfNoNextPage(ItemClickable.onlyItem(
-                        ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
-                                .name(Component.text(" ")).build()))
-                .itemIfNoPreviousPage(ItemClickable.onlyItem(
-                        ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
-                                .name(Component.text(" ")).build()))
+                .bounds(MenuUtils.PAGINATED_BOUND_FROM, MenuUtils.PAGINATED_BOUND_TO)
+                .itemsPerRow(MenuUtils.PAGINATED_ROW_ITEMS_COUNT)
+                .nextPageItem(MenuUtils::NEXT_PAGE)
+                .previousPageItem(MenuUtils::PREVIOUS_PAGE)
+                .itemIfNoNextPage(MenuUtils.NO_NEXT_PREVIOUS_PAGE)
+                .itemIfNoPreviousPage(MenuUtils.NO_NEXT_PREVIOUS_PAGE)
+                .fillBorders(MenuUtils.BORDER_PANEL)
                 .layoutLines(
                         "xxxxxxxxx",
-                        "eeeeeeeee",
-                        "eeeeeeeee",
-                        "eeeeeeeee",
-                        "eeeeeeeee",
-                        "pxxxcxxxn"
+                        "xeeeeeeex",
+                        "xeeeeeeex",
+                        "xeeeeeeex",
+                        "xeeeeeeex",
+                        "pxxxxxxxn"
                 )
-                .layoutItem('x', ItemClickable.onlyItem(
-                        ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
-                                .name(Component.text(" "))
-                                .build())
-                )
-                .layoutItem('c', ItemClickable.builder()
-                        .item(ItemBuilder.newBuilder(Material.BARRIER).name(MessageUtil.parseStringToComponent("<dark_red>Volver")).build())
-                        .action(event -> {
-                            event.getInventory().close();
-                            event.getWhoClicked().openInventory(oldInv.createInventory());
-                            return true;
-                        }).build()
-                );
+                .layoutItem('x', MenuUtils.BORDER_PANEL)
+                .closeAction(player -> {
+                    player.openInventory(scenariosInventory.createInventory());
+                });
 
         return menuInventory.build();
     }
@@ -120,7 +107,7 @@ public class ScenarioOptionsInventory extends UhcInventory {
 
     private ItemStack item(Option<?> option) {
         return ItemBuilder.newBuilder(Material.CHAIN_COMMAND_BLOCK)
-                .name(MessageUtil.parseStringToComponent("<color:#93FF9E>" + option.optionName() + " option")
+                .name(MessageUtil.parseStringToComponent("<color:#93FF9E>" + option.optionName())
                         .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                 .lore(Arrays.stream(new String[]
                                 {"<red>Opción Actual: <gold>" + option.value().getValueDisplay(), "", "<gray>» Click Izquierdo para <bold>Avanzar", "<gray>» Click Derecho para <bold>Retroceder"}

@@ -3,6 +3,7 @@ package io.github.wickeddroid.plugin.command;
 import io.github.wickeddroid.plugin.command.staff.*;
 import io.github.wickeddroid.plugin.command.staff.CommandTeam;
 import io.github.wickeddroid.plugin.game.UhcGameManager;
+import io.github.wickeddroid.plugin.menu.host.HostMenu;
 import io.github.wickeddroid.plugin.player.UhcPlayerHandler;
 import io.github.wickeddroid.plugin.world.Worlds;
 import team.unnamed.commandflow.annotated.CommandClass;
@@ -20,6 +21,16 @@ public class CommandUhcStaff implements CommandClass {
   @Inject private Worlds worlds;
   @Inject
   private Plugin plugin;
+  @Inject
+  private HostMenu hostMenu;
+
+
+  @Command(names = "")
+  public void menu(
+    final @Sender Player sender
+  ) {
+    sender.openInventory(hostMenu.createInventory());
+  }
 
   @Command(names = "later-scatter")
   public void scatter(

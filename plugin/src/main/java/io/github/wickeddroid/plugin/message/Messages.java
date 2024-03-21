@@ -1,5 +1,6 @@
 package io.github.wickeddroid.plugin.message;
 
+import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -13,6 +14,7 @@ public class Messages {
   private Other other = new Other();
   private Game game = new Game();
   private Staff staff = new Staff();
+  private Menu menu = new Menu();
 
   public @NonNull Team team() {
     return this.team;
@@ -29,6 +31,8 @@ public class Messages {
   public @NonNull Staff staff() {
     return this.staff;
   }
+
+  public @NonNull Menu menu() { return this.menu; }
 
   public @NonNull String prefix() {
     return this.prefix;
@@ -240,6 +244,8 @@ public class Messages {
     private String teamsInGamePlayerNearby = "<green>¡Tienes un jugador a <param-distance> bloques!";
     private String killsTop ="<gold>Kills Top: <br><param-top>";
     private String invalidCount = "El número que introdujiste no es válido.";
+    @Getter
+    private String deprecatedWarning = "<yellow>⚠ <red>Estás usando un sistema que será borrado en la versión <param-version>, se recomienda el uso de <gold><param-replacement>";
 
     public @NonNull String teamChatOn() {
       return this.teamChatOn;
@@ -283,5 +289,23 @@ public class Messages {
     public @NonNull String teamsInGamePlayerNearby() { return this.teamsInGamePlayerNearby; }
     public @NonNull String killsTop() { return this.killsTop; }
     public @NonNull String invalidCount() { return this.invalidCount; }
+  }
+
+  @ConfigSerializable
+  public static class Menu {
+    @Getter
+    private String hostMenuTitle = "<red>Host Menu";
+    @Getter
+    private String hostButtonUnselected = "<yellow>» Click para ser host «";
+    @Getter
+    private String hostButtonSelected = "<yellow>Host » <param-host>";
+    @Getter
+    private String settingsButton = "<aqua> » Settings";
+    @Getter
+    private String settingsButtonDescription = "<gold>» <param-enabled>/<param-settings> <gray>Settings activas";
+    @Getter
+    private String scenariosButton = "<aqua> » Scenarios";
+    @Getter
+    private String scenariosButtonDescription = "<gold> » <param-enabled>/<param-scenarios> <gray>Scenarios activos";
   }
 }
