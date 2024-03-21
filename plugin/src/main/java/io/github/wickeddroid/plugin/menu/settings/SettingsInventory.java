@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.menu.settings;
 
 import io.github.wickeddroid.api.scenario.GameScenario;
+import io.github.wickeddroid.api.scenario.internal.WorkInProgress;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
 import io.github.wickeddroid.plugin.menu.UhcInventory;
 import io.github.wickeddroid.plugin.menu.host.HostMenu;
@@ -20,6 +21,7 @@ import team.unnamed.gui.menu.type.MenuInventory;
 import team.unnamed.inject.Inject;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class SettingsInventory extends UhcInventory {
@@ -37,7 +39,7 @@ public class SettingsInventory extends UhcInventory {
                 GameScenario.class, title, 6
         );
 
-        final var entities = settingManager.getSettings();
+        final var entities = settingManager.getSettings().stream().filter(scenario -> !scenario.getClass().isAnnotationPresent(WorkInProgress.class)).sorted(Comparator.comparing(GameScenario::getName)).collect(Collectors.toList());
 
         menuInventory.entities(entities)
                 .entityParser(gameScenario -> ItemClickable.builder()

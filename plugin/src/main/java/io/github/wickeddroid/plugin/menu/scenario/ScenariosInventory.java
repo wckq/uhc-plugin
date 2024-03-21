@@ -1,6 +1,7 @@
 package io.github.wickeddroid.plugin.menu.scenario;
 
 import io.github.wickeddroid.api.scenario.GameScenario;
+import io.github.wickeddroid.api.scenario.internal.WorkInProgress;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
 import io.github.wickeddroid.plugin.menu.UhcInventory;
 import io.github.wickeddroid.plugin.menu.host.HostMenu;
@@ -43,7 +44,7 @@ public class ScenariosInventory extends UhcInventory {
             GameScenario.class, title
     );
 
-    final var entities = scenarioManager.getScenarios().stream().sorted(Comparator.comparing(GameScenario::getName)).collect(Collectors.toList());
+    final var entities = scenarioManager.getScenarios().stream().filter(scenario -> !scenario.getClass().isAnnotationPresent(WorkInProgress.class)).sorted(Comparator.comparing(GameScenario::getName)).collect(Collectors.toList());
 
     menuInventory.entities(entities)
             .entityParser(gameScenario -> ItemClickable.builder()
