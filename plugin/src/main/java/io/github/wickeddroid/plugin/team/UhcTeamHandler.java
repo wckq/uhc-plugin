@@ -1,8 +1,10 @@
 package io.github.wickeddroid.plugin.team;
 
 import io.github.wickeddroid.api.cache.Cache;
+import io.github.wickeddroid.api.event.UhcEventManager;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.game.UhcGameState;
+import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.plugin.cache.DynamicCache;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
@@ -14,6 +16,9 @@ import team.unnamed.inject.InjectAll;
 import team.unnamed.inject.InjectIgnore;
 import team.unnamed.inject.Singleton;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Singleton
@@ -29,10 +34,60 @@ public class UhcTeamHandler {
   @InjectIgnore
   private final Cache<String, String> inviteCache = new DynamicCache<>(5, TimeUnit.MINUTES);
 
-  public void addPlayerToTeam(
+  public boolean forcePlayerToTeam(
+          final Player teamMember,
+          final Player player
+  ) {
+    final var playerName = player.getName();
+    final var uhcTeam = this.uhcTeamManager.getTeamByPlayer(teamMember.getName());
+    final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(playerName);
+
+    if (uhcTeam == null) {
+      this.messageHandler.send(player, this.messages.team().playerDoesNotTeamExist());
+      return false;
+    }
+
+    if (this.uhcTeamManager.getTeamByPlayer(player.getName()) != null) {
+      this.uhcTeamManager.removeTeam(player.getUniqueId());
+    }
+
+    uhcPlayer.setUhcTeam(uhcTeam);
+    uhcTeam.addMember(playerName);
+    UhcEventManager.fireTeamPlayerJoin(player, uhcTeam);
+
+    return true;
+  }
+
+  public boolean forceTeamJoin(
+          final UhcTeam team,
+          final UhcTeam team2
+  ) {
+
+
+    if (team == null || team2 == null) {
+      return false;
+    }
+
+    List<String> teamPlayers = new ArrayList<>(team2.getMembers());
+
+    this.uhcTeamManager.removeTeam(Bukkit.getOfflinePlayer(team2.getMembers().get(0)).getUniqueId());
+
+    teamPlayers.forEach(s -> {
+      var uhcPlayer = this.uhcPlayerRegistry.getPlayer(s);
+
+      if(uhcPlayer == null) { return; }
+
+      uhcPlayer.setUhcTeam(team);
+      UhcEventManager.fireTeamPlayerJoin(Objects.requireNonNull(Bukkit.getPlayer(s)), team);
+      team.addMember(s);
+    });
+
+    return true;
+  }
+
+  public boolean addPlayerToTeam(
           final Player leader,
-          final Player player,
-          final boolean forceJoin
+          final Player player
   ) {
     final var playerName = player.getName();
     final var uhcTeam = this.uhcTeamManager.getTeamByPlayer(leader.getName());
@@ -41,25 +96,29 @@ public class UhcTeamHandler {
 
     if (uhcTeam == null) {
       this.messageHandler.send(player, this.messages.team().playerDoesNotTeamExist());
-      return;
+      return false;
     }
 
-    if (!forceJoin && (teamInvite == null || !teamInvite.equals(uhcTeam.getName()))) {
+    if (teamInvite == null || !teamInvite.equals(uhcTeam.getName())) {
       this.messageHandler.send(player, this.messages.team().inviteDoesNotExist(), uhcTeam.getName());
-      return;
+      return false;
     }
 
     if (this.uhcTeamManager.getTeamByPlayer(player.getName()) != null) {
       this.messageHandler.send(player, this.messages.team().alreadyExists());
-      return;
+      return false;
     }
 
     this.messageHandler.send(leader, this.messages.team().joinPlayer(), playerName);
     this.messageHandler.send(player, this.messages.team().join(), uhcTeam.getName());
-    this.inviteCache.invalidate(playerName);
 
     uhcPlayer.setUhcTeam(uhcTeam);
     uhcTeam.addMember(playerName);
+    UhcEventManager.fireTeamPlayerJoin(player, uhcTeam);
+
+    this.inviteCache.invalidate(playerName);
+
+    return true;
   }
 
   public void removePlayerOfTeam(
@@ -90,6 +149,7 @@ public class UhcTeamHandler {
     this.messageHandler.send(player, this.messages.team().leave(), uhcTeam.getName());
     uhcPlayer.setUhcTeam(null);
     uhcTeam.removeMember(playerName);
+    UhcEventManager.fireTeamPlayerLeave(player, uhcTeam);
   }
 
   public void invitePlayerToTeam(

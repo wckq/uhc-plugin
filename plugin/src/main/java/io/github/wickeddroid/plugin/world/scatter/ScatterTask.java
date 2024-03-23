@@ -1,19 +1,19 @@
-package io.github.wickeddroid.plugin.world;
+package io.github.wickeddroid.plugin.world.scatter;
 
+import io.github.wickeddroid.api.world.EnvironmentAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.jetbrains.annotations.ApiStatus;
+import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-@ApiStatus.Experimental
 public class ScatterTask {
 
 
-    public static @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, Consumer<Integer> progress) throws Exception {
+    public static @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, boolean preventLiquid, boolean aboveSeaLevel, List<Biome> bannedBiomes, EnvironmentAdapter adapter, Consumer<Integer> progress) throws Exception {
         Constructor<?> task;
         try {
             String className = "io.github.wickeddroid.adapter."+VERSION+".SafeScatter";
@@ -23,9 +23,9 @@ public class ScatterTask {
             throw new ExceptionInInitializerError("Unsupported Experimental Scatter version.");
         }
 
-        io.github.wickeddroid.api.team.ScatterTask scatterTask = (io.github.wickeddroid.api.team.ScatterTask) task.newInstance();
+        io.github.wickeddroid.api.world.ScatterTask scatterTask = (io.github.wickeddroid.api.world.ScatterTask) task.newInstance();
 
-        return scatterTask.scatterTask(worldName, maxX, maxZ, count, progress);
+        return scatterTask.scatterTask(worldName, maxX, maxZ, count, preventLiquid, aboveSeaLevel, bannedBiomes, adapter, progress);
     }
 
 

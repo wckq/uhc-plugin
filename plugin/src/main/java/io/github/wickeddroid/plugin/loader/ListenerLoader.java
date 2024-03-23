@@ -26,10 +26,10 @@ public class ListenerLoader implements Loader {
   private FoodLevelChangeListener foodLevelChangeListener;
   private EntityDamageListener entityDamageListener;
   private PlayerAdvancementCriterionGrantListener playerAdvancementCriterionGrantListener;
-  private EntityDeathEvent entityDeathEvent;
   private BlockPlaceListener blockPlaceListener;
   private BrewEventListener brewEventListener;
   private LootGenerateListener lootGenerateListener;
+  private PlayerInteractAtEntityListener playerInteractAtEntityListener;
 
   @Override
   public void load() {
@@ -47,11 +47,11 @@ public class ListenerLoader implements Loader {
             foodLevelChangeListener,
             entityDamageListener,
             playerAdvancementCriterionGrantListener,
-            entityDeathEvent,
             blockPlaceListener,
             blockBreakListener,
             brewEventListener,
-            lootGenerateListener
+            lootGenerateListener,
+            playerInteractAtEntityListener
     );
   }
 

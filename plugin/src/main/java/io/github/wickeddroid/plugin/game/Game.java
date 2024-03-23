@@ -12,11 +12,11 @@ public class Game {
     private boolean ironmanEnabled = true;
     private boolean papermanEnabled = true;
     private boolean spectatorsEnabled = false;
+    private boolean laterScatterIronman = false;
     private boolean initialBoat = true;
-    private boolean replaceGhastDrop = false;
-    private boolean useExperimentalScatter = false;
     private boolean banRegenerationPotion = true;
     private boolean banAmplifiedStrengthPotion = true;
+    private boolean useLoginSecurityPrevention = false;
     private Sound playerDeathSound = Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.PLAYER, 1.0F, 1.0F);
 
     public boolean starterInvulnerability() { return this.starterInvulnerability; }
@@ -24,11 +24,11 @@ public class Game {
     public boolean ironmanEnabled() { return this.ironmanEnabled; }
     public boolean papermanEnabled() { return this.papermanEnabled; }
     public boolean spectatorsEnabled() { return this.spectatorsEnabled; }
+    public boolean laterScatterIronman() { return this.laterScatterIronman; }
     public boolean initialBoat() { return this.initialBoat; }
-    public boolean replaceGhastDrop() { return this.replaceGhastDrop; }
-    public boolean useExperimentalScatter() { return this.useExperimentalScatter; }
     public boolean banRegenerationPotion() { return this.banRegenerationPotion; }
     public boolean banAmplifiedStrengthPotion() { return this.banAmplifiedStrengthPotion; }
+    public boolean useLoginSecurityPrevention() { return this.useLoginSecurityPrevention; }
     public @NonNull Sound playerDeathSound() { return this.playerDeathSound; }
 
     private PlayerList playerList = new PlayerList();

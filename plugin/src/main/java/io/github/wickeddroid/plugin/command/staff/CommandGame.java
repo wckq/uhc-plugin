@@ -3,13 +3,18 @@ package io.github.wickeddroid.plugin.command.staff;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.plugin.backup.Backup;
 import io.github.wickeddroid.plugin.game.UhcGameManager;
+import io.github.wickeddroid.plugin.message.MessageHandler;
+import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.world.Worlds;
-import me.fixeddev.commandflow.annotated.CommandClass;
-import me.fixeddev.commandflow.annotated.annotation.Command;
-import me.fixeddev.commandflow.annotated.annotation.Named;
-import me.fixeddev.commandflow.annotated.annotation.SubCommandClasses;
-import me.fixeddev.commandflow.bukkit.annotation.Sender;
+import team.unnamed.commandflow.annotated.CommandClass;
+import team.unnamed.commandflow.annotated.annotation.Command;
+import team.unnamed.commandflow.annotated.annotation.Named;
+import team.unnamed.commandflow.annotated.annotation.OptArg;
+import team.unnamed.commandflow.annotated.annotation.SubCommandClasses;
+import team.unnamed.commandflow.annotated.annotation.Sender;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import team.unnamed.inject.InjectAll;
@@ -26,15 +31,18 @@ public class CommandGame implements CommandClass {
   private UhcTeamRegistry uhcTeamRegistry;
   private UhcGameManager uhcGameManager;
   private Backup backup;
+  private MessageHandler messageHandler;
+  private Messages messages;
 
   @Command(names = "host")
   public void host(final @Sender Player sender) {
     this.uhcGame.setHost(sender.getName());
+    messageHandler.send(sender, messages.other().getDeprecatedWarning(), "1.4.0-BETA", "/uhcstaff");
   }
 
   @Command(names = "start")
-  public void start(final @Sender Player sender, @Named("scatter") boolean tp) {
-    this.uhcGameManager.startGame(sender, tp);
+  public void start(final @Sender Player sender, @Named("scatter") boolean tp, @OptArg(value = "uhc_world") @Named("world") World world) {
+    this.uhcGameManager.startGame(sender, tp, world == null ? Bukkit.getWorld(worlds.worldName()) : world);
   }
 
   @Command(names = "backup")
@@ -46,17 +54,13 @@ public class CommandGame implements CommandClass {
     }
   }
 
-  @Command(names = "apple-rate")
-  public void appleRate(final @Sender Player sender, final int appleRate) {
-    this.uhcGame.setAppleRate(appleRate);
-  }
-
   @Command(names = "players-size")
   public void playersSize(final @Sender Player sender, final int size) {
     if(size <= uhcGame.getTeamSize()) { return; }
 
     this.uhcGame.setPlayersSize(size);
   }
+
 
 }
 

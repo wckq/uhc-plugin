@@ -1,25 +1,33 @@
 package io.github.wickeddroid.plugin.command;
 
+import com.google.common.collect.Lists;
 import io.github.wickeddroid.api.game.UhcGame;
+import io.github.wickeddroid.api.player.UhcPlayer;
 import io.github.wickeddroid.plugin.game.UhcGameHandler;
 import io.github.wickeddroid.plugin.menu.PlayerInventory;
 import io.github.wickeddroid.plugin.menu.scenario.ScenariosEnabledInventory;
 import io.github.wickeddroid.plugin.menu.settings.SettingsEnabledInventory;
-import io.github.wickeddroid.plugin.menu.settings.SettingsInventory;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
-import me.fixeddev.commandflow.annotated.CommandClass;
-import me.fixeddev.commandflow.annotated.annotation.Command;
-import me.fixeddev.commandflow.bukkit.annotation.Sender;
+import team.unnamed.commandflow.annotated.CommandClass;
+import team.unnamed.commandflow.annotated.annotation.Command;
+import team.unnamed.commandflow.annotated.annotation.Named;
+import team.unnamed.commandflow.annotated.annotation.OptArg;
+import team.unnamed.commandflow.annotated.annotation.Sender;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import team.unnamed.inject.InjectAll;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @InjectAll
 public class CommandPlayer implements CommandClass {
@@ -100,6 +108,31 @@ public class CommandPlayer implements CommandClass {
     sender.openInventory(this.uhcTeamManager.getTeamByPlayer(uhcPlayer.getName()).getTeamInventory());
   }
 
+  @Command(names = { "kt", "killstop" })
+  public void killsTop(@Sender Player sender, @OptArg() @Named("count") Integer count) {
+    var requested = count == null ? -1 : count;
+
+    if(requested > uhcPlayerRegistry.getPlayers().size()) {
+      messageHandler.send(sender, messages.other().invalidCount());
+      return;
+    }
+
+    List<UhcPlayer> killsSorted = new ArrayList<>(uhcPlayerRegistry.getPlayers());
+    StringBuilder builder = new StringBuilder();
+
+    killsSorted.sort(Comparator.comparing(UhcPlayer::getKills).reversed());
+    AtomicInteger i = new AtomicInteger(1);
+
+
+    killsSorted.forEach(uhcPlayer -> {
+      if(requested > 0 && i.get() == requested) { return; }
+
+      builder.append("  <gray><bold>").append(i.get()).append(" ").append(uhcPlayer.getName()).append(" » ").append(uhcPlayer.getKills()).append(" Kills<br>");
+      i.getAndIncrement();
+    });
+
+    messageHandler.send(sender, messages.other().killsTop(), builder.toString());
+  }
   @Command(names = "cleanitem")
   public void cleanItem(@Sender Player sender) {
     final var inventory = sender.getInventory();
@@ -135,7 +168,7 @@ public class CommandPlayer implements CommandClass {
     sender.openInventory(settingsEnabledInventory.createInventory());
   }
 
-  @Command(names = {"inv", "inventory", "invsee"}, permission = "uhc.inventory")
+  @Command(names = {"inv", "inventory", "invsee"}, permission = "uhc.staff.inventory")
   public void inventory(final @Sender Player sender, final Player target) {
     if(sender.getGameMode() == GameMode.SPECTATOR) {
       playerInventory.openInv(target, sender);

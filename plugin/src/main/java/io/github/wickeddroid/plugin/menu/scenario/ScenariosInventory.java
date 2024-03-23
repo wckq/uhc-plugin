@@ -1,8 +1,11 @@
 package io.github.wickeddroid.plugin.menu.scenario;
 
 import io.github.wickeddroid.api.scenario.GameScenario;
+import io.github.wickeddroid.api.scenario.internal.WorkInProgress;
 import io.github.wickeddroid.api.util.item.ItemBuilder;
 import io.github.wickeddroid.plugin.menu.UhcInventory;
+import io.github.wickeddroid.plugin.menu.host.HostMenu;
+import io.github.wickeddroid.plugin.menu.util.MenuUtils;
 import io.github.wickeddroid.plugin.scenario.ScenarioManager;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import net.kyori.adventure.text.Component;
@@ -26,18 +29,22 @@ import java.util.stream.Collectors;
 public class ScenariosInventory extends UhcInventory {
 
   @Inject private ScenarioManager scenarioManager;
+  @Inject private HostMenu hostMenu;
+  @Inject private ScenarioOptionsInventory scenarioOptionsInventory;
 
+  private boolean redirect = false;
   public ScenariosInventory() {
     super("Scenarios", 6);
   }
 
   @Override
   public Inventory createInventory() {
+    redirect = false;
     final var menuInventory = MenuInventory.newPaginatedBuilder(
             GameScenario.class, title
     );
 
-    final var entities = scenarioManager.getScenarios().stream().sorted(Comparator.comparing(GameScenario::getName)).collect(Collectors.toList());
+    final var entities = scenarioManager.getScenarios().stream().filter(scenario -> !scenario.getClass().isAnnotationPresent(WorkInProgress.class)).sorted(Comparator.comparing(GameScenario::getName)).collect(Collectors.toList());
 
     menuInventory.entities(entities)
             .entityParser(gameScenario -> ItemClickable.builder()
@@ -55,7 +62,8 @@ public class ScenariosInventory extends UhcInventory {
 
                       if(gameScenario.isEnabled() && gameScenario.isSupportsOptions()) {
                           if(event.isShiftClick()) {
-                              event.getWhoClicked().openInventory(new ScenarioOptionsInventory(gameScenario, this).createInventory());
+                              redirect = true;
+                              event.getWhoClicked().openInventory(scenarioOptionsInventory.createWithScenario(gameScenario));
                               return true;
                           }
                       }
@@ -72,32 +80,26 @@ public class ScenariosInventory extends UhcInventory {
                     })
                     .build()
             )
-            .bounds(9, 45)
-            .nextPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
-                    .name(Component.text("Siguiente pagina - " + page))
-                    .build()))
-            .previousPageItem(page -> ItemClickable.onlyItem(ItemBuilder.newBuilder(Material.ARROW)
-                    .name(Component.text("Anterior pagina - " + page))
-                    .build()))
-            .itemIfNoNextPage(ItemClickable.onlyItem(
-                            ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
-                                    .name(Component.text(" ")).build()))
-            .itemIfNoPreviousPage(ItemClickable.onlyItem(
-                            ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
-                                    .name(Component.text(" ")).build()))
+            .bounds(MenuUtils.PAGINATED_BOUND_FROM, MenuUtils.PAGINATED_BOUND_TO)
+            .itemsPerRow(MenuUtils.PAGINATED_ROW_ITEMS_COUNT)
+            .nextPageItem(MenuUtils::NEXT_PAGE)
+            .previousPageItem(MenuUtils::PREVIOUS_PAGE)
+            .itemIfNoNextPage(MenuUtils.NO_NEXT_PREVIOUS_PAGE)
+            .itemIfNoPreviousPage(MenuUtils.NO_NEXT_PREVIOUS_PAGE)
+            .fillBorders(MenuUtils.BORDER_PANEL)
             .layoutLines(
                     "xxxxxxxxx",
-                    "eeeeeeeee",
-                    "eeeeeeeee",
-                    "eeeeeeeee",
-                    "eeeeeeeee",
+                    "xeeeeeeex",
+                    "xeeeeeeex",
+                    "xeeeeeeex",
+                    "xeeeeeeex",
                     "pxxxxxxxn"
             )
-            .layoutItem('x', ItemClickable.onlyItem(
-                    ItemBuilder.newBuilder(Material.WHITE_STAINED_GLASS_PANE)
-                            .name(Component.text(" "))
-                            .build())
-            );
+            .layoutItem('x', MenuUtils.BORDER_PANEL).closeAction(player -> {
+                if(!redirect) {
+                    player.openInventory(hostMenu.createInventory());
+                }
+            });
 
     return menuInventory.build();
   }

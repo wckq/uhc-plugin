@@ -1,4 +1,4 @@
-package io.github.wickeddroid.api.scenario;
+package io.github.wickeddroid.api.scenario.options;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.TypeElement;

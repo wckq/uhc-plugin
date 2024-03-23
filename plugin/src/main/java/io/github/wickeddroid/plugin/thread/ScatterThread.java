@@ -1,7 +1,9 @@
 package io.github.wickeddroid.plugin.thread;
 
+import io.github.wickeddroid.api.event.UhcEventManager;
 import io.github.wickeddroid.api.team.UhcTeam;
 import io.github.wickeddroid.api.event.player.PlayerScatteredEvent;
+import io.github.wickeddroid.plugin.game.DefaultUhcEventManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -11,27 +13,30 @@ public class ScatterThread implements Runnable {
   private final Location location;
   private Player player;
   private UhcTeam uhcTeam;
+  private boolean laterScatter;
 
   public ScatterThread(
           final Player player,
-          final Location location
-  ) {
+          final Location location,
+          final boolean laterScatter) {
     this.player = player;
     this.location = location;
+    this.laterScatter = laterScatter;
   }
 
   public ScatterThread(
           final UhcTeam uhcTeam,
-          final Location location
-  ) {
+          final Location location,
+          final boolean laterScatter) {
     this.uhcTeam = uhcTeam;
     this.location = location;
+    this.laterScatter = laterScatter;
   }
 
   @Override
   public void run() {
     if (uhcTeam == null) {
-      Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location, false));
+      UhcEventManager.fireScatter(player, location, laterScatter);
       return;
     }
 
@@ -43,7 +48,7 @@ public class ScatterThread implements Runnable {
         return;
       }
 
-      Bukkit.getPluginManager().callEvent(new PlayerScatteredEvent(player, location, false));
+      UhcEventManager.fireScatter(player, location, laterScatter);
     }
   }
 }

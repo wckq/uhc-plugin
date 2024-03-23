@@ -8,10 +8,10 @@ import io.github.wickeddroid.plugin.team.UhcTeamHandler;
 import io.github.wickeddroid.plugin.team.UhcTeamManager;
 import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.util.MessageUtil;
-import me.fixeddev.commandflow.annotated.CommandClass;
-import me.fixeddev.commandflow.annotated.annotation.Command;
-import me.fixeddev.commandflow.annotated.annotation.Named;
-import me.fixeddev.commandflow.bukkit.annotation.Sender;
+import team.unnamed.commandflow.annotated.CommandClass;
+import team.unnamed.commandflow.annotated.annotation.Command;
+import team.unnamed.commandflow.annotated.annotation.Named;
+import team.unnamed.commandflow.annotated.annotation.Sender;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -75,10 +75,9 @@ public class CommandTeam implements CommandClass {
   }
 
   @Command(names = "remove")
-  public void remove(final OfflinePlayer target) {
+  public void remove(final Player target) {
     this.uhcTeamManager.removeTeam(target.getUniqueId());
   }
-
 
   @Command(names = "remove-all")
   public void removeAll() {
@@ -93,7 +92,15 @@ public class CommandTeam implements CommandClass {
           final Player target,
           final Player leader
   ) {
-    this.uhcTeamHandler.addPlayerToTeam(leader, target, true);
+    this.uhcTeamHandler.forcePlayerToTeam(leader, target);
+  }
+
+  @Command(names = "force-leave")
+  public void forceLeave(
+          final @Sender Player sender,
+          final Player target
+  ) {
+    this.uhcTeamHandler.removePlayerOfTeam(target);
   }
 
   @Command(

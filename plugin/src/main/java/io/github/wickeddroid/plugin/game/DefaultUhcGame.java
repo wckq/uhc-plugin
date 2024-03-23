@@ -26,6 +26,10 @@ public class DefaultUhcGame implements UhcGame {
   private int playersSize;
   private int timeForPvp;
   private int timeForMeetup;
+  private int timeForFinalHeal;
+  private int finalHealAmplifier;
+  private int timeForFinalResistance;
+  private int finalResistanceAmplifier;
   private boolean cleanItem;
   private boolean teamInventory;
   private boolean pvp;
@@ -49,6 +53,10 @@ public class DefaultUhcGame implements UhcGame {
     this.cobwebLimit = 64;
     this.timeForPvp = 3600;
     this.timeForMeetup = 7200;
+    this.timeForFinalHeal = -1;
+    this.finalHealAmplifier = 4;
+    this.timeForFinalResistance = -1;
+    this.finalResistanceAmplifier = 1;
     this.teamSize = 2;
     this.worldBorder = 2000;
     this.pvp = false;
@@ -124,6 +132,46 @@ public class DefaultUhcGame implements UhcGame {
   @Override
   public void setCurrentTime(int currentTime) {
     this.currentTime = currentTime;
+  }
+
+  @Override
+  public int getTimeForFinalHeal() {
+    return timeForFinalHeal;
+  }
+
+  @Override
+  public void setTimeForFinalHeal(int timeForFinalHeal) {
+    this.timeForFinalHeal = timeForFinalHeal;
+  }
+
+  @Override
+  public int getFinalHealAmplifier() {
+    return finalHealAmplifier;
+  }
+
+  @Override
+  public void setFinalHealAmplifier(int finalHealAmplifier) {
+    this.finalHealAmplifier = finalHealAmplifier;
+  }
+
+  @Override
+  public int getTimeForFinalResistance() {
+    return timeForFinalResistance;
+  }
+
+  @Override
+  public void setTimeForFinalResistance(int timeForFinalResistance) {
+    this.timeForFinalResistance = timeForFinalResistance;
+  }
+
+  @Override
+  public int getFinalResistanceAmplifier() {
+    return finalResistanceAmplifier;
+  }
+
+  @Override
+  public void setFinalResistanceAmplifier(int finalResistanceAmplifier) {
+    this.finalResistanceAmplifier = finalResistanceAmplifier;
   }
 
   @Override

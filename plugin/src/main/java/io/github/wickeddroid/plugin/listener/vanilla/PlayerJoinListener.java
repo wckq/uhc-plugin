@@ -8,6 +8,8 @@ import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardEndGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardGame;
 import io.github.wickeddroid.plugin.scoreboard.ScoreboardLobby;
+import io.github.wickeddroid.plugin.team.UhcTeamManager;
+import io.github.wickeddroid.plugin.team.UhcTeamRegistry;
 import io.github.wickeddroid.plugin.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -15,13 +17,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.permissions.ServerOperator;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import team.unnamed.inject.Inject;
 import team.unnamed.inject.InjectAll;
-
-import java.util.stream.Collectors;
 
 @InjectAll
 public class PlayerJoinListener implements Listener {
@@ -48,7 +46,7 @@ public class PlayerJoinListener implements Listener {
     }
 
     if(online >= size) {
-      event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, MessageUtil.parseStringToComponent("<dark_red>El server está lleno."));
+      event.disallow(PlayerLoginEvent.Result.KICK_FULL, MessageUtil.parseStringToComponent("<dark_red>El server está lleno."));
       return;
     }
 
@@ -62,13 +60,16 @@ public class PlayerJoinListener implements Listener {
       return;
     }
 
-    var ip = event.getAddress().getHostAddress();
-    final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(event.getPlayer().getName());
 
-    if(uhcPlayer != null) {
-      if(!ip.equalsIgnoreCase(uhcPlayer.getSession().IP()) && (System.currentTimeMillis() - uhcPlayer.getSession().lastConnect() > 300000)) {
-        event.disallow(PlayerLoginEvent.Result.KICK_OTHER, MessageUtil.parseStringToComponent("<dark_red>Por seguridad del servidor se ha prevenido el ingreso."));
-        return;
+    if(game.useLoginSecurityPrevention()) {
+      var ip = event.getAddress().getHostAddress();
+      final var uhcPlayer = this.uhcPlayerRegistry.getPlayer(event.getPlayer().getName());
+
+      if(uhcPlayer != null) {
+        if(!ip.equalsIgnoreCase(uhcPlayer.getSession().IP()) && (System.currentTimeMillis() - uhcPlayer.getSession().lastConnect() < 300000)) {
+          event.disallow(PlayerLoginEvent.Result.KICK_OTHER, MessageUtil.parseStringToComponent("<dark_red>Por seguridad del servidor se ha prevenido el ingreso."));
+          return;
+        }
       }
     }
 

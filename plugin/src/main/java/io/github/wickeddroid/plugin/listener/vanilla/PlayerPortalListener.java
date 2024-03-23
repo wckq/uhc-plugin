@@ -15,22 +15,35 @@ public class PlayerPortalListener implements Listener {
   @Inject private Worlds worlds;
 
   @EventHandler
-  public void onPortalCreate(final PlayerPortalEvent event) {
-    if (event.getCause() != PlayerTeleportEvent.TeleportCause.NETHER_PORTAL
-          || event.getFrom().getWorld().getEnvironment() != World.Environment.NETHER) {
-      return;
+  public void onPortalEvent(final PlayerPortalEvent event) {
+    if (event.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL
+          && event.getFrom().getWorld().getEnvironment() == World.Environment.NETHER) {
+      final var location = event.getTo();
+
+      final var world = Bukkit.getWorld(worlds.worldName());
+
+      if (world == null) {
+        return;
+      }
+
+      location.setWorld(world);
+
+      event.setTo(location);
     }
 
-    final var location = event.getTo();
+    if(event.getCause() == PlayerTeleportEvent.TeleportCause.END_PORTAL
+    && event.getFrom().getWorld().getEnvironment() == World.Environment.THE_END) {
+      final var location = event.getTo();
 
-    final var world = Bukkit.getWorld(worlds.worldName());
+      final var world = Bukkit.getWorld(worlds.worldName());
 
-    if (world == null) {
-      return;
+      if (world == null) {
+        return;
+      }
+
+      location.setWorld(world);
+
+      event.setTo(location);
     }
-
-    location.setWorld(world);
-
-    event.setTo(location);
   }
 }

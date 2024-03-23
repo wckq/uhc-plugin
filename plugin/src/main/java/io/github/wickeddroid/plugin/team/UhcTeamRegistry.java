@@ -3,11 +3,9 @@ package io.github.wickeddroid.plugin.team;
 import io.github.wickeddroid.api.team.UhcTeam;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
 import team.unnamed.inject.Singleton;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +37,7 @@ public class UhcTeamRegistry {
     return teamMap;
   }
 
-  public UhcTeam getTeam(final String leader) {
+  public UhcTeam getTeamByLeader(final String leader) {
     return this.teamMap.get(leader);
   }
 

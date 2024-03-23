@@ -21,20 +21,18 @@ public class UhcPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    License.iConfirmNonCommercialUse("uhcplugin");
+    License.iConfirmCommercialUse("uhcplugin");
 
     Injector.create(new UhcPluginModule(this))
             .injectMembers(this);
 
+    if(PluginUtil.versionNumber < 19 || (PluginUtil.versionNumber == 19 && PluginUtil.patchNumber < 2)) {
+      throw new ExceptionInInitializerError("Plugin doesn't support versions older than 1.19");
+    }
 
-
-  if(PluginUtil.versionNumber < 19 || (PluginUtil.versionNumber == 19 && PluginUtil.patchNumber < 2)) {
-    throw new ExceptionInInitializerError("Plugin doesn't support versions older than 1.19");
-  }
-
-  if((PluginUtil.versionNumber == 20 && PluginUtil.patchNumber > 2) || PluginUtil.versionNumber > 20) {
-    throw new ExceptionInInitializerError("Due to new Scoreboard packets, this version isn't supported yet");
-  }
+    if((PluginUtil.versionNumber == 20 && PluginUtil.patchNumber > 2) || PluginUtil.versionNumber > 20) {
+      throw new ExceptionInInitializerError("Due to new Scoreboard packets, this version isn't supported yet");
+    }
 
     this.loader.load();
   }

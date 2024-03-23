@@ -1,6 +1,7 @@
 package io.github.wickeddroid.api.scenario.options;
 
 import com.google.common.collect.Maps;
+import io.github.wickeddroid.api.event.UhcEventManager;
 import io.github.wickeddroid.api.event.scenario.ScenarioOptionValueChangeEvent;
 import io.github.wickeddroid.api.scenario.GameScenario;
 import org.bukkit.Bukkit;
@@ -39,8 +40,7 @@ public class Option<T> {
             throw new IllegalArgumentException("This option value is not part of the scenario option");
         }
 
-        var event = new ScenarioOptionValueChangeEvent<T>(this, value);
-        Bukkit.getPluginManager().callEvent(event);
+        var event = UhcEventManager.fireScenarioOptionValueChange(this, value);
 
         if(!event.isCancelled()) {
             this.value = value;
@@ -107,14 +107,16 @@ public class Option<T> {
             T v2, String d2,
             T v3, String d3,
             T v4, String d4,
-            T v5, String d5
+            T v5, String d5,
+            T v6, String d6
     ) {
         return new LinkedList<>(List.of(
                 buildValue(v1, d1),
                 buildValue(v2, d2),
                 buildValue(v3, d3),
                 buildValue(v4, d4),
-                buildValue(v5, d5)
+                buildValue(v5, d5),
+                buildValue(v6, d6)
         ));
     }
 }

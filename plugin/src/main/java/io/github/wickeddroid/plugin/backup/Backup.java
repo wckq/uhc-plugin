@@ -32,7 +32,7 @@ import java.util.*;
 @Singleton
 public class Backup {
 
-    private final Integer BACKUP_FILE_VERSION = 5;
+    private final Integer BACKUP_FILE_VERSION = 6;
 
     @Inject
     private Plugin plugin;
@@ -73,6 +73,10 @@ public class Backup {
                 .append("\"meetup-time\":").append(game.getTimeForMeetup()).append(",")
                 .append("\"applerate\":").append(game.getAppleRate()).append(",")
                 .append("\"cobweb-limit\":").append(game.getCobwebLimit()).append(",")
+                .append("\"final-heal-time\":").append(game.getTimeForFinalHeal()).append(",")
+                .append("\"final-heal-amplifier\":").append(game.getFinalHealAmplifier()).append(",")
+                .append("\"final-resistance-time\":").append(game.getTimeForFinalResistance()).append(",")
+                .append("\"final-resistance-amplifier\":").append(game.getFinalResistanceAmplifier()).append(",")
                 .append("\"pvp-enabled\":").append(game.isPvp()).append(",")
                 .append("\"game-started\":").append(game.isGameStart()).append(",")
                 .append("\"clean-enabled\":").append(game.isCleanItem()).append(",")
@@ -229,8 +233,8 @@ public class Backup {
 
         var version = json.get("version").getAsInt();
 
-        if(version < BACKUP_FILE_VERSION) {
-            Bukkit.getLogger().severe("Backup file version is older than supported");
+        if(version != BACKUP_FILE_VERSION) {
+            Bukkit.getLogger().severe("Backup file version is different than currently supported");
             return;
         }
 
@@ -246,6 +250,10 @@ public class Backup {
         var meetupTime = game.get("meetup-time").getAsInt();
         var appleRate = game.get("applerate").getAsInt();
         var cobwebLimit = game.get("cobweb-limit").getAsInt();
+        var healTime = game.get("final-heal-time").getAsInt();
+        var healAmplifier = game.get("final-heal-amplifier").getAsInt();
+        var resistanceTime = game.get("final-resistance-time").getAsInt();
+        var resistanceAmplifier = game.get("final-resistance-amplifier").getAsInt();
         var pvpEnabled = game.get("pvp-enabled").getAsBoolean();
         var gameStarted = game.get("game-started").getAsBoolean();
         var cleanEnabled = game.get("clean-enabled").getAsBoolean();
@@ -266,6 +274,10 @@ public class Backup {
         uhcGame.setTimeForMeetup(meetupTime);
         uhcGame.setAppleRate(appleRate);
         uhcGame.setCobwebLimit(cobwebLimit);
+        uhcGame.setTimeForFinalHeal(healTime);
+        uhcGame.setFinalHealAmplifier(healAmplifier);
+        uhcGame.setTimeForFinalResistance(resistanceTime);
+        uhcGame.setFinalResistanceAmplifier(resistanceAmplifier);
         uhcGame.setPvp(pvpEnabled);
         uhcGame.setGameStart(gameStarted);
         uhcGame.setCleanItem(cleanEnabled);

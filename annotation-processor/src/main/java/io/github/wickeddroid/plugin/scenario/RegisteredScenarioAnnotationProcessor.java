@@ -9,6 +9,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.annotation.Annotation;
 import java.util.Set;
 
 @SupportedAnnotationTypes("io.github.wickeddroid.plugin.scenario.RegisteredScenario")
@@ -25,7 +26,7 @@ public class RegisteredScenarioAnnotationProcessor extends AbstractProcessor {
 
       try {
         this.generateScenarioRegistration(annotatedElements);
-      } catch (IOException exception) {
+      } catch (Exception exception) {
         exception.printStackTrace();
       }
     }
@@ -33,7 +34,7 @@ public class RegisteredScenarioAnnotationProcessor extends AbstractProcessor {
   }
 
   private void generateScenarioRegistration(
-          final Set<? extends Element> element) throws IOException {
+          final Set<? extends Element> element) throws IOException, ClassNotFoundException {
     final var packageName = "io.github.wickeddroid.plugin.scenario";
     final var fileObject = processingEnv.getFiler().createSourceFile("ScenarioRegistration");
 
@@ -48,6 +49,7 @@ public class RegisteredScenarioAnnotationProcessor extends AbstractProcessor {
               import team.unnamed.inject.InjectAll;
               import team.unnamed.inject.InjectIgnore;
               import team.unnamed.inject.Singleton;
+              import org.spongepowered.configurate.objectmapping.ConfigSerializable;
                             
               @InjectAll
               @Singleton

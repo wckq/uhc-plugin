@@ -1,10 +1,15 @@
 package io.github.wickeddroid.adapter.v1_20_R1;
 
-import io.github.wickeddroid.api.team.ScatterTask;
+import io.github.wickeddroid.api.world.EnvironmentAdapter;
+import io.github.wickeddroid.api.world.ScatterTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 import java.util.Arrays;
@@ -15,7 +20,7 @@ import java.util.function.Consumer;
 
 public class SafeScatter implements ScatterTask {
     @Override
-    public @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, Consumer<Integer> progress) throws Exception {
+    public @NotNull CompletableFuture<List<Location>> scatterTask(String worldName, int maxX, int maxZ, int count, boolean preventLiquid, boolean aboveSeaLevel, List<Biome> bannedBiomes, EnvironmentAdapter adapter, Consumer<Integer> progress) throws Exception {
         final var world = Bukkit.getWorld(worldName);
         List<Location> locations = new ArrayList<>();
 
@@ -42,7 +47,7 @@ public class SafeScatter implements ScatterTask {
             final var x = ThreadLocalRandom.current().nextInt(-maxX, maxX);
             final var z = ThreadLocalRandom.current().nextInt(-maxZ, maxX);
 
-            final var y = world.getHighestBlockYAt(x, z);
+            final int y = adapter.highestY(world, x, z)+1;
 
             var chunkX = x >> 4;
             var chunkZ = z >> 4;
@@ -50,7 +55,7 @@ public class SafeScatter implements ScatterTask {
             Consumer<?> consumer = (Consumer<Object>) o -> {
                 var loc = new Location(world, x, y, z);
 
-                if (loc.getWorld().getBlockAt(loc).isLiquid()) {
+                if(!adapter.safe(loc, bannedBiomes, preventLiquid, aboveSeaLevel)) {
                     return;
                 }
 

@@ -3,8 +3,8 @@ package io.github.wickeddroid.api.scenario;
 import io.github.wickeddroid.api.exception.NotEnabledFeatureException;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
+import io.github.wickeddroid.api.scenario.options.ScenarioOption;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 import java.util.*;

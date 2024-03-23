@@ -1,18 +1,20 @@
 package io.github.wickeddroid.plugin.message;
 
+import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+
 @SuppressWarnings("")
 @ConfigSerializable
 public class Messages {
-
   private String prefix = "<gradient:#FEE679:#E5BF18>UHC ➣";
   private Team team = new Team();
   private Other other = new Other();
   private Game game = new Game();
   private Staff staff = new Staff();
+  private Menu menu = new Menu();
 
   public @NonNull Team team() {
     return this.team;
@@ -30,10 +32,11 @@ public class Messages {
     return this.staff;
   }
 
+  public @NonNull Menu menu() { return this.menu; }
+
   public @NonNull String prefix() {
     return this.prefix;
   }
-
   @ConfigSerializable
   public static class Game {
     private String hasStarted = "El juego ya ha empezado.";
@@ -190,8 +193,13 @@ public class Messages {
   public static class Staff {
     private String changePvpTime = "Has cambiado el tiempo que comience el pvp a <param-time>";
     private String changeMeetupTime = "Has cambiado el tiempo que comience el meetup a <param-time>";
+    private String changeFinalHealTime = "Has cambiado el tiempo que ocurra Final Heal a <param-time>";
+    private String changeFinalHealAmplifier = "Has cambiado el amplificador de Final Heal a <param-amplifier>";
+    private String changeFinalResistanceTime = "Has cambiado el tiempo que ocurra Final Resistance a <param-time>";
+    private String changeFinalResistanceAmplifier = "Has cambiado el amplificador de Final Resistance a <param-amplifier>";
     private String invalidTime = "El tiempo que has dado no es valido";
     private String timeHigherThanEpisodes = "El tiempo no puede ser mayor al de la totalidad de episodios.";
+    private String invalidAmplifier = "No puedes colocar este nivel de amplificador. Debe ser entre <param-min> y <param-max>";
 
     public @NonNull String changeMeetupTime() {
       return this.changeMeetupTime;
@@ -206,6 +214,16 @@ public class Messages {
     }
 
     public @NonNull String timeHigherThanEpisodes() { return this.timeHigherThanEpisodes; }
+
+    public @NonNull String changeFinalHealTime() { return this.changeFinalHealTime; }
+
+    public @NonNull String changeFinalResistanceTime() { return this.changeFinalResistanceTime; }
+
+    public @NonNull String changeFinalResistanceAmplifier() { return this.changeFinalResistanceAmplifier; }
+
+    public @NonNull String invalidAmplifier() { return this.invalidAmplifier; }
+
+    public @NonNull String changeFinalHealAmplifier() { return this.changeFinalHealAmplifier; }
   }
 
   @ConfigSerializable
@@ -222,8 +240,12 @@ public class Messages {
     private String settingEnabled = "La configuración <color:#93FF9E><param-name> <white>ha sido activado correctamente,";
     private String settingDisabled = "La configuración <color:#93FF9E><param-name> <white>ha sido desactivado correctamente";
     private String cleanItemDisabled = "El clean item se encuentra desactivado.";
-    private String teamsInGameTeamJoin = "El jugador <param-joined> se ha unido al equipo de <param-player>";
+    private String teamsInGameTeamJoin = "El equipo <param-who> se ha unido al equipo <param-joined>";
     private String teamsInGamePlayerNearby = "<green>¡Tienes un jugador a <param-distance> bloques!";
+    private String killsTop ="<gold>Kills Top: <br><param-top>";
+    private String invalidCount = "El número que introdujiste no es válido.";
+    @Getter
+    private String deprecatedWarning = "<yellow>⚠ <red>Estás usando un sistema que será borrado en la versión <param-version>, se recomienda el uso de <gold><param-replacement>";
 
     public @NonNull String teamChatOn() {
       return this.teamChatOn;
@@ -265,5 +287,25 @@ public class Messages {
 
     public @NonNull String teamsInGameTeamJoin() { return this.teamsInGameTeamJoin; }
     public @NonNull String teamsInGamePlayerNearby() { return this.teamsInGamePlayerNearby; }
+    public @NonNull String killsTop() { return this.killsTop; }
+    public @NonNull String invalidCount() { return this.invalidCount; }
+  }
+
+  @ConfigSerializable
+  public static class Menu {
+    @Getter
+    private String hostMenuTitle = "<red>Host Menu";
+    @Getter
+    private String hostButtonUnselected = "<yellow>» Click para ser host «";
+    @Getter
+    private String hostButtonSelected = "<yellow>Host » <param-host>";
+    @Getter
+    private String settingsButton = "<aqua> » Settings";
+    @Getter
+    private String settingsButtonDescription = "<gold>» <param-enabled>/<param-settings> <gray>Settings activas";
+    @Getter
+    private String scenariosButton = "<aqua> » Scenarios";
+    @Getter
+    private String scenariosButtonDescription = "<gold> » <param-enabled>/<param-scenarios> <gray>Scenarios activos";
   }
 }

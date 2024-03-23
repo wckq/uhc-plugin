@@ -1,14 +1,20 @@
 package io.github.wickeddroid.plugin.team;
 
+import io.github.wickeddroid.api.event.UhcEventManager;
 import io.github.wickeddroid.api.game.UhcGame;
 import io.github.wickeddroid.api.team.UhcTeam;
+import io.github.wickeddroid.api.util.LuckPermsProvider;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.player.UhcPlayerRegistry;
 import io.github.wickeddroid.plugin.util.MessageUtil;
+import io.papermc.paper.adventure.PaperAdventure;
+import io.papermc.paper.adventure.providers.LegacyComponentSerializerProviderImpl;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.InjectAll;
@@ -33,7 +39,6 @@ public class UhcTeamManager {
   private Teams teams;
   @InjectIgnore
   private Iterator<String> iterator;
-
   public void createTeam(
           final Player leader,
           String name
@@ -65,6 +70,7 @@ public class UhcTeamManager {
     this.messageHandler.send(leader, this.messages.team().create(), name);
 
     uhcPlayer.setUhcTeam(this.getTeamByLeader(leader.getName()));
+    UhcEventManager.fireTeamPlayerJoin(leader, this.getTeamByLeader(leader.getName()));
   }
 
 
@@ -95,13 +101,16 @@ public class UhcTeamManager {
       }
 
       this.messageHandler.send(player, this.messages.team().leave(), uhcTeam.getName());
+      UhcEventManager.fireTeamPlayerLeave(player, uhcTeam);
       this.uhcPlayerRegistry.getPlayer(member).setUhcTeam(null);
     }
 
     if(leaderOP.isOnline()) {
       this.messageHandler.send(leaderOP.getPlayer(), this.messages.team().remove());
-
     }
+
+    UhcEventManager.fireTeamEliminated(uhcTeam);
+
     this.uhcTeamRegistry.removeTeam(leaderOP.getName());
   }
 
@@ -131,7 +140,7 @@ public class UhcTeamManager {
           for (var j = 0;j<teamSize - 1;j++) {
             final var member = playersWithoutTeam.remove(0);
 
-            this.uhcTeamHandler.addPlayerToTeam(leader, member, true);
+            this.uhcTeamHandler.forcePlayerToTeam(leader, member);
           }
         }
       }
@@ -157,15 +166,16 @@ public class UhcTeamManager {
         return;
       }
 
+
       member.sendMessage(MessageUtil.parseStringToComponent(
               "<red>[Team] <white><player></white> <red>➣</red> ",
-              Placeholder.parsed("player", player.getName())
+              Placeholder.component("player", LegacyComponentSerializer.legacyAmpersand().deserialize(LuckPermsProvider.getPrefix(player) + player.getName() + LuckPermsProvider.getSuffix(player)))
       ).append(message));
     }
   }
 
   public UhcTeam getTeamByLeader(final String leader) {
-    return this.uhcTeamRegistry.getTeam(leader);
+    return this.uhcTeamRegistry.getTeamByLeader(leader);
   }
 
   public UhcTeam getTeamByPlayer(final String player) {

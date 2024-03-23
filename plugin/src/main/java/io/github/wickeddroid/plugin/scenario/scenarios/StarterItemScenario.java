@@ -1,12 +1,13 @@
 package io.github.wickeddroid.plugin.scenario.scenarios;
 
 import io.github.wickeddroid.api.event.game.GameStartEvent;
+import io.github.wickeddroid.api.event.player.PlayerScatteredEvent;
 import io.github.wickeddroid.api.scenario.Scenario;
 import io.github.wickeddroid.api.scenario.options.Option;
 import io.github.wickeddroid.api.scenario.options.OptionValue;
 import io.github.wickeddroid.plugin.scenario.ListenerScenario;
 import io.github.wickeddroid.plugin.scenario.RegisteredScenario;
-import io.github.wickeddroid.api.scenario.ScenarioOption;
+import io.github.wickeddroid.api.scenario.options.ScenarioOption;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -29,7 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
                 "<gold>   » Random (Anteriores 3)",
                 "<gold>   » Random (Cualquier Item)"
         },
-        material = Material.BUNDLE,
+        material = Material.NETHER_STAR,
         supportsOptions = true
 )
 public class StarterItemScenario extends ListenerScenario {
@@ -54,5 +55,15 @@ public class StarterItemScenario extends ListenerScenario {
         Bukkit.getOnlinePlayers().forEach(
                 p -> p.getInventory().addItem(item)
         );
+    }
+
+    @EventHandler
+    public void onScatter(PlayerScatteredEvent event) {
+        if(!event.isLaterScatter()) { return; }
+
+        var mats = Arrays.stream(Material.values()).filter(Material::isItem).filter(m -> !m.isLegacy()).toList();
+        var item = material == Material.AIR ? new ItemStack(List.of(Material.BUNDLE, Material.GOLDEN_APPLE, Material.SHULKER_BOX, Material.ENCHANTED_GOLDEN_APPLE).get(ThreadLocalRandom.current().nextInt(4))) : material == Material.STRUCTURE_VOID ? new ItemStack(mats.get(ThreadLocalRandom.current().nextInt(mats.size()))): new ItemStack(material);
+
+        event.getPlayer().getInventory().addItem(item);
     }
 }

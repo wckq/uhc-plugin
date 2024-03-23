@@ -49,6 +49,14 @@ public class CutCleanScenario extends ListenerScenario {
             Material.RAW_IRON_BLOCK, Material.IRON_BLOCK
     ));
 
+    Map<Material, Double> smeltExp = new java.util.HashMap<>(Map.of(
+            Material.GLASS, 0.1D,
+            Material.IRON_INGOT, 0.7D,
+            Material.COPPER_INGOT, 0.7D,
+            Material.GOLD_INGOT, 1.0D,
+            Material.NETHERITE_SCRAP, 2.0D
+    ));
+
     var block = event.getBlock();
 
     var drops = block.getDrops(event.getPlayer().getItemInHand());
@@ -67,7 +75,16 @@ public class CutCleanScenario extends ListenerScenario {
     if(!newDrops.isEmpty()) {
       event.setDropItems(false);
 
-      newDrops.forEach(d ->    block.getWorld().dropItemNaturally(block.getLocation(), d));
+      newDrops.forEach(d ->    {
+        block.getWorld().dropItemNaturally(block.getLocation(), d);
+
+        var xp = smeltExp.get(d.getType());
+
+        if(xp != null) {
+          ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+          orb.setExperience((int) Math.round(xp));
+        }
+      });
 
       if(event.getExpToDrop() == 0) { return; }
       ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
@@ -91,7 +108,11 @@ public class CutCleanScenario extends ListenerScenario {
             Material.RABBIT, Material.COOKED_RABBIT
     );
 
-    var dropsMaterial = drops.stream().collect(Collectors.toMap(ItemStack::getType, itemStack -> itemStack));
+    var dropsMaterial = drops.stream().collect(Collectors.toMap(ItemStack::getType,
+            itemStack -> itemStack,
+            (item1, item2) -> {
+                return item1.add(item2.getAmount());
+            }));
 
     dropReplacements.forEach((from, to) -> {
 

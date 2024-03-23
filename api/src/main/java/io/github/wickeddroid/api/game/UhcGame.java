@@ -48,6 +48,22 @@ public interface UhcGame {
 
   int getCobwebLimit();
 
+  int getTimeForFinalHeal();
+
+  void setTimeForFinalHeal(int timeForFinalHeal);
+
+  int getFinalHealAmplifier();
+
+  void setFinalHealAmplifier(int finalHealAmplifier);
+
+  int getTimeForFinalResistance();
+
+  void setTimeForFinalResistance(int timeForFinalResistance);
+
+  int getFinalResistanceAmplifier();
+
+  void setFinalResistanceAmplifier(int finalResistanceAmplifier);
+
   void setTimeForPvp(int timeForPvp);
 
   int getTimeForMeetup();

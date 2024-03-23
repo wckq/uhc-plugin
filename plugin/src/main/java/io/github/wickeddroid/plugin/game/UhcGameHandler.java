@@ -5,7 +5,7 @@ import io.github.wickeddroid.api.game.UhcGameState;
 import io.github.wickeddroid.plugin.message.MessageHandler;
 import io.github.wickeddroid.plugin.message.Messages;
 import io.github.wickeddroid.plugin.message.announcements.Announcements;
-import me.fixeddev.commandflow.bukkit.annotation.Sender;
+import team.unnamed.commandflow.annotated.annotation.Sender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.InjectAll;
